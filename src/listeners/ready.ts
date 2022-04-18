@@ -83,7 +83,7 @@ ${line03}${dev ? ` ${pad}${blc("<")}${llc("/")}${blc(">")} ${llc("DEVELOPMENT MO
     const { client, logger } = this.container;
 
     // Find all the guilds in our database
-    const documents = await client.GuildSettingsModel._model.find();
+    const documents = await client.GuildSettingsModel.initCache();
 
     if (!documents) return;
 

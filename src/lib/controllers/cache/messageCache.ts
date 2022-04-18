@@ -67,9 +67,22 @@ export class IMessageCache extends BaseCache {
 
     container.logger.info(`[MessageCache] Uploaded ${count ?? "nothing"} ${count ? "messages" : ""} to ${guild.name}`);
 
-    const save = await container.client.GuildSettingsModel.insertOne(guild, "message", count ?? 0).then(() =>
-      this.pool.delete(guild.id)
-    );
+    if(!count) return;
+
+    const save = await container.client.GuildSettingsModel._model
+      .findByIdAndUpdate(
+        { _id: guild.id },
+        {
+          $set: {
+            data: {
+              message: count,
+            },
+          },
+        },
+        { new: true, upsert: true }
+      )
+      .exec()
+      .then(() => this.pool.delete(guild.id));
 
     return save;
   }
