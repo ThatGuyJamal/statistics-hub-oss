@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.build.json",
+  "include": ["src/**/*.ts", "src/languages/**/*.json"],
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./out",
+    "declaration": false,
+    "declarationMap": false
+  }
+}

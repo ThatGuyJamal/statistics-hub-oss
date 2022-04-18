@@ -1,0 +1,6 @@
+{
+  "command_input_error_event_embed_titles": "Command Error Occurred",
+  "command_input_error_event_embed_descriptions": "An error occurred while executing the command.",
+  "prefix_mention_reply_guild": "Run `/commands` to see a list of commands.",
+  "prefix_mention_reply_dm": "Run `/commands` to see a list of commands."
+}

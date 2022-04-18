@@ -1,0 +1,8 @@
+{
+  "reload_command": {
+    "help_description": "Reloads a bot piece. This can be anything from a command, event, or store."
+  },
+  "eval_command": {
+    "help_description": "Evaluates a code snippet. This is useful for debugging and testing."
+  }
+}

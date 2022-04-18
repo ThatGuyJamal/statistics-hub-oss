@@ -1,0 +1,166 @@
+import { cpus, uptime, type CpuInfo } from "node:os";
+import { roundNumber } from "@sapphire/utilities";
+import {
+  ApplicationCommandRegistry,
+  BucketScope,
+  ChatInputCommand,
+  RegisterBehavior,
+  version as sapphireVersion,
+  version,
+} from "@sapphire/framework";
+import { ApplyOptions } from "@sapphire/decorators";
+import { Message } from "discord.js";
+import { ENV } from "../../config";
+import { time, TimestampStyles } from "@discordjs/builders";
+import { ICommandOptions, ICommand } from "../../lib/client/command";
+import { BrandingColors } from "../../lib/utils/colors";
+import { BaseEmbed } from "../../lib/utils/embed";
+import { createHyperLink } from "../../lib/utils/format";
+import { seconds } from "../../lib/utils/time";
+
+@ApplyOptions<ICommandOptions>({
+  description: "Shows statistics about the bot.",
+  cooldownDelay: seconds(10),
+  cooldownScope: BucketScope.User,
+  cooldownLimit: 2,
+  runIn: "GUILD_TEXT",
+  nsfw: false,
+  enabled: true,
+  extendedDescription: {
+    command_type: "both",
+  },
+})
+export class UserCommand extends ICommand {
+  // Message Based Command
+  public async messageRun(ctx: Message) {
+    return ctx.reply({ embeds: [this.buildEmbed()] });
+  }
+  // Slash Based Command
+  public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
+    return interaction.reply({ embeds: [this.buildEmbed()], ephemeral: true });
+  }
+
+  private buildEmbed(): BaseEmbed {
+    const titles = {
+      stats: "Statistics",
+      uptime: "Uptime",
+      serverUsage: "Server Usage",
+      globalStats: "Global Statistics",
+      developer: "Development",
+    };
+    const stats = this.generalStatistics;
+    const uptime = this.uptimeStatistics;
+    const usage = this.usageStatistics;
+    //    const global = this.commandStatistics;
+
+    const fields = {
+      stats: `• **Users**: ${stats.users}\n• **Guilds**: ${stats.guilds}\n• **Channels**: ${stats.channels}\n• **Discord.js**: ${stats.version}\n• **Node.js**: ${stats.nodeJs}\n• **Sapphire Framework**: ${stats.sapphireVersion}`,
+      uptime: `• **Host**: ${uptime.host}\n• **Total**: ${uptime.total}\n• **Client**: ${uptime.client}`,
+      serverUsage: `• **CPU Load**: ${usage.cpuLoad}\n• **Heap**: ${usage.ramUsed}MB (Total: ${usage.ramTotal}MB)`,
+      //   globalStats: `• **Commands Ran**: ${global.commands_ran} *Updated every 25 minutes*\n • **Blacklisted Guilds**: ${global.blacklisted_guilds}\n • **Blacklisted Users**: ${global.blacklisted_users}\n • **Errors Handed**: ${global.errors_triggered}`,
+      developer: `• **Name**: __${ENV.developer.name}__\n• **GitHub**: ${createHyperLink(
+        "repository",
+        ENV.developer.github_link
+      )}\n• **Discord**: ${createHyperLink("link", ENV.bot.server_link)}`,
+    };
+
+    return (
+      new BaseEmbed({
+        footer: {
+          text: `Enjoy your day!`,
+        },
+      })
+        .setColor(BrandingColors.Primary)
+        .addField(titles.stats, fields.stats)
+        .addField(titles.uptime, fields.uptime)
+        .addField(titles.serverUsage, fields.serverUsage)
+        //   .addField(titles.globalStats, fields.globalStats)
+        .addField(titles.developer, fields.developer)
+        .setThumbnail(this.container.client.user?.displayAvatarURL() ?? "")
+    );
+  }
+
+  // private get commandStatistics(): StatsCommand {
+  // TODO - implement this later...
+  //    let cmd =
+  //    return {
+  //       commands_ran: cmd?.commands_ran ?? 0,
+  //       blacklisted_guilds: cmd?.blacklisted_guilds ?? 0,
+  //       blacklisted_users: cmd?.blacklisted_users ?? 0,
+  //       errors_triggered: cmd?.errors_triggered ?? 0,
+  //    };
+  // }
+
+  private get generalStatistics(): StatsGeneral {
+    const { client } = this.container;
+    return {
+      channels: client.channels.cache.size,
+      guilds: client.guilds.cache.size,
+      nodeJs: process.version,
+      users: client.guilds.cache.reduce((acc, val) => acc + (val.memberCount ?? 0), 0),
+      version: `v${version}`,
+      sapphireVersion: `v${sapphireVersion}`,
+    };
+  }
+
+  private get uptimeStatistics(): StatsUptime {
+    const now = Date.now();
+    const nowSeconds = roundNumber(now / 1000);
+    return {
+      client: time(seconds.fromMilliseconds(now - this.container.client.uptime!), TimestampStyles.RelativeTime),
+      host: time(roundNumber(nowSeconds - uptime()), TimestampStyles.RelativeTime),
+      total: time(roundNumber(nowSeconds - process.uptime()), TimestampStyles.RelativeTime),
+    };
+  }
+
+  private get usageStatistics(): StatsUsage {
+    const usage = process.memoryUsage();
+    return {
+      cpuLoad: cpus().map(UserCommand.formatCpuInfo.bind(null)).join(" | "),
+      ramTotal: `${(usage.heapTotal / 1048576).toFixed(2)}`,
+      ramUsed: `${(usage.heapUsed / 1048576).toFixed(2)}`,
+    };
+  }
+
+  private static formatCpuInfo({ times }: CpuInfo) {
+    return `${roundNumber(((times.user + times.nice + times.sys + times.irq) / times.idle) * 10000) / 100}%`;
+  }
+
+  // slash command registry
+  public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
+    registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
+      guildIds: [ENV.bot.test_guild_id],
+      registerCommandIfMissing: ENV.bot.register_commands,
+      behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
+      idHints: ["964236972241600522"],
+    });
+  }
+}
+
+interface StatsGeneral {
+  channels: number;
+  guilds: number;
+  nodeJs: string;
+  users: number;
+  version: string;
+  sapphireVersion: string;
+}
+
+interface StatsUptime {
+  client: string;
+  host: string;
+  total: string;
+}
+
+interface StatsUsage {
+  cpuLoad: string;
+  ramTotal: string;
+  ramUsed: string;
+}
+
+interface StatsCommand {
+  commands_ran: number;
+  blacklisted_guilds: number;
+  blacklisted_users: number;
+  errors_triggered: number;
+}

@@ -1,0 +1,38 @@
+{
+  "ping_command": {
+    "description": "¡Apestar! Latencia del bot {{wsLatency}}. Latencia de la API {{APILatency}}",
+    "help_description": "Verifique la latencia del bot con discords api."
+  },
+  "about_command": {
+    "description": "{{bot_name}} es un juego de rol desarrollado por `ThatGuyJamal#2695`. Estoy en beta y estoy siendo desarrollado activamente. Únase a nuestro servidor para obtener más información sobre mi desarrollo.",
+    "help_description": "Biografia general de la bot."
+  },
+  "stats_command": {
+    "help_description": "¡Muestra la CPU, la RAM, el tiempo de actividad y más del bot!"
+  },
+  "help_command_reply_ctx": "¡Utilice `/commands` para ver todos los comandos! Nos hemos movido a los comandos de barra oblicua solamente. Si no puede verlos, pídale a un administrador del servidor que los habilite o vuelva a invitarme al servidor.",
+  "help_command_general": {
+    "title": "Comandos",
+    "description": "Hola `{{user}}` a continuación están todos mis comandos y sus categorías. Puede encontrar más información sobre un comando buscándolo. __Usar: **/comando [search]**__",
+    "footer": "¡Únete a nuestra comunidad de discordia para obtener más apoyo!",
+    "invalid": "Comando no válido __**{{cmd}}**__ Utilice `/commands` para ver todos los comandos válidos.",
+    "title2": "{{command}} Comando | {{category}}",
+    "description2": "/comandos para todos los comandos \uD83E\uDD0D",
+    "alias_title": "Alias",
+    "usage_title": "Uso",
+    "examples_title": "Ejemplos",
+    "null_aliases": "Sin alias",
+    "null_examples": "Sin ejemplos",
+    "null_usage": "sin uso",
+    "command_type_title": "Tipo de comando",
+    "null_command_type": "Sin tipo de comando",
+    "null_description": "Command Aliases no tiene descripción. Utilice el comando raíz en su lugar. Ejemplo: /comandos ping en lugar de /comandos pong."
+  },
+  "command_command": {
+    "help_description": "/comandos para todos los comandos \uD83E\uDD0D",
+    "description": "Este comando se usa para obtener información sobre cómo usar un comando.\n  Mostrará el uso, la descripción y los ejemplos del comando.\n  Si tiene alguna pregunta, puede contactarnos en el servidor de soporte."
+  },
+  "invite_command": {
+    "help_description": "¡Una forma rápida de invitar al bot a su servidor!"
+  }
+}

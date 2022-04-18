@@ -1,0 +1,31 @@
+{
+   "deno.enable": false,
+   "deno.lint": true,
+   "deno.unstable": true,
+   "cSpell.words": [
+      "Akuma",
+      "autopost",
+      "BLURPLE",
+      "botinfo",
+      "Bson",
+      "colorette",
+      "cooldown",
+      "cooldowns",
+      "Deno",
+      "discordjs",
+      "discordx",
+      "fuzzer",
+      "importx",
+      "kaname",
+      "Kodo",
+      "Lngs",
+      "nocheck",
+      "ratelimit",
+      "ratelimits",
+      "statcord",
+      "statshub",
+      "Tedis",
+      "typegoose",
+      "upsert"
+   ]
+}

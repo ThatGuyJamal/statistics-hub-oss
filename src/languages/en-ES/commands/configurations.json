@@ -1,0 +1,23 @@
+{
+  "prefix": {
+    "title": "Prefijo Cambio Exitosa",
+    "description": "El prefijo en **{{guild_name}}** se ha establecido en __{{prefix}}__."
+  },
+  "language": {
+    "title": "Cambio de idioma exitoso",
+    "description": "El idioma en **{{guild_name}}** se ha establecido en __{{language}}__."
+  },
+  "view": {
+    "title": "Configuración actual en {{guild_name}}",
+    "description": "Prefijo: **{{prefix}}**\n Idioma: **{{language}}**\n Canal: **{{channel}}**",
+    "no_settings": "Este servidor no tiene opciones de configuración."
+  },
+  "clear": {
+    "description": "Todas las configuraciones borradas en {{guild_name}}",
+    "no_settings": "Este servidor no tiene opciones de configuración.",
+    "success": "Se ha borrado la configuración **{{setting}}**."
+  },
+  "admin-config_command": {
+    "help_description": "El comando config establece el prefijo y el idioma del bot."
+  }
+}

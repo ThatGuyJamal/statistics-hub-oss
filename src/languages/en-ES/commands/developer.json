@@ -1,0 +1,8 @@
+{
+  "reload_command": {
+    "help_description": "Recarga una pieza de bot. Esto puede ser cualquier cosa, desde un comando, un evento o una tienda."
+  },
+  "eval_command": {
+    "help_description": "Evalúa un fragmento de código. Esto es útil para depurar y probar."
+  }
+}

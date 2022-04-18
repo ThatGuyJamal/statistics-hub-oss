@@ -1,0 +1,13 @@
+{
+  "category": "listeners"
+}
+---
+import { ApplyOptions } from "@sapphire/decorators";
+import { Events, Listener, ListenerOptions } from "@sapphire/framework";
+
+@ApplyOptions<ListenerOptions>({
+  event: Events,
+})
+export class UserEvent extends Listener {
+  public async run(): Promise<void> {}
+}

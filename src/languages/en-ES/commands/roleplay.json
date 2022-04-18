@@ -1,0 +1,11 @@
+{
+  "character_command": {
+    "name_too_long": "El nombre del comando es demasiado largo. Solo se permiten 35 caracteres.",
+    "description_too_long": "La descripción del comando es demasiado larga. Solo se permiten 200 caracteres.",
+    "description": "¡Felicidades {{user}}! Tu personaje __**{{character}}**__ ha sido creado. ¡Ya puedes empezar a jugar al RPG!",
+    "help_description": "El sistema de juego de roles es el núcleo de este bot. Este comando te permite crear rápidamente un personaje para interactuar con otros jugadores.",
+    "already_playing": "¡Ya estás registrado como jugador!",
+    "delete_description": "Tu personaje __**{{characte}}**__ ha sido eliminado.",
+    "not_playing": "¡No estás registrado como jugador!"
+  }
+}
