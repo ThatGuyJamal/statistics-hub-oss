@@ -16,7 +16,7 @@ export class IMessageCache extends BaseCache {
       for (const guilds of container.client.guilds.cache.values()) {
         // Adds the guild message count to the queue...
         await this.next(guilds).then(() => {
-          container.logger.info(`[MessageCache] Processed ${guilds.id} in message cache queue.`);
+          container.logger.info(`[MessageCache] Processed ${guilds.name} in message cache queue.`);
         });
       }
     }, minutes(25));
