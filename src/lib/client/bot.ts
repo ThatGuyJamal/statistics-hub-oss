@@ -1,6 +1,7 @@
 import { container, SapphireClient } from "@sapphire/framework";
 import { connection } from "mongoose";
 import { CLIENT_OPTIONS, ENV } from "../../config";
+import { IMemberCache } from "../controllers/cache/memberCache";
 import { IMessageCache } from "../controllers/cache/messageCache";
 import { IntervalsController } from "../controllers/interval";
 import { IEventLogger } from "../controllers/statistics/logger";
@@ -18,7 +19,10 @@ class ExtendedClient extends SapphireClient {
     this.IntervalsController = new IntervalsController(this);
     this.EventLogger = new IEventLogger();
     this.StatisticsHandler = new StatisticsHandler(container);
-    this.MessageCache = new IMessageCache();
+    this.TemporaryCaches = {
+      MessageCache: new IMessageCache(),
+      MemberCache: new IMemberCache(),
+    };
     this.BotDevelopers = new Set();
     this.BotSupporters = new Set();
     this.BotStaff = new Set();

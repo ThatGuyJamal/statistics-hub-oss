@@ -10,7 +10,7 @@ export class GuildModelHandler {
 
   /**
    * Saves all documents from the database to the cache
-   * @returns 
+   * @returns
    */
   public async initCache() {
     // find all the documents in the db

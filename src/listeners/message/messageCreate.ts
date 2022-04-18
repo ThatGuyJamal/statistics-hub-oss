@@ -10,6 +10,6 @@ export class UserEvent extends Listener {
   public run(ctx: Message) {
     if (ctx.partial || !isGuildMessage(ctx) || ctx.author.bot) return;
 
-    this.container.client.MessageCache.save(ctx.guild, 1);
+    this.container.client.TemporaryCaches.MessageCache.save(ctx.guild, 1);
   }
 }

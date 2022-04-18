@@ -3,47 +3,57 @@ import { Guild } from "discord.js";
 import { minutes } from "../../utils/time";
 import { BaseCache } from "./cache";
 
-export class IMessageCache extends BaseCache {
+interface MemberData {
+  joined: number;
+  left: number;
+  lastJoin: Date;
+}
+
+export class IMemberCache extends BaseCache {
   /** The map of the cache */
-  private pool: Map<string, number>;
+  private pool: Map<string, MemberData>;
 
   public constructor() {
-    super("message");
+    super("member");
     this.pool = new Map();
-    this.activeCacheManagers.push("message");
+    this.activeCacheManagers.push("member");
 
     setInterval(async () => {
       for (const guilds of container.client.guilds.cache.values()) {
-        // Adds the guild message count to the queue...
+        // Adds the guild member count to the queue...
         await this.next(guilds).then(() => {
-          container.logger.info(`[MessageCache] Processed ${guilds.id} in message cache queue.`);
+          container.logger.info(`[MemberCache] Processed ${guilds.id} in member cache queue.`);
         });
       }
     }, minutes(25));
   }
   /**
-   * Saves a message to the cache and increments the count data
+   * Saves a member to the cache and increments the count data
    * @param key The guild id
-   * @param value Message count
+   * @param value member count
    */
   public save(guild: Guild, value: number) {
-    let cachedCount = this.get(guild);
-    if (cachedCount) {
-      cachedCount += value;
-      this.pool.set(guild.id, cachedCount);
-      container.logger.info(`[MessageCache] Saved ${cachedCount} messages to ${guild.name} (${guild.id})`);
+    const data = this.get(guild);
+
+    if (!data) {
+      this.pool.set(guild.id, {
+        joined: value,
+        left: value,
+        lastJoin: new Date(),
+      });
     } else {
-      this.pool.set(guild.id, value);
-      container.logger.info(`[MessageCache] Created new cache for ${guild.name} with ${value} messages tracked.`);
+      data.joined += value;
+      data.left += value;
+      data.lastJoin = new Date();
     }
   }
 
   /**
    * Gets the current value of the cache
-   * @param key The key of the message
+   * @param key The key of the member cache
    * @returns
    */
-  private get(guild: Guild): number | undefined {
+  private get(guild: Guild): MemberData | undefined {
     return this.pool.get(guild.id);
   }
 
@@ -64,11 +74,9 @@ export class IMessageCache extends BaseCache {
   protected async upload(guild: Guild) {
     const count = this.pool.get(guild.id);
 
-    container.logger.info(`[MessageCache] Uploaded ${count ?? "nothing"} ${count ? "messages" : ""} from ${guild.name} to the database.`);
+    container.logger.info(`[MemberCache] Uploaded ${count ?? "nothing"} ${count ? "members" : ""} from ${guild.name} to the database.`);
 
     if (!count) return;
-
-    const old = await container.client.GuildSettingsModel._model.findById(guild.id);
 
     const save = await container.client.GuildSettingsModel._model
       .findByIdAndUpdate(
@@ -77,7 +85,11 @@ export class IMessageCache extends BaseCache {
           $set: {
             guild_name: guild.name,
             data: {
-              message: old?.data?.message ?? 0 + count,
+              member: {
+                guildJoins: count,
+                guildLeaves: count,
+                lastJoin: new Date(),
+              },
             },
           },
         },

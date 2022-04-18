@@ -1,3 +1,4 @@
+import { IMemberCache } from "../lib/controllers/cache/memberCache";
 import { IMessageCache } from "../lib/controllers/cache/messageCache";
 import { IntervalsController } from "../lib/controllers/interval";
 import { IEventLogger } from "../lib/controllers/statistics/logger";
@@ -16,7 +17,11 @@ declare module "discord.js" {
     EventLogger: IEventLogger;
     StatisticsHandler: StatisticsHandler;
     IntervalsController: IntervalsController;
-    MessageCache: IMessageCache;
+    /** A collection of cache controllers */
+    TemporaryCaches: {
+      MessageCache: IMessageCache;
+      MemberCache: IMemberCache;
+    };
     // Sets
     BotDevelopers: Set<string>;
     BotSupporters: Set<string>;
