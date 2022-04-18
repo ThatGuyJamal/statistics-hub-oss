@@ -6,8 +6,11 @@ import { BaseCache } from "./cache";
 interface MemberData {
   joined: number;
   left: number;
-  lastJoin: Date;
+  lastJoin: Date | null;
+  guildBans: number;
 }
+
+type MemberDataType = "guildJoins" | "guildLeaves" | "lastJoin" | "guildBans";
 
 export class IMemberCache extends BaseCache {
   /** The map of the cache */
@@ -32,19 +35,62 @@ export class IMemberCache extends BaseCache {
    * @param key The guild id
    * @param value member count
    */
-  public save(guild: Guild, value: number) {
+  public save(guild: Guild, event: MemberDataType, value: any) {
     const data = this.get(guild);
 
-    if (!data) {
-      this.pool.set(guild.id, {
-        joined: value,
-        left: value,
-        lastJoin: new Date(),
-      });
-    } else {
-      data.joined += value;
-      data.left += value;
-      data.lastJoin = new Date();
+    switch (event) {
+      case "guildJoins":
+        if (!data) {
+          this.pool.set(guild.id, {
+            joined: value,
+            left: 0,
+            lastJoin: null,
+            guildBans: 0,
+          });
+        } else {
+          data.joined += value;
+          this.pool.set(guild.id, data);
+        }
+        break;
+      case "guildLeaves":
+        if (!data) {
+          this.pool.set(guild.id, {
+            joined: 0,
+            left: value,
+            lastJoin: null,
+            guildBans: 0,
+          });
+        } else {
+          data.left += value;
+          this.pool.set(guild.id, data);
+        }
+        break;
+      case "lastJoin":
+        if (!data) {
+          this.pool.set(guild.id, {
+            joined: 0,
+            left: 0,
+            lastJoin: value,
+            guildBans: 0,
+          });
+        } else {
+          data.lastJoin = value;
+          this.pool.set(guild.id, data);
+        }
+        break;
+      case "guildBans":
+        if (!data) {
+          this.pool.set(guild.id, {
+            joined: 0,
+            left: 0,
+            lastJoin: null,
+            guildBans: value,
+          });
+        } else {
+          data.guildBans += value;
+          this.pool.set(guild.id, data);
+        }
+        break;
     }
   }
 
@@ -74,7 +120,9 @@ export class IMemberCache extends BaseCache {
   protected async upload(guild: Guild) {
     const count = this.pool.get(guild.id);
 
-    container.logger.info(`[MemberCache] Uploaded ${count ?? "nothing"} ${count ? "members" : ""} from ${guild.name} to the database.`);
+    container.logger.info(
+      `[MemberCache] Uploaded ${count ?? "nothing"} ${count ? "members" : ""} from ${guild.name} to the database.`
+    );
 
     if (!count) return;
 
@@ -86,9 +134,10 @@ export class IMemberCache extends BaseCache {
             guild_name: guild.name,
             data: {
               member: {
-                guildJoins: count,
-                guildLeaves: count,
-                lastJoin: new Date(),
+                guildJoins: count.joined,
+                guildLeaves: count.left,
+                lastJoin: count.lastJoin,
+                guildBans: count.guildBans,
               },
             },
           },

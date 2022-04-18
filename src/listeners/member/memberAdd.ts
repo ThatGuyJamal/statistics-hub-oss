@@ -7,6 +7,6 @@ import { GuildMember } from "discord.js";
 })
 export class UserEvent extends Listener {
   public async run(member: GuildMember): Promise<void> {
-    this.container.client.TemporaryCaches.MemberCache.save(member.guild, 1)
+    this.container.client.TemporaryCaches.MemberCache.save(member.guild, "guildJoins", 1);
   }
 }

@@ -58,4 +58,5 @@ export interface GuildSchemaMemberType {
   guildLeaves: number;
   /** The last time a member joined the server. */
   lastJoin: Date | null;
+  guildBans: number;
 }
