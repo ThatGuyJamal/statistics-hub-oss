@@ -26,11 +26,11 @@
   "license": "GNU",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ThatGuyJamal/statshub-oss.git"
+    "url": "https://github.com/ThatGuyJamal/statistics-hub-oss.git"
   },
-  "homepage": "https://github.com/ThatGuyJamal/statshub-oss",
+  "homepage": "https://github.com/ThatGuyJamal/statistics-hub-oss",
   "bugs": {
-    "url": "https://github.com/ThatGuyJamal/statshub-oss/issues"
+    "url": "https://github.com/ThatGuyJamal/statistics-hub-oss/issues"
   },
   "dependencies": {
     "@kaname-png/plugin-statcord": "^1.1.3",
