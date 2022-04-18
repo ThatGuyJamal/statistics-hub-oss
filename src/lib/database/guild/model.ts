@@ -35,6 +35,9 @@ export class GuildDocument {
    */
   public blacklisted?: boolean;
 
+  /**
+   * The guild's tracking data
+   */
   @prop({ type: () => Object, required: false, default: undefined })
   public data?: GuildSchema;
 }

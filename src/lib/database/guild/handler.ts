@@ -38,15 +38,12 @@ export class GuildModelHandler {
     options: _OneOptions,
     value: string | number | boolean | GuildSchemaMemberType | GuildSchema
   ) {
+
     const doc = await this._model.findOneAndUpdate(
       { _id: guild.id },
       { $set: { [options]: value } },
       { upsert: true, new: true }
     );
-
-    container.logger.info(`[GuildModelHandler] Updated\n ${doc}`);
-
-    container.logger.info(`[GuildModelHandler] Updated ${guild.name}'s ${options} to ${value}`);
 
     if (doc) {
       this._cache.set(guild.id, doc);
@@ -62,10 +59,13 @@ export class GuildModelHandler {
         case "voice":
           return doc.data?.voice ?? 0;
         case "data":
+          // the entire data object
           return doc.data;
+        default:
+          return doc;
       }
     } else {
-      const newGuild = new this._model({
+      const newGuild = await this._model.create({
         _id: guild.id,
         GuildName: guild.name,
         [options]: value,
@@ -75,7 +75,7 @@ export class GuildModelHandler {
 
       this._cache.set(guild.id, newGuild);
 
-      return await newGuild.save();
+      return await newGuild
     }
   }
 
@@ -85,13 +85,29 @@ export class GuildModelHandler {
     if (cached) {
       if (cached.hasOwnProperty(options)) {
         switch (options) {
+          case "message":
+            delete cached.data?.message
+            break;
+          case "language":
+            delete cached.language
+            break;
+          case "blacklisted":
+            delete cached.blacklisted
+            break;
+          case "member":
+            delete cached.data?.member
+            break;
+          case "voice":
+            delete cached.data?.voice
+            break;
           case "data":
-            delete cached[options];
+            delete cached.data
+            break;
         }
-      }
+      } 
     }
 
-    return this._model.deleteOne({ _id: guild.id, [options]: { $exists: true } });
+    return this._model.find ({ _id: guild.id, [options]: { $exists: true } });
   }
 
   /**
@@ -101,7 +117,7 @@ export class GuildModelHandler {
    */
   public async getDocument(guild: Guild) {
     if (this._cache.has(guild.id)) return this._cache.get(guild.id);
-    const doc = await this._model.findOne({ _id: guild.id });
+    const doc = await this._model.findById(guild.id);
     if (doc) this._cache.set(guild.id, doc);
     return doc;
   }
@@ -112,9 +128,16 @@ export class GuildModelHandler {
    */
   public async wipe(id: string) {
     this._cache.delete(id);
-    return this._model.findOneAndDelete({ _id: id });
+    return this._model.findByIdAndDelete(id);
   }
 }
 
 /** Typings for our query helper */
-type _OneOptions = "message" | "member" | "language" | "blacklisted" | "voice" | "data";
+enum _OneOptions {
+  message = "message",
+  language = "language",
+  blacklisted = "blacklisted",
+  member = "member",
+  voice = "voice",
+  data = "data",
+}
