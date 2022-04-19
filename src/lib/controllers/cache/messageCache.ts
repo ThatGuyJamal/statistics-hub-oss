@@ -15,7 +15,7 @@ export class IMessageCache extends BaseCache {
     setInterval(async () => {
       for (const guilds of container.client.guilds.cache.values()) {
         const cachedData: number | undefined = this.collection.get(guilds.id);
-        if (!cachedData) return;
+        if (!cachedData) return container.logger.warn(`[Message Cache] ${guilds.id} is not cached.`);
         else {
           await container.client.GuildSettingsModel._model
             .findOneAndUpdate(

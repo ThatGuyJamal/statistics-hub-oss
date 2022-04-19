@@ -108,6 +108,8 @@ export class UserCommand extends ICommand {
               .setDescription("Sets the active language the bot will use.")
               .addStringOption((stringOption) =>
                 stringOption
+                .setName("select")
+                .setDescription("Select the language you want to use.")
                   .addChoices([
                     ["English", "en-US"],
                     ["Espanol", "en-ES"],
@@ -119,7 +121,7 @@ export class UserCommand extends ICommand {
         guildIds: [ENV.bot.test_guild_id],
         registerCommandIfMissing: ENV.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
-        idHints: [],
+        idHints: ["966111289652969532"],
       }
     );
   }
