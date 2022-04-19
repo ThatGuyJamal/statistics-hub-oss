@@ -1,7 +1,6 @@
 import { container } from "@sapphire/framework";
 import { Guild } from "discord.js";
 import { GuildSchemaMemberType } from "../../database/guild/model";
-import { pauseThread } from "../../utils/promises";
 import { minutes } from "../../utils/time";
 import { BaseCache } from "./cache";
 
@@ -17,9 +16,11 @@ export class IMemberCache extends BaseCache {
 
     setInterval(async () => {
       for (const guilds of container.client.guilds.cache.values()) {
-        const cachedData: GuildSchemaMemberType | undefined = this.collection.get(guilds.id);
-        if (!cachedData) return container.logger.warn(`[MemberCache] ${guilds.id} is not cached.`);
+        const cachedData = this.collection.get(guilds.id);
+        if (!cachedData) return container.logger.warn(`[MemberCache] ${guilds.name} is not cached.`);
         else {
+          const o = await container.client.GuildSettingsModel._model.findById(guilds.id);
+
           await container.client.GuildSettingsModel._model
             .findOneAndUpdate(
               { _id: guilds.id },
@@ -28,10 +29,13 @@ export class IMemberCache extends BaseCache {
                   guild_name: guilds.name,
                   data: {
                     member: {
-                      guildJoins: cachedData.guildJoins ?? 0,
-                      guildLeaves: cachedData.guildLeaves ?? 0,
-                      lastJoin: cachedData.lastJoin ?? undefined,
-                      guildBans: cachedData.guildBans ?? 0,
+                      //@ts-ignore
+                      guildJoins: cachedData.guildJoins ?? 0 + o?.data?.member?.guildJoins ?? 0,
+                      //@ts-ignore
+                      guildLeaves: cachedData.guildLeaves ?? 0 + o?.data?.member?.guildLeaves ?? 0,
+                      lastJoin: cachedData.lastJoin ?? undefined ?? o?.data?.member?.lastJoin ?? undefined,
+                      //@ts-ignore
+                      guildBans: cachedData.guildBans ?? 0 + o?.data?.member?.guildBans ?? 0,
                     },
                   },
                 },

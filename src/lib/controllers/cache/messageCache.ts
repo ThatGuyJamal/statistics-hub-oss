@@ -14,9 +14,11 @@ export class IMessageCache extends BaseCache {
 
     setInterval(async () => {
       for (const guilds of container.client.guilds.cache.values()) {
-        const cachedData: number | undefined = this.collection.get(guilds.id);
-        if (!cachedData) return container.logger.warn(`[Message Cache] ${guilds.id} is not cached.`);
+        const cachedData = this.collection.get(guilds.id);
+        if (!cachedData) return container.logger.warn(`[Message Cache] ${guilds.name} is not cached.`);
         else {
+          const o = await container.client.GuildSettingsModel._model.findById(guilds.id)
+
           await container.client.GuildSettingsModel._model
             .findOneAndUpdate(
               { _id: guilds.id },
@@ -24,7 +26,7 @@ export class IMessageCache extends BaseCache {
                 $set: {
                   guild_name: guilds.name,
                   data: {
-                    messages: cachedData,
+                    messages: cachedData + (o!.data!.message ?? 0),
                   },
                 },
               },
