@@ -15,11 +15,14 @@ export class IMessageCache extends BaseCache {
     setInterval(async () => {
       for (const guilds of container.client.guilds.cache.values()) {
         // Adds the guild message count to the queue...
-        await this.next(guilds).then(() => {
-          container.logger.info(`[MessageCache] Processed ${guilds.name} in message cache queue.`);
-        });
+       const result =  await this.next(guilds)
+       if(result) {
+         container.logger.info(`[MessageCache] Upload Success for cache[messages] in ${guilds.name} (${guilds.id})`)
+       } else {
+          container.logger.warn(`[MessageCache] Upload Failed for cache[messages] in ${guilds.name} (${guilds.id})`)
+       }
       }
-    }, minutes(25));
+    }, minutes(1));
   }
   /**
    * Saves a message to the cache and increments the count data
@@ -51,10 +54,8 @@ export class IMessageCache extends BaseCache {
    * Uploads the cache to our db instance and clears the cache
    * @param guild The guild to upload the cache to
    */
-  protected async next(guild: Guild): Promise<void> {
-    await this.upload(guild).catch((err) => {
-      container.logger.error(err);
-    });
+  protected async next(guild: Guild) {
+    return await this.upload(guild)
   }
 
   /**
@@ -64,29 +65,33 @@ export class IMessageCache extends BaseCache {
   protected async upload(guild: Guild) {
     const count = this.pool.get(guild.id);
 
-    container.logger.info(`[MessageCache] Uploaded ${count ?? "nothing"} ${count ? "messages" : ""} from ${guild.name} to the database.`);
-
-    if (!count) return;
+    if (!count) return false
 
     const old = await container.client.GuildSettingsModel._model.findById(guild.id);
 
+    if (!old?.data?.message) return false
+
+    const totalCount: number = old.data.message + count;
+
+    container.logger.info(`[MessageCache] Uploaded ${totalCount} ${totalCount} ${totalCount > 1 ? 'messages' : 'message'} from ${guild.name} to the database.`);
+
     const save = await container.client.GuildSettingsModel._model
-      .findByIdAndUpdate(
+      .findOneAndUpdate(
         { _id: guild.id },
         {
           $set: {
             guild_name: guild.name,
             data: {
-              message: old?.data?.message ?? 0 + count,
+              message: totalCount,
             },
           },
         },
-        { new: true, upsert: true }
+        { new: true, upsert: true, runValidators: true }
       )
       .exec()
       .then(() => this.pool.delete(guild.id));
 
-    return save;
+    return true
   }
 
   /** Gets the size of the message cache */

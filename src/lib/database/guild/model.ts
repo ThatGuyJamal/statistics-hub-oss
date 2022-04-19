@@ -21,7 +21,7 @@ export class GuildDocument {
    * The name of the guild
    */
   @prop({ type: () => String, default: null })
-  public GuildName?: string;
+  public guild_name?: string;
 
   @prop({ type: () => String, required: false, default: "en-US" })
   /**

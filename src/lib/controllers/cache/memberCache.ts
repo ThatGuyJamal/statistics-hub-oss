@@ -23,12 +23,15 @@ export class IMemberCache extends BaseCache {
 
     setInterval(async () => {
       for (const guilds of container.client.guilds.cache.values()) {
-        // Adds the guild member count to the queue...
-        await this.next(guilds).then(() => {
-          container.logger.info(`[MemberCache] Processed ${guilds.id} in member cache queue.`);
-        });
+        // Adds the guild message count to the queue...
+       const result =  await this.next(guilds)
+       if(result) {
+         container.logger.info(`[MemberCache] Upload Success for cache[member] in ${guilds.name} (${guilds.id})`)
+       } else {
+          container.logger.warn(`[MemberCache] Upload Failed for cache[member] in ${guilds.name} (${guilds.id})`)
+       }
       }
-    }, minutes(25));
+    }, minutes(1));
   }
   /**
    * Saves a member to the cache and increments the count data
@@ -107,10 +110,8 @@ export class IMemberCache extends BaseCache {
    * Uploads the cache to our db instance and clears the cache
    * @param guild The guild to upload the cache to
    */
-  protected async next(guild: Guild): Promise<void> {
-    await this.upload(guild).catch((err) => {
-      container.logger.error(err);
-    });
+  protected async next(guild: Guild) {
+    return await this.upload(guild)
   }
 
   /**
@@ -120,34 +121,36 @@ export class IMemberCache extends BaseCache {
   protected async upload(guild: Guild) {
     const count = this.pool.get(guild.id);
 
-    container.logger.info(
-      `[MemberCache] Uploaded ${count ?? "nothing"} ${count ? "members" : ""} from ${guild.name} to the database.`
-    );
+    if (!count) return false
 
-    if (!count) return;
+    const old = await container.client.GuildSettingsModel._model.findById(guild.id);
+
+    if (!old?.data?.member) return false
+
+    container.logger.info(`[MemberCache] Uploading ${guild.name} to the database.`);
 
     const save = await container.client.GuildSettingsModel._model
-      .findByIdAndUpdate(
+      .findOneAndUpdate(
         { _id: guild.id },
         {
           $set: {
             guild_name: guild.name,
             data: {
               member: {
-                guildJoins: count.joined,
-                guildLeaves: count.left,
-                lastJoin: count.lastJoin,
-                guildBans: count.guildBans,
+                guildJoins: old?.data?.member?.guildJoins ?? 0 + count.joined,
+                guildLeaves: old?.data?.member?.guildLeaves ?? 0 + count.left,
+                lastJoin: count.lastJoin ?? new Date(),
+                guildBans: old?.data?.member?.guildBans ?? 0 + count.guildBans,
               },
             },
           },
         },
-        { new: true, upsert: true }
+        { new: true, upsert: true, runValidators: true }
       )
       .exec()
       .then(() => this.pool.delete(guild.id));
 
-    return save;
+    return true;
   }
 
   /** Gets the size of the message cache */
