@@ -20,7 +20,7 @@ export class GuildDocument {
   /**
    * The name of the guild
    */
-  @prop({ type: () => String, default: null })
+  @prop({ type: () => String, required: false, default: null })
   public guild_name?: string;
 
   @prop({ type: () => String, required: false, default: "en-US" })
@@ -53,10 +53,13 @@ export interface GuildSchema {
   voice?: number;
 }
 
+/**
+ * Typings for member data structure
+ */
 export interface GuildSchemaMemberType {
-  guildJoins: number;
-  guildLeaves: number;
+  guildJoins?: number;
+  guildLeaves?: number;
   /** The last time a member joined the server. */
-  lastJoin: Date | null;
-  guildBans: number;
+  lastJoin?: Date;
+  guildBans?: number;
 }

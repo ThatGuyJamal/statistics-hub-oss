@@ -29,9 +29,14 @@ export class GuildModelHandler {
 
         return documents;
       }
-    }
 
-    return null;
+      return null;
+    } else {
+      container.logger.warn(
+        `[GuildModelHandler] The guild cache limit is set to ${guildsToCacheLimit}, which is too high.`
+      );
+      return null;
+    }
   }
 
   /**

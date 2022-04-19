@@ -1,101 +1,70 @@
 import { container } from "@sapphire/framework";
 import { Guild } from "discord.js";
+import { pauseThread } from "../../utils/promises";
 import { minutes } from "../../utils/time";
 import { BaseCache } from "./cache";
 
 export class IMessageCache extends BaseCache {
   /** The map of the cache */
-  private pool: Map<string, number>;
+  public collection: Map<string, number>;
 
   public constructor() {
-    super("message");
-    this.pool = new Map();
-    this.activeCacheManagers.push("message");
+    super();
+    this.collection = new Map();
 
     setInterval(async () => {
       for (const guilds of container.client.guilds.cache.values()) {
-        // Adds the guild message count to the queue...
-       const result =  await this.next(guilds)
-       if(result) {
-         container.logger.info(`[MessageCache] Upload Success for cache[messages] in ${guilds.name} (${guilds.id})`)
-       } else {
-          container.logger.warn(`[MessageCache] Upload Failed for cache[messages] in ${guilds.name} (${guilds.id})`)
-       }
+        const cachedData: number | undefined = this.collection.get(guilds.id);
+        if (!cachedData) return;
+        else {
+          await container.client.GuildSettingsModel._model
+            .findOneAndUpdate(
+              { _id: guilds.id },
+              {
+                $set: {
+                  guild_name: guilds.name,
+                  data: {
+                    messages: cachedData,
+                  },
+                },
+              },
+              {
+                upsert: true,
+                new: true,
+              }
+              // After running the query to the db, we need to clear the cache so we can upload new data...
+            )
+            .exec()
+            .then(() => container.logger.info(`Saved message data for ${guilds.name} to the database.`))
+            .then(() => this.collection.delete(guilds.id));
+        }
       }
-    }, minutes(1));
+    }, minutes(2));
   }
+
   /**
-   * Saves a message to the cache and increments the count data
-   * @param key The guild id
-   * @param value Message count
+   * Saves the data
+   * @param guild The Guild Object.
+   * @returns {Map<string, number>} A map of the new cache
    */
-  public save(guild: Guild, value: number) {
-    let cachedCount = this.get(guild);
-    if (cachedCount) {
-      cachedCount += value;
-      this.pool.set(guild.id, cachedCount);
-      container.logger.info(`[MessageCache] Saved ${cachedCount} messages to ${guild.name} (${guild.id})`);
+  public save(guild: Guild, value: number): Map<string, number> {
+    const oldCache: number | undefined = this.collection.get(guild.id);
+    let result: number;
+    if (!oldCache) {
+      result = value;
+      container.logger.info(`[Message Cache] ${result} was saved to the cache.`);
+      // If there is no cache already, we will save the new value into the cache
+      return this.collection.set(guild.id, result);
     } else {
-      this.pool.set(guild.id, value);
-      container.logger.info(`[MessageCache] Created new cache for ${guild.name} with ${value} messages tracked.`);
+      result = value + oldCache;
+      container.logger.info(`[Message Cache] ${result} was saved to the cache.`);
+      // If there is old cache, we will add that result to the updated value and re-save them.
+      return this.collection.set(guild.id, result);
     }
   }
 
-  /**
-   * Gets the current value of the cache
-   * @param key The key of the message
-   * @returns
-   */
-  private get(guild: Guild): number | undefined {
-    return this.pool.get(guild.id);
-  }
-
-  /**
-   * Uploads the cache to our db instance and clears the cache
-   * @param guild The guild to upload the cache to
-   */
-  protected async next(guild: Guild) {
-    return await this.upload(guild)
-  }
-
-  /**
-   * Uploads the cache to our db instance
-   * @param guild The guild api object
-   */
-  protected async upload(guild: Guild) {
-    const count = this.pool.get(guild.id);
-
-    if (!count) return false
-
-    const old = await container.client.GuildSettingsModel._model.findById(guild.id);
-
-    if (!old?.data?.message) return false
-
-    const totalCount: number = old.data.message + count;
-
-    container.logger.info(`[MessageCache] Uploaded ${totalCount} ${totalCount} ${totalCount > 1 ? 'messages' : 'message'} from ${guild.name} to the database.`);
-
-    const save = await container.client.GuildSettingsModel._model
-      .findOneAndUpdate(
-        { _id: guild.id },
-        {
-          $set: {
-            guild_name: guild.name,
-            data: {
-              message: totalCount,
-            },
-          },
-        },
-        { new: true, upsert: true, runValidators: true }
-      )
-      .exec()
-      .then(() => this.pool.delete(guild.id));
-
-    return true
-  }
-
-  /** Gets the size of the message cache */
-  protected get size() {
-    return this.pool.size;
+  /** Returns the size of the cache. */
+  public get size() {
+    return this.collection.size;
   }
 }

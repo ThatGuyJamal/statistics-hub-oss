@@ -1,6 +1,7 @@
 #misc 
 src/config.ts
 out/
+out/config.js
 
 #npm5
 package-lock.json

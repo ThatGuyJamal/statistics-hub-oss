@@ -10,23 +10,36 @@ export interface env_types {
   };
   /** Config Options for our bot client */
   bot: {
+    /** The name of the bot */
     name: string;
+    /** A longer name for the bot. if there is one... */
     full_name: string;
+    /** If the bot is in development mode */
     dev: boolean;
+    /** 
+     * If slash commands should be registered on startup. 
+     * Make sure your using slash commands in test mode before enabling this or else you may spam the global api.
+     */
     register_commands: boolean;
     prefix: string;
     token: string;
     client_id: string;
     CLIENT_SECRET: string;
     PUBLIC_KEY: string;
+    /** The guild to deploy our slash commands for testing. */
     test_guild_id: string;
+    test_guild_id_2: string;
+    /** The url used to invite the bot to your discord server. */
     invite_url: string;
+    /** The link to your support server */
     server_link: string;
+    /** Redis server config */
     redis: {
       host: string;
       port: number;
       password: string;
     };
+    /** Statcord config */
     statcord: {
       key: string;
       autopost: boolean;

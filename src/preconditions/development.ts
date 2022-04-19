@@ -1,15 +1,9 @@
 import { Precondition } from "@sapphire/framework";
 import { Message, CommandInteraction, CacheType } from "discord.js";
-import { ENV } from "../config";
-
-const dev_user: string[] = [
-  ENV.developer.discord_id,
-  // add more options here
-];
 
 export class UserPrecondition extends Precondition {
-  public override async messageRun(ctx: Message) {
-    return dev_user.includes(ctx.author.id)
+  public override async chatInputRun(interaction: CommandInteraction<CacheType>) {
+    return this.container.client.BotDevelopers.has(interaction.user.id)
       ? this.ok()
       : this.error({
           message:
@@ -17,8 +11,8 @@ export class UserPrecondition extends Precondition {
         });
   }
 
-  public override async chatInputRun(interaction: CommandInteraction<CacheType>) {
-    return dev_user.includes(interaction.user.id)
+  public override async messageRun(ctx: Message) {
+    return this.container.client.BotDevelopers.has(ctx.author.id)
       ? this.ok()
       : this.error({
           message:

@@ -8,7 +8,7 @@ import { fetchCurrentLanguage, translate } from "../il8n/translate";
 import { GuildMessage } from "../../types/discord";
 
 /**
- * The base class for all commands.
+ * The base class for all commands. Extends @SapphireCommand to add more functionally for our bot
  */
 export abstract class ICommand extends SapphireCommand<Args, ICommandOptions> {
   /**
@@ -25,7 +25,7 @@ export abstract class ICommand extends SapphireCommand<Args, ICommandOptions> {
   public constructor(context: Piece.Context, options: ICommandOptions) {
     super(context, {
       ...options,
-      // All commands use embeds and thus require this permissions
+      // Base permissions for all commands
       requiredClientPermissions: new Permissions(options.requiredClientPermissions).add([
         PermissionFlagsBits.EmbedLinks,
         PermissionFlagsBits.UseApplicationCommands,

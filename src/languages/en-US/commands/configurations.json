@@ -1,23 +1,6 @@
 {
-  "prefix": {
-    "title": "Prefix Change Successful",
-    "description": "The prefix in **{{guild_name}}** has been set to __{{prefix}}__."
-  },
   "language": {
-    "title": "Language Change Successful",
-    "description": "The language in **{{guild_name}}** has been set to __{{language}}__."
-  },
-  "view": {
-    "title": "Current Settings in {{guild_name}}",
-    "description": "Prefix: **{{prefix}}**\n Language: **{{language}}**\n Channel: **{{channel}}**",
-    "no_settings": "This server has no configuration settings."
-  },
-  "clear": {
-    "description": " All settings cleared in {{guild_name}}",
-    "no_settings": "This server has no configuration settings.",
-    "success": "The **{{setting}}** setting has been cleared."
-  },
-  "admin-config_command": {
-    "help_description": "The config command sets the bot prefix and language."
+    "success_reply": "Language settings were updated to __{{lang}}__!",
+    "error_reply": "Error setting language...No language provided"
   }
 }

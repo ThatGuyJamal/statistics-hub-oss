@@ -7,17 +7,18 @@ import {
   MessageEmbedImage,
   User,
 } from "discord.js";
+import minIndent from "min-indent";
 
 /**
  * Format a username for bot members
  * @param author
  * @returns
  */
-function formatAuthor(author: User): string {
+export function formatAuthor(author: User): string {
   return `${author.tag}${author.bot ? " [BOT]" : ""}`;
 }
 
-function formatContent(guild: Guild, content: string): string {
+export function formatContent(guild: Guild, content: string): string {
   return cleanMentions(guild, content)
     .split("\n")
     .map((line: any) => `> ${line}`)
@@ -28,7 +29,13 @@ export function formatAttachment(attachment: MessageAttachment): string {
   return `📂 [${attachment.name}: ${attachment.url}]`;
 }
 
-function formatEmbed(guild: Guild, embed: MessageEmbed): string {
+/**
+ * Formats the embed based on type
+ * @param guild Guild Object
+ * @param embed Embed Object
+ * @returns {string} The formatted text
+ */
+export function formatEmbed(guild: Guild, embed: MessageEmbed): string {
   switch (embed.type) {
     case "video":
       return formatEmbedVideo(embed);
@@ -105,17 +112,59 @@ function formatEmbedRichProvider(embed: MessageEmbed): string {
 }
 
 /**
- * Wraps the content inside a codeblock with the specified language
- *
- * @param language The language for the codeblock
- * @param content The content to wrap
+ * Allows for easy string indenting
+ * @param str String to indent
+ * @returns {string} The indented string
  */
-export function codeBlock(language: string, content?: string): string {
-  return typeof content === "undefined" ? `\`\`\`\n${language}\`\`\`` : `\`\`\`${language}\n${content}\`\`\``;
+export default function stripIndent(str: string) {
+	const indent = minIndent(str);
+
+	if (indent === 0) {
+		return str;
+	}
+
+	const regex = new RegExp(`^[ \\t]{${indent}}`, 'gm');
+
+	return str.replace(regex, '');
+}
+
+
+/**
+ * Wraps the content inside a codeblock with the specified language
+ * @param language The language for the codeblock
+ * @param code The code to wrap
+ * @returns The codeblock
+ */
+export function codeBlock(
+  language:
+    | "asciidoc"
+    | "autohotkey"
+    | "bash"
+    | "coffeescript"
+    | "cpp"
+    | "cs"
+    | "css"
+    | "diff"
+    | "fix"
+    | "glsl"
+    | "ini"
+    | "json"
+    | "md"
+    | "ml"
+    | "prolog"
+    | "py"
+    | "tex"
+    | "xl"
+    | "js"
+    | "ts"
+    | "xml",
+  code: string
+) {
+  return `\`\`\`${language}\n${stripIndent(code)}\`\`\``;
 }
 
 /**
- * Wraps the content inside \`backticks\`, which formats it as inline code
+ * Wraps the content inside \`backtick's\`, which formats it as inline code
  *
  * @param content The content to wrap
  */
@@ -194,7 +243,7 @@ export function hideLinkEmbed(url: string): string {
   return `<${url}>`;
 }
 /**
- * Mentions the channel in a string
+ * Formats a string to create a discord channel mention
  * @param id The id of the channel
  * @returns
  */
