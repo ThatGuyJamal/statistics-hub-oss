@@ -1,7 +1,8 @@
-# This is a little utility script that installs and runs our app using bash.
+#!/bin/bash    
 
 node -v
 
+npm install
 npm run compile
 npm run start
 
