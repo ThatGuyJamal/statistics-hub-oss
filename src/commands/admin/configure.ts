@@ -1,3 +1,19 @@
+/**
+ *  Statistics Hub OSS - A data analytics discord bot.
+    
+    Copyright (C) 2022, ThatGuyJamal and contributors
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU Affero General Public License for more details.
+ */
+
 import { ApplyOptions } from "@sapphire/decorators";
 import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand } from "@sapphire/framework";
 import { TextChannel } from "discord.js";
@@ -38,14 +54,14 @@ export class UserCommand extends ICommand {
 
         await pauseThread(3, "seconds", "Cache Command").then(async () => {
           // Save the language option
-          this.container.client.GuildSettingsModel._model.updateOne(
-            { _id: interaction.guildId },
-            { $set: { language: result } },
-          ).then((res) => {
-            this.container.logger.info(res);
-          }).catch((err) => {
-            this.container.logger.error(err);
-          });
+          this.container.client.GuildSettingsModel._model
+            .updateOne({ _id: interaction.guildId }, { $set: { language: result } })
+            .then((res) => {
+              this.container.logger.info(res);
+            })
+            .catch((err) => {
+              this.container.logger.error(err);
+            });
 
           return await interaction.editReply({
             embeds: [

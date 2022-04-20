@@ -1,3 +1,19 @@
+/**
+ *  Statistics Hub OSS - A data analytics discord bot.
+    
+    Copyright (C) 2022, ThatGuyJamal and contributors
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU Affero General Public License for more details.
+ */
+
 import { ApplyOptions } from "@sapphire/decorators";
 import { BucketScope, RegisterBehavior, ChatInputCommand, ApplicationCommandRegistry } from "@sapphire/framework";
 import { Message, MessageActionRow, MessageButton } from "discord.js";
@@ -32,7 +48,10 @@ export class UserCommand extends ICommand {
       embeds: [
         new BaseEmbed().contextEmbed(
           {
-            description: `${createHyperLink("Bot Invite link", ENV.bot.invite_url)} | ${createHyperLink("Server Invite link", ENV.bot.server_link)}`,
+            description: `${createHyperLink("Bot Invite link", ENV.bot.invite_url)} | ${createHyperLink(
+              "Server Invite link",
+              ENV.bot.server_link
+            )}`,
           },
           ctx
         ),
@@ -42,7 +61,10 @@ export class UserCommand extends ICommand {
   // Slash Based Command
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
     return interaction.reply({
-      content: `Thanks for the interest ${interaction.user.username} | ${createHyperLink("Server Invite link", ENV.bot.server_link)}`,
+      content: `Thanks for the interest ${interaction.user.username} | ${createHyperLink(
+        "Server Invite link",
+        ENV.bot.server_link
+      )}`,
       components: [
         new MessageActionRow().addComponents(
           new MessageButton().setLabel("Click me 🤍").setEmoji("📧").setStyle("LINK").setURL(`${ENV.bot.invite_url}`)

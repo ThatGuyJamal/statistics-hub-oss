@@ -1,8 +1,8 @@
 {
-    "statistics_command": {
-        "help_description": "Statistical commands for the bot"
-    },
-    "statistics": {
-        "success": "Not implemented yet..."
-    }
+  "statistics_command": {
+    "help_description": "Statistical commands for the bot"
+  },
+  "statistics": {
+    "success": "Not implemented yet..."
+  }
 }

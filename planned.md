@@ -2,18 +2,20 @@
 
 Below are planned features I will be adding to the bot in now specific order...
 
-*   [ ] Channel Stats \[Create, Delete]
+- [ ] Channel Stats \[Create, Delete]
 
-*   [ ] Voice Stats \[Joins]
+- [ ] Voice Stats \[Joins]
 
-*   [ ] Welcome System used slash commands \[Welcome, Leave] Using - [w-card](https://github.com/AKORA-Studios/DiscordWelcomeCard)
+- [ ] Switch setInterval Functions to the interval controller class for more control
 
-*   [ ] Send an hour interval of stats from the db to the channel for logging and growth of the bot API
+- [ ] Welcome System used slash commands \[Welcome, Leave] Using - [w-card](https://github.com/AKORA-Studios/DiscordWelcomeCard)
 
-*   [ ] Dev command to show all active guilds the bot is in and information about them.
+- [ ] Send an hour interval of stats from the db to the channel for logging and growth of the bot API
 
-*   [ ] Add statcord command information to statistics command
+- [ ] Dev command to show all active guilds the bot is in and information about them.
 
-*   [ ] Update information / info command to include [b-card](https://github.com/discord-card/bot) 
+- [ ] Add statcord command information to statistics command
 
-*   [ ] Add support for enable or disabling of commands.
+- [ ] Update information / info command to include [b-card](https://github.com/discord-card/bot)
+
+- [ ] Add support for enable or disabling of commands.

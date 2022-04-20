@@ -1,8 +1,8 @@
 # ⚠️Warning - In Development
 
-*This project is in rapid development and any information is subject to change at any time.* 
+_This project is in rapid development and any information is subject to change at any time._
 
-***
+---
 
 # Statistics Hub OSS
 
@@ -10,7 +10,7 @@
 
 ## `Get starting`
 
-Coming soon... 
+Coming soon...
 
 ## `Commands`
 
@@ -29,7 +29,7 @@ Coming soon...
 
 ## `Languages`
 
-Currently supported translations. If you would like to help improve them, join our support server. You can also clone this repository, make changes to 
+Currently supported translations. If you would like to help improve them, join our support server. You can also clone this repository, make changes to
 the language [folder](./src/languages/) and submit a pull request.
 
 - English (default)
@@ -61,7 +61,7 @@ started with the bot.
 ### `Important Notes`
 
 1. Because of the lack of support moving forward with many message based commands from both the discord api and library's, the bot has limited support for things
-such as a custom prefix and message commands. You can implement this yourself but just know it had no been implemented fully. *And will be removed in the future.*
+   such as a custom prefix and message commands. You can implement this yourself but just know it had no been implemented fully. _And will be removed in the future._
 
 2. As of now, the current version of the bot is being updated rapidly and is not in a stable version. It is also being developed to be a multi-guild bot in mind, meaning you may want to disabled or enable some of the features depending on your needs.
 

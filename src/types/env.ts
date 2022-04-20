@@ -1,3 +1,19 @@
+/**
+ *  Statistics Hub OSS - A data analytics discord bot.
+    
+    Copyright (C) 2022, ThatGuyJamal and contributors
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU Affero General Public License for more details.
+ */
+
 /** Our environment typings for ts support. */
 export interface env_types {
   /** Config options for our database client */
@@ -16,8 +32,8 @@ export interface env_types {
     full_name: string;
     /** If the bot is in development mode */
     dev: boolean;
-    /** 
-     * If slash commands should be registered on startup. 
+    /**
+     * If slash commands should be registered on startup.
      * Make sure your using slash commands in test mode before enabling this or else you may spam the global api.
      */
     register_commands: boolean;
