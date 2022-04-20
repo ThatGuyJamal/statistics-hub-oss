@@ -28,59 +28,59 @@ export class UserCommand extends ICommand {
   }
   // Slash Based Command
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
-
     await interaction.reply({
       content: `Fetching data...`,
     });
 
-    await pauseThread(3, "seconds", "Cache Command");
+    await pauseThread(3, "seconds", "Cache Command").then(async () => {
+      const fetch = await this.container.client.GuildSettingsModel.getDocument(interaction.guild!);
 
-    const fetch = await this.container.client.GuildSettingsModel.getDocument(interaction.guild!)
+      if (!fetch) {
+        await this.container.client.GuildSettingsModel._model
+          .create({
+            _id: interaction.guild!.id,
+            guild_name: interaction.guild!.name,
+            data: {
+              member: {
+                guildJoins: 0,
+                guildLeaves: 0,
+                lastJoin: null,
+                guildBans: 0,
+              },
+              message: 1,
+              voice: 0,
+              channel: {
+                created: 0,
+                deleted: 0,
+              },
+            },
+          })
+          .then((res) => {
+            this.container.logger.info(res);
+          });
 
-    if (!fetch) {
+        await interaction.reply({
+          content: `No data found for this server... Creating new data.`,
+        });
+      }
 
-      await this.container.client.GuildSettingsModel._model.create({
-        _id: interaction.guild!.id,
-        guild_name: interaction.guild!.name,
-        data: {
-          member: {
-            guildJoins: 0,
-            guildLeaves: 0,
-            lastJoin: null,
-            guildBans: 0
-          },
-          message: 1,
-          voice: 0,
-          channel: {
-            created: 0,
-            deleted: 0,
-          }
-        }
-      }).then((res) => {
-        this.container.logger.info(res);
-      })
+      //@ts-ignore
+      const memData = fetch.data.member?.guildJoins + fetch.data.member?.guildLeaves + fetch.data.member?.guildBans;
+      //@ts-ignore
+      const msgData = fetch.data.message;
 
-      await interaction.reply({
-        content: `No data found for this server... Creating new data.`,
-      });
-    }
-
-    //@ts-ignore
-    const memData = fetch.data.member?.guildJoins + fetch.data.member?.guildLeaves + fetch.data.member?.guildBans
-    //@ts-ignore
-    const msgData = fetch.data.message
-
-    return await interaction.editReply({
-      content: codeBlock(
-        "css",
-        `
+      return await interaction.editReply({
+        content: codeBlock(
+          "css",
+          `
             Server Data
             [Message Size] = ${fetch?.data?.message ?? 0}
             [Member Size]  = ${memData ?? 0}
 
             Total data size Cached = ${msgData! + memData}
             `
-      ),
+        ),
+      });
     });
   }
   // slash command registry
