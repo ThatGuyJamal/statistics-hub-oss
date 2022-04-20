@@ -77,6 +77,8 @@ export class UserCommand extends ICommand {
             [Message Size] = ${fetch?.data?.message ?? 0}
             [Member Size]  = ${memData ?? 0}
 
+            More stats coming soon...
+
             Total data size Cached = ${msgData! + memData}
             `
         ),
