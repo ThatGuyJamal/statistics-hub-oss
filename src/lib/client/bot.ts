@@ -5,7 +5,7 @@ import { IMemberCache } from "../controllers/cache/memberCache";
 import { IMessageCache } from "../controllers/cache/messageCache";
 import { IntervalsController } from "../controllers/interval";
 import { IEventLogger } from "../controllers/statistics/logger";
-import { StatisticsHandler } from "../controllers/statistics/statistics";
+import { StatisticsHandler } from "../controllers/statistics/statcord";
 import { initializeTypeGooseConnection } from "../database";
 import { GuildModelHandler } from "../database/guild/handler";
 import { loadImportantMembers } from "../utils/loaders";

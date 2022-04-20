@@ -2,7 +2,7 @@ import { IMemberCache } from "../lib/controllers/cache/memberCache";
 import { IMessageCache } from "../lib/controllers/cache/messageCache";
 import { IntervalsController } from "../lib/controllers/interval";
 import { IEventLogger } from "../lib/controllers/statistics/logger";
-import { StatisticsHandler } from "../lib/controllers/statistics/statistics";
+import { StatisticsHandler } from "../lib/controllers/statistics/statcord";
 import { GuildModelHandler } from "../lib/database/guild/handler";
 import { env_types } from "./env";
 
