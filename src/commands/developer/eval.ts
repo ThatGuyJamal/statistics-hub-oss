@@ -27,7 +27,7 @@ import { seconds } from "../../lib/utils/time";
   },
   chatInputCommand: {
     register: ENV.bot.register_commands,
-    guildIds: [ENV.bot.test_guild_id],
+    guildIds: ENV.bot.test_guild_id,
     behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
     idHints: ["964166784661983232"],
   },
@@ -140,7 +140,7 @@ export class UserCommand extends ICommand {
               .setRequired(false)
           ),
       {
-        guildIds: [ENV.bot.test_guild_id],
+        guildIds: ENV.bot.test_guild_id,
         registerCommandIfMissing: ENV.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
         idHints: ["964166784661983232"],

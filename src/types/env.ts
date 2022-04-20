@@ -27,8 +27,7 @@ export interface env_types {
     CLIENT_SECRET: string;
     PUBLIC_KEY: string;
     /** The guild to deploy our slash commands for testing. */
-    test_guild_id: string;
-    test_guild_id_2: string;
+    test_guild_id: string[];
     /** The url used to invite the bot to your discord server. */
     invite_url: string;
     /** The link to your support server */

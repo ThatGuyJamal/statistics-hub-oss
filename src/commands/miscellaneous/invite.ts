@@ -17,7 +17,7 @@ import { seconds } from "../../lib/utils/time";
   enabled: true,
   chatInputCommand: {
     register: ENV.bot.register_commands,
-    guildIds: [ENV.bot.test_guild_id],
+    guildIds: ENV.bot.test_guild_id,
     behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
     idHints: ["837830514130812970"],
   },
@@ -53,7 +53,7 @@ export class UserCommand extends ICommand {
   // slash command registry
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
     registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
-      guildIds: [ENV.bot.test_guild_id],
+      guildIds: ENV.bot.test_guild_id,
       registerCommandIfMissing: ENV.bot.register_commands,
       behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
     });

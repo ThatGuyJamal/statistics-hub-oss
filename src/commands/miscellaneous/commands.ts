@@ -314,7 +314,7 @@ export class UserCommand extends ICommand {
               .setAutocomplete(true);
           }),
       {
-        guildIds: [ENV.bot.test_guild_id],
+        guildIds: ENV.bot.test_guild_id,
         registerCommandIfMissing: ENV.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
         idHints: ["964236971163672667"],

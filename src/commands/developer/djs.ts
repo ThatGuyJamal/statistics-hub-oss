@@ -21,7 +21,7 @@ import { TextChannel } from "discord.js";
   },
   chatInputCommand: {
     register: ENV.bot.register_commands,
-    guildIds: [ENV.bot.test_guild_id],
+    guildIds: ENV.bot.test_guild_id,
     behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
   },
   preconditions: ["OwnerOnly"],
@@ -102,7 +102,7 @@ export class UserCommand extends ICommand {
               .setDescription("The query to search for from the discord.js documentation.");
           }),
       {
-        guildIds: [ENV.bot.test_guild_id],
+        guildIds: ENV.bot.test_guild_id,
         registerCommandIfMissing: ENV.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
         idHints: ["964542816921460906"],

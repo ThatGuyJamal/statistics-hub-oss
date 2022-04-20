@@ -74,7 +74,7 @@ export class UserCommand extends ICommand {
         description: this.description,
       },
       {
-        guildIds: [ENV.bot.test_guild_id],
+        guildIds: ENV.bot.test_guild_id,
         registerCommandIfMissing: ENV.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
         idHints: ["964164545482473582"],
