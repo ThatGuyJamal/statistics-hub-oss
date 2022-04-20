@@ -11,3 +11,7 @@ Below are planned features I will be adding to the bot in now specific order...
 *   [ ] Send an hour interval of stats from the db to the channel for logging and growth of the bot API
 
 *   [ ] Dev command to show all active guilds the bot is in and information about them.
+
+*   [ ] Add statcord command information to statistics command
+
+*   [ ] Update information / info command to include [b-card](https://github.com/discord-card/bot) 

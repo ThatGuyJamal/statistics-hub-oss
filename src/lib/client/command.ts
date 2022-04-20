@@ -30,6 +30,7 @@ export abstract class ICommand extends SapphireCommand<Args, ICommandOptions> {
         PermissionFlagsBits.EmbedLinks,
         PermissionFlagsBits.UseApplicationCommands,
         PermissionFlagsBits.SendMessages,
+        PermissionFlagsBits.AttachFiles,
       ]),
       generateDashLessAliases: true,
       runIn: ["GUILD_TEXT"],
