@@ -1,12 +1,19 @@
 import { GuildDocument, GuildDocumentModel } from "./model";
 import { Collection, Guild } from "discord.js";
 import { container } from "@sapphire/framework";
+import { days } from "../../utils/time";
 
 export class GuildModelHandler {
   /** Model types for mongoose query's... */
   public _model = GuildDocumentModel;
   /** The local cache for quick setting information */
   public _cache = new Collection<string, GuildDocument>();
+
+  public constructor() {
+    setInterval(() => {
+      this._cache.clear();
+    }, days(1))
+  }
 
   /**
    * Saves all documents from the database to the cache
@@ -45,7 +52,6 @@ export class GuildModelHandler {
    * @returns The guild settings for the given guild id
    */
   public async getDocument(guild: Guild) {
-    if (this._cache.has(guild.id)) return this._cache.get(guild.id);
     const doc = await this._model.findById(guild.id);
     if (doc) this._cache.set(guild.id, doc);
     return doc;

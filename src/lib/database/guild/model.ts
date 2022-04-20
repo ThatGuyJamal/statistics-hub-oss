@@ -51,6 +51,7 @@ export interface GuildSchema {
   /** Tracks the member join rates */
   member?: GuildSchemaMemberType;
   voice?: number;
+  channel?: GuildSchemaChannelType;
 }
 
 /**
@@ -62,4 +63,12 @@ export interface GuildSchemaMemberType {
   /** The last time a member joined the server. */
   lastJoin?: Date;
   guildBans?: number;
+}
+
+/**
+ * Typings for guild channel data structure
+ */
+export interface GuildSchemaChannelType {
+  created: number
+  deleted: number
 }

@@ -14,41 +14,41 @@ export class IMemberCache extends BaseCache {
     super();
     this.collection = new Map();
 
-    setInterval(async () => {
-      for (const guilds of container.client.guilds.cache.values()) {
-        const cachedData = this.collection.get(guilds.id);
-        if (!cachedData) return container.logger.warn(`[MemberCache] ${guilds.name} is not cached.`);
-        else {
-          const o = await container.client.GuildSettingsModel._model.findById(guilds.id);
+    // setInterval(async () => {
+    //   for (const guilds of container.client.guilds.cache.values()) {
+    //     const cachedData = this.collection.get(guilds.id);
+    //     if (!cachedData) return container.logger.warn(`[MemberCache] ${guilds.name} is not cached.`);
+    //     else {
+    //       const o = await container.client.GuildSettingsModel._model.findById(guilds.id);
 
-          await container.client.GuildSettingsModel._model
-            .findOneAndUpdate(
-              { _id: guilds.id },
-              {
-                $set: {
-                  guild_name: guilds.name,
-                  data: {
-                    member: {
-                      //@ts-ignore
-                      guildJoins: cachedData.guildJoins ?? 0 + o?.data?.member?.guildJoins ?? 0,
-                      //@ts-ignore
-                      guildLeaves: cachedData.guildLeaves ?? 0 + o?.data?.member?.guildLeaves ?? 0,
-                      lastJoin: cachedData.lastJoin ?? undefined ?? o?.data?.member?.lastJoin ?? undefined,
-                      //@ts-ignore
-                      guildBans: cachedData.guildBans ?? 0 + o?.data?.member?.guildBans ?? 0,
-                    },
-                  },
-                },
-              },
-              { upsert: true, new: true }
-              // After running the query to the db, we need to clear the cache so we can upload new data...
-            )
-            .exec()
-            .then(() => container.logger.info(`Saved member data for ${guilds.name} to the database.`))
-            .then(() => this.collection.delete(guilds.id));
-        }
-      }
-    }, minutes(2));
+    //       await container.client.GuildSettingsModel._model
+    //         .findOneAndUpdate(
+    //           { _id: guilds.id },
+    //           {
+    //             $set: {
+    //               guild_name: guilds.name,
+    //               data: {
+    //                 member: {
+    //                   //@ts-ignore
+    //                   guildJoins: cachedData.guildJoins ?? 0 + o?.data?.member?.guildJoins ?? 0,
+    //                   //@ts-ignore
+    //                   guildLeaves: cachedData.guildLeaves ?? 0 + o?.data?.member?.guildLeaves ?? 0,
+    //                   lastJoin: cachedData.lastJoin ?? undefined ?? o?.data?.member?.lastJoin ?? undefined,
+    //                   //@ts-ignore
+    //                   guildBans: cachedData.guildBans ?? 0 + o?.data?.member?.guildBans ?? 0,
+    //                 },
+    //               },
+    //             },
+    //           },
+    //           { upsert: true, new: true }
+    //           // After running the query to the db, we need to clear the cache so we can upload new data...
+    //         )
+    //         .exec()
+    //         .then(() => container.logger.info(`Saved member data for ${guilds.name} to the database.`))
+    //         .then(() => this.collection.delete(guilds.id));
+    //     }
+    //   }
+    // }, minutes(2));
   }
 
   /**

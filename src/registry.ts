@@ -17,18 +17,18 @@ bootstrap()
     container.logger.error(err);
   });
 
-process.on("unhandledRejection", (error) => {
-  container.logger.error("Unhandled promise rejection:", error);
-});
+// process.on("unhandledRejection", (error) => {
+//   container.logger.error("Unhandled promise rejection:", error);
+// });
 
-process.on("rejectionHandled", (error) => {
-  container.logger.error("Promise rejection handled:", error);
-});
+// process.on("rejectionHandled", (error) => {
+//   container.logger.error("Promise rejection handled:", error);
+// });
 
-process.on("uncaughtException", (error) => {
-  container.logger.error("Uncaught exception:", error);
-});
+// process.on("uncaughtException", (error) => {
+//   container.logger.error("Uncaught exception:", error);
+// });
 
-process.on("exit", (code) => {
-  container.logger.info(`Exiting with code ${code}`);
-});
+// process.on("exit", (code) => {
+//   container.logger.info(`Exiting with code ${code}`);
+// });

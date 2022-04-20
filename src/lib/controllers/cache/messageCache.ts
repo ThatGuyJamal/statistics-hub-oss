@@ -12,36 +12,36 @@ export class IMessageCache extends BaseCache {
     super();
     this.collection = new Map();
 
-    setInterval(async () => {
-      for (const guilds of container.client.guilds.cache.values()) {
-        const cachedData = this.collection.get(guilds.id);
-        if (!cachedData) return container.logger.warn(`[Message Cache] ${guilds.name} is not cached.`);
-        else {
-          const o = await container.client.GuildSettingsModel._model.findById(guilds.id)
+    // setInterval(async () => {
+    //   for (const guilds of container.client.guilds.cache.values()) {
+    //     const cachedData = this.collection.get(guilds.id);
+    //     if (!cachedData) return container.logger.warn(`[Message Cache] ${guilds.name} is not cached.`);
+    //     else {
+    //       const o = await container.client.GuildSettingsModel._model.findById(guilds.id)
 
-          await container.client.GuildSettingsModel._model
-            .findOneAndUpdate(
-              { _id: guilds.id },
-              {
-                $set: {
-                  guild_name: guilds.name,
-                  data: {
-                    messages: cachedData + (o!.data!.message ?? 0),
-                  },
-                },
-              },
-              {
-                upsert: true,
-                new: true,
-              }
-              // After running the query to the db, we need to clear the cache so we can upload new data...
-            )
-            .exec()
-            .then(() => container.logger.info(`Saved message data for ${guilds.name} to the database.`))
-            .then(() => this.collection.delete(guilds.id));
-        }
-      }
-    }, minutes(2));
+    //       await container.client.GuildSettingsModel._model
+    //         .findOneAndUpdate(
+    //           { _id: guilds.id },
+    //           {
+    //             $set: {
+    //               guild_name: guilds.name,
+    //               data: {
+    //                 messages: cachedData + (o!.data!.message ?? 0),
+    //               },
+    //             },
+    //           },
+    //           {
+    //             upsert: true,
+    //             new: true,
+    //           }
+    //           // After running the query to the db, we need to clear the cache so we can upload new data...
+    //         )
+    //         .exec()
+    //         .then(() => container.logger.info(`Saved message data for ${guilds.name} to the database.`))
+    //         .then(() => this.collection.delete(guilds.id));
+    //     }
+    //   }
+    // }, minutes(2));
   }
 
   /**

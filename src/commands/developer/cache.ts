@@ -28,24 +28,57 @@ export class UserCommand extends ICommand {
   }
   // Slash Based Command
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
-    const msg = this.container.client.TemporaryCaches.MessageCache.collection.get(interaction.guildId!) ?? 0
-    const mem = this.container.client.TemporaryCaches.MemberCache.size ?? 0
 
     await interaction.reply({
       content: `Fetching data...`,
     });
 
-    await pauseThread(2, "seconds", "Cache Command");
+    await pauseThread(3, "seconds", "Cache Command");
+
+    const fetch = await this.container.client.GuildSettingsModel.getDocument(interaction.guild!)
+
+    if (!fetch) {
+
+      await this.container.client.GuildSettingsModel._model.create({
+        _id: interaction.guild!.id,
+        guild_name: interaction.guild!.name,
+        data: {
+          member: {
+            guildJoins: 0,
+            guildLeaves: 0,
+            lastJoin: null,
+            guildBans: 0
+          },
+          message: 1,
+          voice: 0,
+          channel: {
+            created: 0,
+            deleted: 0,
+          }
+        }
+      }).then((res) => {
+        this.container.logger.info(res);
+      })
+
+      await interaction.reply({
+        content: `No data found for this server... Creating new data.`,
+      });
+    }
+
+    //@ts-ignore
+    const memData = fetch.data.member?.guildJoins + fetch.data.member?.guildLeaves + fetch.data.member?.guildBans
+    //@ts-ignore
+    const msgData = fetch.data.message
 
     return await interaction.editReply({
       content: codeBlock(
         "css",
         `
-            Server Cache
-            [Message Size] = ${msg ?? 0}
-            [Member Size]  = ${mem ?? 0}
+            Server Data
+            [Message Size] = ${fetch?.data?.message ?? 0}
+            [Member Size]  = ${memData ?? 0}
 
-            Total Cached = ${msg + mem}
+            Total data size Cached = ${msgData! + memData}
             `
       ),
     });
