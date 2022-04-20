@@ -24,7 +24,7 @@ export class UserEvent extends Listener {
             lastJoin: null,
             guildBans: 0,
           },
-          message: 1,
+          message: 0,
           voice: 0,
           channel: {
             created: 0,
