@@ -1,5 +1,6 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand } from "@sapphire/framework";
+import { TextChannel } from "discord.js";
 import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { seconds } from "../../lib/utils/time";
@@ -21,7 +22,7 @@ import { seconds } from "../../lib/utils/time";
 export class UserCommand extends ICommand {
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
     return await interaction.reply({
-      content: "Not implemented yet...",
+      content: await this.translate(interaction.channel as TextChannel, "commands/data:statistics.success"),
     });
   }
   // slash command registry

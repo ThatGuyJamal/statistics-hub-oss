@@ -36,7 +36,7 @@ export class UserCommand extends ICommand {
           content: `Saving configuration...`,
         });
 
-        await pauseThread(3, "seconds", "Configure Command").then(async () => {
+        await pauseThread(3, "seconds", "Cache Command").then(async () => {
           // Save the language option
           this.container.client.GuildSettingsModel._model.updateOne(
             { _id: interaction.guildId },

@@ -32,7 +32,7 @@ export class UserCommand extends ICommand {
       embeds: [
         new BaseEmbed().contextEmbed(
           {
-            description: createHyperLink("Discord Bot Invite link", ENV.bot.invite_url),
+            description: `${createHyperLink("Bot Invite link", ENV.bot.invite_url)} | ${createHyperLink("Server Invite link", ENV.bot.server_link)}`,
           },
           ctx
         ),
@@ -42,7 +42,7 @@ export class UserCommand extends ICommand {
   // Slash Based Command
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
     return interaction.reply({
-      content: `Thanks for the interest ${interaction.user.username}! Heres my invite link...`,
+      content: `Thanks for the interest ${interaction.user.username} | ${createHyperLink("Server Invite link", ENV.bot.server_link)}`,
       components: [
         new MessageActionRow().addComponents(
           new MessageButton().setLabel("Click me 🤍").setEmoji("📧").setStyle("LINK").setURL(`${ENV.bot.invite_url}`)

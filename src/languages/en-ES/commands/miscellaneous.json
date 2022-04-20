@@ -3,10 +3,6 @@
     "description": "¡Apestar! Latencia del bot {{wsLatency}}. Latencia de la API {{APILatency}}",
     "help_description": "Verifique la latencia del bot con discords api."
   },
-  "about_command": {
-    "description": "{{bot_name}} es un juego de rol desarrollado por `ThatGuyJamal#2695`. Estoy en beta y estoy siendo desarrollado activamente. Únase a nuestro servidor para obtener más información sobre mi desarrollo.",
-    "help_description": "Biografia general de la bot."
-  },
   "stats_command": {
     "help_description": "¡Muestra la CPU, la RAM, el tiempo de actividad y más del bot!"
   },

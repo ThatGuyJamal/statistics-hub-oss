@@ -4,5 +4,9 @@
   },
   "eval_command": {
     "help_description": "Evalúa un fragmento de código. Esto es útil para depurar y probar."
+  },
+  "djs_command": {
+    "help_description": "Busca en la documentación de discord.js y devuelve los resultados de la búsqueda.",
+    "no_results_found": "No se encontraron resultados para `{consulta}`. Vuelva a intentarlo con una consulta diferente."
   }
 }

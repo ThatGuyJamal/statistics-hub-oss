@@ -4,6 +4,7 @@ import { ENV } from "../../config";
 import Docs from "discord.js-docs";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { seconds } from "../../lib/utils/time";
+import { TextChannel } from "discord.js";
 
 @ApplyOptions<ICommandOptions>({
   description: "Read the discord.js documentation.",
@@ -14,7 +15,7 @@ import { seconds } from "../../lib/utils/time";
   nsfw: false,
   enabled: true,
   extendedDescription: {
-    usage: "djs [query]",
+    usage: "[query]",
     examples: ["djs Interaction", "djs ClientOptions"],
     command_type: "slash",
   },
@@ -40,7 +41,9 @@ export class UserCommand extends ICommand {
 
     if (!result) {
       return interaction.reply({
-        content: `No results found for \`${userQuery}\`! Try again...`,
+        content: await this.translate(interaction.channel as TextChannel, "commands/developer:djs_command.no_results_found", {
+          query: userQuery,
+        })
       });
     }
 

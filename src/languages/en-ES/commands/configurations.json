@@ -1,1 +1,9 @@
-{}
+{
+  "configure_command": {
+    "help_description": "Configurar diferentes ajustes para el bot"
+  }, 
+  "language": {
+    "success_reply": "¡La configuración de idioma se actualizó a __{{lang}}__!",
+    "error_reply": "Error al configurar el idioma... No se proporcionó ningún idioma"
+  }
+}

@@ -4,5 +4,9 @@
   },
   "eval_command": {
     "help_description": "Evaluates a code snippet. This is useful for debugging and testing."
+  },
+  "djs_command": {
+    "help_description": "Searches the discord.js documentation and returns your search results.",
+    "no_results_found": "No results found for `{query}`. Try again with a different query."
   }
 }
