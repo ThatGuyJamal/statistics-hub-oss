@@ -1,6 +1,12 @@
+# ⚠️Warning - In Development
+
+*This project is in rapid development and any information is subject to change at any time.* 
+
+***
+
 # Statistics Hub OSS
 
-📊 A discord bot dedicated for server owners. Created by [ThatGuyJamal](https://github.com/ThatGuyJamal)
+📊 An open source data analytics discord bot dedicated for server owners. Created by [ThatGuyJamal](https://github.com/ThatGuyJamal) and [contributors](./.github/contributors.md)
 
 ## `Get starting`
 
