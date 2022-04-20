@@ -10,7 +10,7 @@
 
 ## `Get starting`
 
-Coming soon...
+Coming soon... 
 
 ## `Commands`
 
@@ -67,4 +67,6 @@ such as a custom prefix and message commands. You can implement this yourself bu
 
 ---
 
-Join my support server [here](https://discord.com/invite/N79DZsm3m2). You can find planned features [here](./planned.md)
+Join my support server [here](https://discord.com/invite/N79DZsm3m2). You can find planned features [here](./planned.md).
+
+You can invite the production version of the bot [here](https://discord.com/api/oauth2/authorize?client_id=946398697254703174&permissions=415001496704&scope=bot%20applications.commands).
