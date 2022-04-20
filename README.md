@@ -52,10 +52,12 @@ started with the bot.
 
 6.  Lastly you can run the bot using `yarn start`.&#x20;
 
-### `Notes`
+### `Important Notes`
 
 1. Because of the lack of support moving forward with many message based commands from both the discord api and library's, the bot has limited support for things
 such as a custom prefix and message commands. You can implement this yourself but just know it had no been implemented fully. *And will be removed in the future.*
+
+2. As of now, the current version of the bot is being updated rapidly and is not in a stable version. It is also being developed to be a multi-guild bot in mind, meaning you may want to disabled or enable some of the features depending on your needs.
 
 ---
 
