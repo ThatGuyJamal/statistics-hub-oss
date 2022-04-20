@@ -12,7 +12,7 @@ export class GuildModelHandler {
   public constructor() {
     setInterval(() => {
       this._cache.clear();
-    }, days(1))
+    }, days(1));
   }
 
   /**
@@ -52,8 +52,13 @@ export class GuildModelHandler {
    * @returns The guild settings for the given guild id
    */
   public async getDocument(guild: Guild) {
-    const doc = await this._model.findById(guild.id);
-    if (doc) this._cache.set(guild.id, doc);
+    let doc;
+    if (this._cache.has(guild.id)) {
+      doc = this._cache.get(guild.id);
+    } else {
+      doc = await this._model.findById(guild.id);
+      if (doc) this._cache.set(guild.id, doc);
+    }
     return doc;
   }
 
