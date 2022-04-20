@@ -1,9 +1,5 @@
 #!/bin/bash    
 
-# Making sure nodejs is installed on the server
-curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
 # Checking the version of nodejs installed
 node --version
 

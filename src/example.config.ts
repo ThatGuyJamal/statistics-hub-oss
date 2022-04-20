@@ -30,8 +30,7 @@ export const ENV: env_types = {
     client_id: "",
     CLIENT_SECRET: "",
     PUBLIC_KEY: "",
-    test_guild_id: "",
-    test_guild_id_2: "",
+    test_guild_id: [],
     invite_url:
       "https://discord.com/api/oauth2/authorize?client_id=946398697254703174&permissions=415001496704&scope=bot%20applications.commands",
     server_link: "https://discord.com/invite/N79DZsm3m2",
