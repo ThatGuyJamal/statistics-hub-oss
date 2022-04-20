@@ -27,7 +27,7 @@ connection.on("connecting", () => {
 });
 
 connection.on("connected", () => {
-  container.logger.info(`Mongoose has connected!`);
+  container.logger.info(`Mongoose has connected @${ENV.database.mongodb_url}`);
 });
 
 connection.on("close", () => {
