@@ -84,6 +84,7 @@ export class UserCommand extends ICommand {
                   .addChoices([
                     ["English", "en-US"],
                     ["Espanol", "en-ES"],
+                    ["Portuguese", "pt-BR"],
                   ])
                   .setRequired(true)
               )
