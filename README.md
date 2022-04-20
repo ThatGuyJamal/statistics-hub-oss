@@ -21,6 +21,15 @@ Coming soon...
 | eval       | Executes js code                                     | Developer     | slash           | Guild Only |
 | reload     | Reloads a piece of the bot                           | Developer     | slash           | Guild Only |
 
+## `Languages`
+
+Currently supported translations. If you would like to help improve them, join our support server. You can also clone this repository, make changes to 
+the language [folder](./src/languages/) and submit a pull request.
+
+- English (default)
+- Spanish
+- Portuguese
+
 ---
 
 ## `Self Hosting Guide`
@@ -42,6 +51,11 @@ started with the bot.
 5.  Install the dependency's and then compile the code using `yarn compile`.
 
 6.  Lastly you can run the bot using `yarn start`.&#x20;
+
+### `Notes`
+
+1. Because of the lack of support moving forward with many message based commands from both the discord api and library's, the bot has limited support for things
+such as a custom prefix and message commands. You can implement this yourself but just know it had no been implemented fully. *And will be removed in the future.*
 
 ---
 

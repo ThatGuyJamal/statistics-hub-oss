@@ -1,0 +1,34 @@
+{
+  "ping_command": {
+    "description": "Pong! Latência do Bot {{{wsLatency}}}. Latência API {{{APILatency}}}",
+    "help_description": "A verificação é a latência do bot com discords api."
+  },
+  "stats_command": {
+    "help_description": "Mostra o CPU do bot, RAM, Uptime, e muito mais!"
+  },
+  "help_command_reply_ctx": "Por favor, utilize `/commands` para ver todos os comandos! Passamos para apenas os comandos de barra. Se não os puder ver, peça a um administrador do servidor que os active ou me convide novamente para o servidor.",
+  "help_command_general": {
+    "title": "Comandos",
+    "description": "Olá `{{{user}}` abaixo estão todos os meus comandos e lá estão as minhas categorias. Pode encontrar mais informações sobre um comando procurando por ele. __Use: **/command [search]**__",
+    "footer": "JJunte-se à nossa comunidade do discord para mais apoio!",
+    "invalid": "Comando inválido __**{{{cmd}}**__ Por favor utilize `/commands` para ver todos os comandos válidos.",
+    "title2": "{{command}} Comando | {{category}}",
+    "description2": "/commands para todos os comandos 🤍",
+    "alias_title": "Pseudónimos",
+    "usage_title": "Utilização",
+    "examples_title": "Exemplos",
+    "null_aliases": "Sem pseudónimos",
+    "null_examples": "Sem exemplos",
+    "null_usage": "Sem utilização",
+    "command_type_title": "Tipo de comando",
+    "null_command_type": "Sem tipo de comando",
+    "null_description": "Os pseudónimos de Comando não têm descrição. Por favor, utilize antes o comando de raiz. Exemplo: /commands ping em vez de /commands pong."
+  },
+  "commands_command": {
+    "help_description": "/commands para todos os comandos 🤍",
+    "description": "Este comando é utilizado para obter informações sobre como utilizar um comando.\n Mostrará o uso do comando, descrição, e exemplos.\n Se tiver alguma dúvida, pode contactar-nos no servidor de suporte."
+  },
+  "invite_command": {
+    "help_description": "Uma forma rápida de convidar o bot para o seu servidor!"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "reload_command": {
+    "help_description": "Recarregamento da paz do bot. Isto pode ser qualquer coisa desde um comando, evento ou loja."
+  },
+  "eval_command": {
+    "help_description": "Avalia uma porção do código. Isto é util para depuração e testes."
+  },
+  "djs_command": {
+    "help_description": "Pesquisa a documentação do discord.js e devolve os resultados da sua pesquisa.",
+    "no_results_found": "Não foram encontrados resultados para `{{query}``. Tente novamente com uma consulta diferente."
+  },
+  "cache_command": {
+    "help_description": "Permite ao desenvolvedor visualizar a cache do bot para este servidor.",
+    "success": "Dados do servidor"
+  }
+}

@@ -1,0 +1,8 @@
+{
+    "statistics_command": {
+        "help_description": "Comandos estatísticos para o bot."
+    },
+    "statistics": {
+        "success": "Não foi implementado ainda..."
+    }
+}
