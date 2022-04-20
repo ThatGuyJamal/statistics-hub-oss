@@ -4,6 +4,7 @@ import { TextChannel } from "discord.js";
 import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { BaseEmbed } from "../../lib/utils/embed";
+import { pauseThread } from "../../lib/utils/promises";
 import { seconds } from "../../lib/utils/time";
 
 @ApplyOptions<ICommandOptions>({
@@ -29,69 +30,39 @@ export class UserCommand extends ICommand {
     switch (interaction.options.getSubcommand()) {
       case "language":
         // fetches the language option we want
-        const result = interaction.options.getString("language");
-
-        if (!result)
-          return interaction.reply({
-            content: await this.translate(
-              interaction.channel as TextChannel,
-              "commands/configuration:language.error_reply"
-            ),
-            ephemeral: true,
-          });
+        const result = interaction.options.getString("language", true);
 
         await interaction.reply({
-          embeds: [
-            new BaseEmbed().interactionEmbed(
-              {
-                description: "loading...",
-              },
-              interaction
-            ),
-          ],
+          content: `Saving configuration...`,
         });
 
-        // Fetch the old data from the cache or db and update it
-
-        const fetchOldCache = await this.container.client.GuildSettingsModel.getDocument(interaction.guild);
-
-        if (fetchOldCache) {
-          this.container.client.GuildSettingsModel._cache.set(interaction.guild.id, {
-            _id: interaction.guild.id,
-            guild_name: interaction.guild.name,
-            language: result,
-            blacklisted: fetchOldCache.blacklisted ?? false,
-            data: fetchOldCache?.data ?? {},
+        await pauseThread(3, "seconds", "Cache Command").then(async () => {
+          // Save the language option
+          this.container.client.GuildSettingsModel._model.updateOne(
+            { _id: interaction.guildId },
+            { $set: { language: result } },
+          ).then((res) => {
+            this.container.logger.info(res);
+          }).catch((err) => {
+            this.container.logger.error(err);
           });
-        }
 
-        // After updating the cache we will send the results to the database
-
-        await this.container.client.GuildSettingsModel._model.findByIdAndUpdate(
-          { _id: interaction.guildId },
-          {
-            $set: {
-              guild_name: interaction.guild.name,
-              language: result,
-            },
-          }
-        );
-
-        return await interaction.reply({
-          embeds: [
-            new BaseEmbed().interactionEmbed(
-              {
-                description: await this.translate(
-                  interaction.channel as TextChannel,
-                  "commands/configuration:language.success_reply",
-                  {
-                    lang: result,
-                  }
-                ),
-              },
-              interaction
-            ),
-          ],
+          return await interaction.reply({
+            embeds: [
+              new BaseEmbed().interactionEmbed(
+                {
+                  description: await this.translate(
+                    interaction.channel as TextChannel,
+                    "commands/configurations:language.success_reply",
+                    {
+                      lang: result,
+                    }
+                  ),
+                },
+                interaction
+              ),
+            ],
+          });
         });
     }
   }
@@ -108,8 +79,8 @@ export class UserCommand extends ICommand {
               .setDescription("Sets the active language the bot will use.")
               .addStringOption((stringOption) =>
                 stringOption
-                .setName("select")
-                .setDescription("Select the language you want to use.")
+                  .setName("select")
+                  .setDescription("Select the language you want to use.")
                   .addChoices([
                     ["English", "en-US"],
                     ["Espanol", "en-ES"],
