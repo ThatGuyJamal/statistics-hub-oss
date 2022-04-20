@@ -15,3 +15,5 @@ Below are planned features I will be adding to the bot in now specific order...
 *   [ ] Add statcord command information to statistics command
 
 *   [ ] Update information / info command to include [b-card](https://github.com/discord-card/bot) 
+
+*   [ ] Add support for enable or disabling of commands.
