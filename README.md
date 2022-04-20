@@ -45,4 +45,4 @@ started with the bot.
 
 ---
 
-Join my support server [here]()
+Join my support server [here](https://discord.com/invite/N79DZsm3m2). You can find planned features [here](./planned.md)
