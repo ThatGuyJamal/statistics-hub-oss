@@ -30,13 +30,13 @@ export class UserCommand extends ICommand {
     switch (interaction.options.getSubcommand()) {
       case "language":
         // fetches the language option we want
-        const result = interaction.options.getString("language", true);
+        const result = interaction.options.getString("select", true);
 
         await interaction.reply({
           content: `Saving configuration...`,
         });
 
-        await pauseThread(3, "seconds", "Cache Command").then(async () => {
+        await pauseThread(3, "seconds", "Configure Command").then(async () => {
           // Save the language option
           this.container.client.GuildSettingsModel._model.updateOne(
             { _id: interaction.guildId },
@@ -47,7 +47,7 @@ export class UserCommand extends ICommand {
             this.container.logger.error(err);
           });
 
-          return await interaction.reply({
+          return await interaction.editReply({
             embeds: [
               new BaseEmbed().interactionEmbed(
                 {
