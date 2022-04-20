@@ -8,5 +8,9 @@
   "djs_command": {
     "help_description": "Searches the discord.js documentation and returns your search results.",
     "no_results_found": "No results found for `{query}`. Try again with a different query."
+  },
+  "cache_command": {
+    "help_description": "Allows the developer to view the cache of the bot for this guild.",
+    "success": "Server Data"
   }
 }

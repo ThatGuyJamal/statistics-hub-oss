@@ -8,5 +8,9 @@
   "djs_command": {
     "help_description": "Busca en la documentación de discord.js y devuelve los resultados de la búsqueda.",
     "no_results_found": "No se encontraron resultados para `{consulta}`. Vuelva a intentarlo con una consulta diferente."
+  },
+  "cache_command": {
+    "help_description": "Permite al desarrollador ver el caché del bot para este gremio.",
+    "success": "Datos del servidor"
   }
 }
