@@ -14,4 +14,4 @@ init:
 	@yarn run check:format
 	@echo Formatted code...
 	@yarn run compile
-	@echo Build complete. Run yarn serve to start the bot.
+	@echo Build complete. Run yarn start:production to start the bot.
