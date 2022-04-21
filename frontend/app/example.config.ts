@@ -14,24 +14,12 @@
     GNU Affero General Public License for more details.
  */
 
-import type { EntryContext } from "@remix-run/node";
-import { RemixServer } from "@remix-run/react";
-import { renderToString } from "react-dom/server";
-
-export default function handleRequest(
-  request: Request,
-  responseStatusCode: number,
-  responseHeaders: Headers,
-  remixContext: EntryContext
-) {
-  let markup = renderToString(
-    <RemixServer context={remixContext} url={request.url} />
-  );
-
-  responseHeaders.set("Content-Type", "text/html");
-
-  return new Response("<!DOCTYPE html>" + markup, {
-    status: responseStatusCode,
-    headers: responseHeaders,
-  });
+/**
+ * Our project configuration
+ */
+ export const environment = {
+    production: false,
+    mongodbUrl: 'mongodb://localhost:27017/test',
+    website_root_title: "Statistics Hub OSS",
+    session_secret: "",
 }
