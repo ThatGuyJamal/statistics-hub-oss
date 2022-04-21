@@ -2,9 +2,9 @@
 
 Below are planned features I will be adding to the bot in now specific order...
 
-- [ ] Channel Stats \[Create, Delete]
+- [x] Channel Stats \[Create, Delete]
 
-- [ ] Voice Stats \[Joins]
+- [x] Voice Stats \[Joins]
 
 - [x] Switch setInterval Functions to the interval controller class for more control
 
