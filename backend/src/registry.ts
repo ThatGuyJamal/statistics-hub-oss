@@ -21,6 +21,8 @@ import "@sapphire/plugin-hmr/register";
 import { container } from "@sapphire/framework";
 import { BotClient } from "./lib/client/bot";
 
+console.clear()
+
 async function bootstrap(): Promise<void> {
   await BotClient.startClient();
 }

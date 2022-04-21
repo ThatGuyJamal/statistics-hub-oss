@@ -88,3 +88,21 @@ export interface GuildSchemaChannelType {
   created: number;
   deleted: number;
 }
+
+/**
+ * The default data object for the database schema creation object.
+ */
+export const DefaultDataModelObject = {
+  member: {
+    guildJoins: 0,
+    guildLeaves: 0,
+    lastJoin: null,
+    guildBans: 0,
+  },
+  message: 1,
+  voice: 0,
+  channel: {
+    created: 0,
+    deleted: 0,
+  },
+}

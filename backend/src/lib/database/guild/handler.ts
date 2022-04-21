@@ -17,7 +17,7 @@
 import { GuildDocument, GuildDocumentModel } from "./model";
 import { Collection, Guild } from "discord.js";
 import { container } from "@sapphire/framework";
-import { days } from "../../utils/time";
+import { hours } from "../../utils/time";
 
 export class GuildModelHandler {
   /** Model types for mongoose query's... */
@@ -26,6 +26,11 @@ export class GuildModelHandler {
   public _cache = new Collection<string, GuildDocument>();
 
   public constructor() {
+
+    this.initCache().then(() => {
+      console.log(`[GuildModelHandler] Cache initialized.`);
+    });
+
     /**
      * This will clear all cache entries every 24 hours.
      * This is to prevent the cache from growing too large and wipe inactivity guilds from the memory.
@@ -35,7 +40,7 @@ export class GuildModelHandler {
       () => {
         this._cache.clear();
       },
-      days(1)
+      hours(12)
     ).then(() => {
       container.logger.info("Global guild cache clear interval started!");
     });

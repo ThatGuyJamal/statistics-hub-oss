@@ -34,7 +34,7 @@ export class UserEvent extends Listener {
             member: {
               guildJoins: 1,
               guildLeaves: 0,
-              lastJoin: null,
+              lastJoin: new Date(),
               guildBans: 0,
             },
             message: 0,
@@ -58,6 +58,9 @@ export class UserEvent extends Listener {
             $inc: {
               "data.member.guildJoins": 1,
             },
+            $set: {
+              "data.member.lastJoin": new Date(),
+            }
           }
         )
         .then((res) => {

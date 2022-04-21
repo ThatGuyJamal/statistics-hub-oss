@@ -30,9 +30,9 @@ class ExtendedClient extends SapphireClient {
   public constructor() {
     super(CLIENT_OPTIONS);
 
+    this.IntervalsController = new IntervalsController(this);
     this.GuildSettingsModel = new GuildModelHandler();
     // this.cluster = new ShardCluster.Client(this);
-    this.IntervalsController = new IntervalsController(this);
     this.EventLogger = new IEventLogger();
     this.StatisticsHandler = new StatisticsHandler(container);
     this.TemporaryCaches = {

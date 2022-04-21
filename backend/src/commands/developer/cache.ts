@@ -22,6 +22,7 @@ import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { seconds } from "../../lib/utils/time";
 import { codeBlock } from "../../lib/utils/format";
 import { pauseThread } from "../../lib/utils/promises";
+import { DefaultDataModelObject } from "../../lib/database/guild/model";
 
 @ApplyOptions<ICommandOptions>({
   description: "Checks the current active cache for this server",
@@ -44,62 +45,58 @@ export class UserCommand extends ICommand {
   }
   // Slash Based Command
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
-    await interaction.reply({
-      content: `Fetching data...`,
-    });
+    await interaction
+      .reply({
+        content: `Fetching data...`,
+      })
+      .then(async () => {
+        await pauseThread(3, "seconds", "Cache Command").then(async () => {
+          const fetch = await this.container.client.GuildSettingsModel.getDocument(interaction.guild!);
 
-    await pauseThread(3, "seconds", "Cache Command").then(async () => {
-      const fetch = await this.container.client.GuildSettingsModel.getDocument(interaction.guild!);
+          if (!fetch) {
+            await this.container.client.GuildSettingsModel._model
+              .create({
+                _id: interaction.guild!.id,
+                guild_name: interaction.guild!.name,
+                data: DefaultDataModelObject,
+              })
+              .then((res) => {
+                this.container.logger.info(res);
+              });
 
-      if (!fetch) {
-        await this.container.client.GuildSettingsModel._model
-          .create({
-            _id: interaction.guild!.id,
-            guild_name: interaction.guild!.name,
-            data: {
-              member: {
-                guildJoins: 0,
-                guildLeaves: 0,
-                lastJoin: null,
-                guildBans: 0,
-              },
-              message: 1,
-              voice: 0,
-              channel: {
-                created: 0,
-                deleted: 0,
-              },
-            },
-          })
-          .then((res) => {
-            this.container.logger.info(res);
-          });
+            return interaction.reply({
+              content: `No cache found. Creating new cache...`,
+            });
+          } else {
+            const memData =
+              //@ts-ignore
+              fetch.data.member?.guildJoins + fetch.data.member?.guildLeaves + fetch.data.member?.guildBans;
+            //@ts-ignore
+            const msgData = fetch.data.message;
+            //@ts-ignore
+            const voiceData = fetch.data.voice;
+            //@ts-ignore
+            const chanData = fetch.data.channel?.created + fetch.data.channel?.deleted;
 
-        await interaction.reply({
-          content: `No data found for this server... Creating new data.`,
+            return await interaction.editReply({
+              content: codeBlock(
+                "css",
+                `
+               Server Data
+               [Message Size] = ${fetch?.data?.message ?? 0}
+               [Member Size]  = ${memData ?? 0}
+               [Voice Size]   = ${voiceData ?? 0}
+               [Channel Size] = ${chanData ?? 0}
+   
+               More stats coming soon...
+   
+               Total data size Cached = ${msgData! + memData}
+               `
+              ),
+            });
+          }
         });
-      }
-
-      //@ts-ignore
-      const memData = fetch.data.member?.guildJoins + fetch.data.member?.guildLeaves + fetch.data.member?.guildBans;
-      //@ts-ignore
-      const msgData = fetch.data.message;
-
-      return await interaction.editReply({
-        content: codeBlock(
-          "css",
-          `
-            Server Data
-            [Message Size] = ${fetch?.data?.message ?? 0}
-            [Member Size]  = ${memData ?? 0}
-
-            More stats coming soon...
-
-            Total data size Cached = ${msgData! + memData}
-            `
-        ),
       });
-    });
   }
   // slash command registry
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {

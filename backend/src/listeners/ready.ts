@@ -29,7 +29,7 @@ const dev = ENV.bot.dev;
 export class UserEvent extends Listener {
   private readonly style = dev ? yellow : blue;
 
-  public async run(ctx: Message): Promise<void> {
+  public async run(_ctx: Message): Promise<void> {
     const { client } = this.container;
 
     await client.user?.setPresence({
@@ -55,7 +55,7 @@ export class UserEvent extends Listener {
 
     UserEvent.printBanner();
     this.printStoreDebugInformation();
-    await this.guildValidator(ctx);
+    // await this.guildValidator(ctx);
 
     this.container.client.StatisticsHandler.init();
   }
@@ -95,32 +95,32 @@ ${line03}${dev ? ` ${pad}${blc("<")}${llc("/")}${blc(">")} ${llc("DEVELOPMENT MO
     return gray(`${last ? "└─" : "├─"} Loaded ${this.style(store.size.toString().padEnd(3, " "))} ${store.name}.`);
   }
 
-  private async guildValidator(ctx: Message) {
-    const { client, logger } = this.container;
+  // private async guildValidator(ctx: Message) {
+  //   const { client, logger } = this.container;
 
-    // Find all the guilds in our database
-    const documents = await client.GuildSettingsModel.initCache();
+  //   // Find all the guilds in our database
+  //   const documents = await client.GuildSettingsModel.initCache();
 
-    if (!documents) return;
+  //   if (!documents) return;
 
-    logger.warn("Starting guild validator...");
+  //   logger.info("Starting guild validator...")
 
-    for (const collection of client.guilds.cache) {
-      const guild = collection[1];
+  //   for (const collection of client.guilds.cache) {
+  //     const guild = collection[1];
 
-      let guilds = documents.find((doc) => doc._id === guild.id);
+  //     let guilds = documents.find((doc) => doc._id === guild.id);
 
-      logger.info(`${this.style(guild.name)} (${guild.id}) - ${guilds ? "Found" : "Not found"} in database.`);
+  //     logger.info(`${this.style(guild.name)} (${guild.id}) - ${guilds ? "Found" : "Not found"} in database.`);
 
-      // check if the guild is blacklisted in our database
-      // if it is, leave the guild
-      if (guilds && guilds.blacklisted === true) {
-        await guild.leave();
-        let msg = `Guild ${bold(guild.name)} (${guild.id}) is on the guild blacklist, leaving...`;
-        logger.warn(msg);
-        await client.EventLogger.blackListLogs(ctx, blackListLevel.guild, msg);
-      }
-    }
-    logger.info(`Finished guild validator.`);
-  }
+  //     // check if the guild is blacklisted in our database
+  //     // if it is, leave the guild
+  //     if (guilds && guilds.blacklisted === true) {
+  //       await guild.leave();
+  //       let msg = `Guild ${bold(guild.name)} (${guild.id}) is on the guild blacklist, leaving...`;
+  //       logger.warn(msg);
+  //       await client.EventLogger.blackListLogs(ctx, blackListLevel.guild, msg);
+  //     }
+  //   }
+  //   logger.info(`Finished guild validator.`);
+  // }
 }
