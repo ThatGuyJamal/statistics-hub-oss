@@ -35,7 +35,7 @@ import { createHyperLink } from "../../lib/utils/format";
 import { seconds } from "../../lib/utils/time";
 
 @ApplyOptions<ICommandOptions>({
-  description: "Shows statistics about the bot.",
+  description: "Shows information about the bot.",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,

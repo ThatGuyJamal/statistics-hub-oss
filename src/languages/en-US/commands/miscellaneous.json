@@ -3,7 +3,7 @@
     "description": "Pong! Bot Latency {{wsLatency}}. API Latency {{APILatency}}",
     "help_description": "Check's the bot latency with discords api."
   },
-  "stats_command": {
+  "info_command": {
     "help_description": "Shows the bot's CPU, RAM, Uptime, and more!"
   },
   "help_command_reply_ctx": "Please use `/commands` to see all commands! We have moved to slash commands only. If you cant see them, ask a server admin to enable them or re-invite me to the server.",

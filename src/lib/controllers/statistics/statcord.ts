@@ -27,7 +27,8 @@ export class StatisticsHandler {
     this.client = c;
   }
   public init(): void {
-    setInterval(async () => {
+
+    container.client.IntervalsController.start("statcord-post-interval", async () => {
       await this.statcordPost();
     }, hours(1));
 

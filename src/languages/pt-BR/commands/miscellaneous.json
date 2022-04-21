@@ -3,7 +3,7 @@
     "description": "Pong! Latência do Bot {{{wsLatency}}}. Latência API {{{APILatency}}}",
     "help_description": "A verificação é a latência do bot com discords api."
   },
-  "stats_command": {
+  "info_command": {
     "help_description": "Mostra o CPU do bot, RAM, Uptime, e muito mais!"
   },
   "help_command_reply_ctx": "Por favor, utilize `/commands` para ver todos os comandos! Passamos para apenas os comandos de barra. Se não os puder ver, peça a um administrador do servidor que os active ou me convide novamente para o servidor.",

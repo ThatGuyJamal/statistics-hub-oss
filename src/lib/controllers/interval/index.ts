@@ -36,7 +36,7 @@ export class IntervalsController {
   }
 
   /**
-   * Starts an interval
+   * Starts an interval and provides a little bit of safety to make sure it doesn't start twice.
    * @param name Name of the interval
    * @param callback The callback to be called
    * @param interval The interval to be called

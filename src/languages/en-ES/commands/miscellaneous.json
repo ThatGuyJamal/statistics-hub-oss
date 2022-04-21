@@ -3,7 +3,7 @@
     "description": "¡Apestar! Latencia del bot {{wsLatency}}. Latencia de la API {{APILatency}}",
     "help_description": "Verifique la latencia del bot con discords api."
   },
-  "stats_command": {
+  "info_command": {
     "help_description": "¡Muestra la CPU, la RAM, el tiempo de actividad y más del bot!"
   },
   "help_command_reply_ctx": "¡Utilice `/commands` para ver todos los comandos! Nos hemos movido a los comandos de barra oblicua solamente. Si no puede verlos, pídale a un administrador del servidor que los habilite o vuelva a invitarme al servidor.",
