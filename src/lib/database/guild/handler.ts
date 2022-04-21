@@ -26,9 +26,15 @@ export class GuildModelHandler {
   public _cache = new Collection<string, GuildDocument>();
 
   public constructor() {
-    setInterval(() => {
+    /**
+     * This will clear all cache entries every 24 hours.
+     * This is to prevent the cache from growing too large and wipe inactivity guilds from the memory.
+     */
+    container.client.IntervalsController.start("global-guild-cache-clear", () => {
       this._cache.clear();
-    }, days(1));
+    }, days(1)).then(() => {
+      container.logger.info("Global guild cache clear interval started!");
+    })
   }
 
   /**

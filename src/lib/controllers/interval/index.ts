@@ -15,7 +15,6 @@
  */
 
 import { Collection } from "discord.js";
-import { ENV } from "../../../config";
 import { BotClient } from "../../client/bot";
 
 /**
@@ -52,10 +51,8 @@ export class IntervalsController {
             this.client.logger.error(error);
           }
         }
-      }
-      this.intervals.set(name, setInterval(callback, interval));
-      if (ENV.bot.dev) {
-        this.client.logger.info(`[Interval] ${name} started with interval ${interval}ms`);
+      } else {
+        this.intervals.set(name, setInterval(callback, interval));
       }
     } catch (e) {
       this.client.logger.error(e);
@@ -64,31 +61,24 @@ export class IntervalsController {
 
   /**
    * Stops an interval
-   * @param name
-   * @returns {Promise<void>}
+   * @param name Name of the interval
+   * @returns {Promise<void>} Whether the interval exists
    */
   public async stop(name: string): Promise<void> {
     if (this.intervals.has(name)) {
       this.intervals.delete(name);
-      if (ENV.bot.dev) {
         this.client.logger.info(`[Interval] ${name} has stopped`);
-      }
     } else {
-      if (ENV.bot.dev) {
-        this.client.logger.info(`[Interval] ${name} does not exist`);
-      }
+        this.client.logger.info(`[Interval] ${name} does not exist, nothing was stopped`);
     }
   }
 
   /**
    * Check if an interval exists
-   * @param name
-   * @returns {boolean}
+   * @param name Name of the interval
+   * @returns {boolean} Whether the interval exists
    */
   public exists(name: string): boolean {
-    if (ENV.bot.dev) {
-      this.client.logger.info(`[Interval] ${name} exists? ${this.intervals.has(name)}`);
-    }
     return this.intervals.has(name);
   }
 }
