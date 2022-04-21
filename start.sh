@@ -1,7 +1,9 @@
 #!/bin/bash    
 
 # Checking the version of nodejs installed
-node --version
+nodev = node --version
+
+echo "Current Node version is $nodev"
 
 #  Installing and running the app
 npm install
