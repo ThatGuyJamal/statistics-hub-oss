@@ -51,15 +51,18 @@ export class UserEvent extends Listener {
     if (!result) result = { value: 0, stack: 0 };
 
     if (ratelimit.has(ctx.guild.id)) {
-      if (result.stack > 5) {
+      if (result.stack > 10) {
+        // container.logger.info(`Ratelimit exceeded for ${ctx.guild.name} | ${ctx.guild.id} - Pushing to upload queue...`);
         this.upload(ctx)
       } else {
+        // container.logger.info(`[Ratelimit] ${ctx.guild.name} | ${ctx.guild.id} - Incrementing stack...`);
         ratelimit.set(ctx.guild.id, {
           value: result.value + 1,
           stack: result.stack + 1,
         });
       }
     } else {
+      // container.logger.info(`[Ratelimit] ${ctx.guild.name} | ${ctx.guild.id} - Initializing...`);
       ratelimit.set(ctx.guild.id, {
         value: 1,
         stack: 0,
