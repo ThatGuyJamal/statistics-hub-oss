@@ -21,3 +21,5 @@ Below are planned features I will be adding to the bot in now specific order...
 - [ ] Add support for enable or disabling of commands.
 
 - [ ] Add caching to some of the db query's
+
+- [ ] Add premium system for bot. This will limit some functions and commands. Also we need to make another simple bot for handling the premium form setup.

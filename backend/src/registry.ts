@@ -1,5 +1,5 @@
 /**
- *  Statistics Hub OSS - A data analytics discord bot.
+    Statistics Hub OSS - A data analytics discord bot.
     
     Copyright (C) 2022, ThatGuyJamal and contributors
 
