@@ -15,6 +15,7 @@
  */
 
 import { getModelForClass, modelOptions, prop, Severity } from "@typegoose/typegoose";
+import { GuildSchemaPremiumTier } from "../user/model";
 
 @modelOptions({
   schemaOptions: {
@@ -75,7 +76,12 @@ export interface GuildSchema {
    * This will require a guild owner to set this up. They will active the premium status for there 
    * account and then can enable the guild.
    */
-  premium?: boolean;
+  premium?: {
+    status: boolean;
+    tier: GuildSchemaPremiumTier;
+    /** Id of the guild owner who enabled this guild. */
+    enabled_by: string;
+  }
 }
 
 /**
