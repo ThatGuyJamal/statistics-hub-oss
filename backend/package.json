@@ -45,7 +45,7 @@
     "@sapphire/ratelimits": "^2.1.12",
     "@sapphire/time-utilities": "^1.5.2",
     "@sapphire/type": "^2.1.2",
-    "@typegoose/typegoose": "^9.7.0",
+    "@typegoose/typegoose": "^9.8.1",
     "discord.js": "^13.6.0",
     "discord.js-docs": "^0.3.0",
     "fuse.js": "^6.5.3",
