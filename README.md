@@ -61,7 +61,7 @@ started with the bot.
 
 3.  Go to mongodb.com and create a database, then save the connection url.
 
-4.  Clone this repository, and rename the example.config.ts file to config.ts and fill it out.
+4.  Clone this repository, and rename the [example.config.ts](./backend/src/example.config.ts) file to config.ts and fill it out.
 
 5.  Install the dependency's and then compile the code using `yarn compile`.
 

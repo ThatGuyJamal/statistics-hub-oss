@@ -61,6 +61,9 @@ export class UserEvent extends Listener {
             $inc: {
               "data.message": 1,
             },
+            $set: {
+              guild_name: ctx.guild.name,
+            }
           }
         )
         .then((res) => {

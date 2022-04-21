@@ -19,7 +19,6 @@ import { ListenerOptions, Events, Listener, Store } from "@sapphire/framework";
 import { Message } from "discord.js";
 import { ENV } from "../config";
 import { blue, bold, gray, green, magenta, magentaBright, white, yellow } from "colorette";
-import { blackListLevel } from "../lib/controllers/statistics/logger";
 
 const dev = ENV.bot.dev;
 
@@ -55,6 +54,8 @@ export class UserEvent extends Listener {
 
     UserEvent.printBanner();
     this.printStoreDebugInformation();
+    // Save all guilds from the database to the cache
+    await this.container.client.GuildSettingsModel.initCache();
     // await this.guildValidator(ctx);
 
     this.container.client.StatisticsHandler.init();

@@ -26,11 +26,6 @@ export class GuildModelHandler {
   public _cache = new Collection<string, GuildDocument>();
 
   public constructor() {
-
-    this.initCache().then(() => {
-      console.log(`[GuildModelHandler] Cache initialized.`);
-    });
-
     /**
      * This will clear all cache entries every 24 hours.
      * This is to prevent the cache from growing too large and wipe inactivity guilds from the memory.
@@ -83,13 +78,8 @@ export class GuildModelHandler {
    * @returns The guild settings for the given guild id
    */
   public async getDocument(guild: Guild) {
-    let doc;
-    if (this._cache.has(guild.id)) {
-      doc = this._cache.get(guild.id);
-    } else {
-      doc = await this._model.findById(guild.id);
-      if (doc) this._cache.set(guild.id, doc);
-    }
+    const doc = await this._model.findById(guild.id);
+    if (doc) this._cache.set(guild.id, doc);
     return doc;
   }
 

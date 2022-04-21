@@ -96,7 +96,7 @@ export const DefaultDataModelObject = {
   member: {
     guildJoins: 0,
     guildLeaves: 0,
-    lastJoin: null,
+    lastJoin: undefined,
     guildBans: 0,
   },
   message: 1,
@@ -105,4 +105,4 @@ export const DefaultDataModelObject = {
     created: 0,
     deleted: 0,
   },
-}
+} as GuildSchema

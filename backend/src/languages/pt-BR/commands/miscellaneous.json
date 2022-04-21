@@ -9,7 +9,7 @@
   "help_command_reply_ctx": "Por favor, utilize `/commands` para ver todos os comandos! Passamos para apenas os comandos de barra. Se não os puder ver, peça a um administrador do servidor que os active ou me convide novamente para o servidor.",
   "help_command_general": {
     "title": "Comandos",
-    "description": "Olá `{{{user}}` abaixo estão todos os meus comandos e lá estão as minhas categorias. Pode encontrar mais informações sobre um comando procurando por ele. __Use: **/command [search]**__",
+    "description": "Olá `{{user}}` abaixo estão todos os meus comandos e lá estão as minhas categorias. Pode encontrar mais informações sobre um comando procurando por ele. __Use: **/command [search]**__",
     "footer": "JJunte-se à nossa comunidade do discord para mais apoio!",
     "invalid": "Comando inválido __**{{{cmd}}**__ Por favor utilize `/commands` para ver todos os comandos válidos.",
     "title2": "{{command}} Comando | {{category}}",

@@ -60,7 +60,7 @@ export class UserEvent extends Listener {
             },
             $set: {
               "data.member.lastJoin": new Date(),
-            }
+            },
           }
         )
         .then((res) => {

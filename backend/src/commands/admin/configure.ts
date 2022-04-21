@@ -19,6 +19,7 @@ import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCom
 import { TextChannel } from "discord.js";
 import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
+import { DefaultDataModelObject } from "../../lib/database/guild/model";
 import { BaseEmbed } from "../../lib/utils/embed";
 import { pauseThread } from "../../lib/utils/promises";
 import { seconds } from "../../lib/utils/time";
@@ -52,9 +53,20 @@ export class UserCommand extends ICommand {
           content: `Saving configuration...`,
         });
 
-        await pauseThread(3, "seconds", "Cache Command").then(async () => {
-          // Save the language option
-          this.container.client.GuildSettingsModel._model
+        await pauseThread(3, "seconds", "Configure Command").then(async () => {
+
+          // Make sure to update the current cache if the language is changed
+          const oldData = this.container.client.GuildSettingsModel._cache.get(interaction.guild!.id)
+          if(oldData) {
+            this.container.client.GuildSettingsModel._cache.set(interaction.guild!.id, {
+              _id: interaction.guild!.id,
+              guild_name: interaction.guild!.name,
+              language: result,
+              data: oldData.data ??  DefaultDataModelObject,
+            });
+          }
+
+         const updatedData = await this.container.client.GuildSettingsModel._model
             .updateOne({ _id: interaction.guildId }, { $set: { language: result } })
             .then((res) => {
               this.container.logger.info(res);
