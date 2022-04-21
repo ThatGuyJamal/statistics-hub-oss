@@ -75,7 +75,7 @@ const IndexPropsValue = [
     id: "1",
     name: "Github",
     description: "The site source code",
-    url: "https://github.com/ThatGuyJamal/statistics-hub-oss"
+    url: "https://github.com/ThatGuyJamal/statistics-hub-oss/tree/master/frontend"
   },
   {
     id: "2",
