@@ -1,6 +1,6 @@
 {
   "ping_command": {
-    "description": "Pong! Latência do Bot {{{wsLatency}}}. Latência API {{{APILatency}}}",
+    "description": "Pong! Latência do Bot {{wsLatency}}. Latência API {{APILatency}}",
     "help_description": "A verificação é a latência do bot com discords api."
   },
   "info_command": {
@@ -11,7 +11,7 @@
     "title": "Comandos",
     "description": "Olá `{{user}}` abaixo estão todos os meus comandos e lá estão as minhas categorias. Pode encontrar mais informações sobre um comando procurando por ele. __Use: **/command [search]**__",
     "footer": "JJunte-se à nossa comunidade do discord para mais apoio!",
-    "invalid": "Comando inválido __**{{{cmd}}**__ Por favor utilize `/commands` para ver todos os comandos válidos.",
+    "invalid": "Comando inválido __**{{cmd}}**__ Por favor utilize `/commands` para ver todos os comandos válidos.",
     "title2": "{{command}} Comando | {{category}}",
     "description2": "/commands para todos os comandos 🤍",
     "alias_title": "Pseudónimos",
