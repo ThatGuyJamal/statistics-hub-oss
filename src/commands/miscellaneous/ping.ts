@@ -42,7 +42,7 @@ import { seconds } from "../../lib/utils/time";
 })
 export class UserCommand extends ICommand {
   public override async messageRun(ctx: Message) {
-    const msg = await send(ctx, "Ping?");
+    const msg = await send(ctx, "fetching current latency...");
 
     let content = await this.translate(ctx.channel as TextChannel, "commands/miscellaneous:ping_command.description", {
       replace: {
@@ -56,7 +56,7 @@ export class UserCommand extends ICommand {
   }
 
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
-    const embed = createEmbed("", BrandingColors.Secondary).setTitle("Ping? 🏓");
+    const embed = createEmbed("", BrandingColors.Secondary).setTitle("fetching current latency... 🏓");
     const message = (await interaction.reply({
       embeds: [embed],
       fetchReply: true,
