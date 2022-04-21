@@ -51,8 +51,8 @@ export class UserEvent extends Listener {
     if (!result) result = { value: 0, stack: 0 };
 
     if (ratelimit.has(ctx.guild.id)) {
-      if (result.stack > 25) {
-        this.upload(ctx).then(() => ratelimit.delete(ctx.guild.id))
+      if (result.stack > 5) {
+        this.upload(ctx)
       } else {
         ratelimit.set(ctx.guild.id, {
           value: result.value + 1,
@@ -60,7 +60,10 @@ export class UserEvent extends Listener {
         });
       }
     } else {
-      this.upload(ctx);
+      ratelimit.set(ctx.guild.id, {
+        value: 1,
+        stack: 0,
+      });
     }
   }
 
@@ -74,11 +77,6 @@ export class UserEvent extends Listener {
 
     const fetch = await this.container.client.GuildSettingsModel.getDocument(ctx.guild);
 
-    ratelimit.set(ctx.guild.id, {
-      value: 1,
-      stack: 0,
-    });
-
     if (!fetch) {
       await this.container.client.GuildSettingsModel._model
         .create({
@@ -88,8 +86,10 @@ export class UserEvent extends Listener {
         })
         .then((res) => {
           this.container.logger.info(res);
+          ratelimit.delete(ctx.guild.id)
         });
     } else {
+      let result = ratelimit.get(ctx.guild.id);
       await this.container.client.GuildSettingsModel._model
         .updateOne(
           {
@@ -97,7 +97,7 @@ export class UserEvent extends Listener {
           },
           {
             $inc: {
-              "data.message": ratelimit,
+              "data.message": result?.value ?? 1,
             },
             $set: {
               guild_name: ctx.guild.name,
@@ -106,6 +106,7 @@ export class UserEvent extends Listener {
         )
         .then((res) => {
           this.container.logger.info(res);
+          ratelimit.delete(ctx.guild.id)
         });
     }
   }
