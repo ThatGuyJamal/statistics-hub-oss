@@ -15,7 +15,7 @@ _This project is in rapid development and any information is subject to change a
 - [Discord.js](https://discord.js.org/) is the discord api library used for the project.
 - [Sapphire.js](https://www.sapphirejs.dev/) is the discord plugin framework for the project.
 
-### directory's
+### Directory's
 
 - [Backend](./backend/) is the main source code of the bot and its functions.
 - [api](./api/) is the handler for the bots api and cloud functions.
