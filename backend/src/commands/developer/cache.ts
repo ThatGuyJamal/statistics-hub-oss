@@ -22,7 +22,7 @@ import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { seconds } from "../../lib/utils/time";
 import { codeBlock } from "../../lib/utils/format";
 import { pauseThread } from "../../lib/utils/promises";
-import { DefaultDataModelObject } from "../../lib/database/guild/model";
+import { DefaultDataModelObject } from "../../lib/database/";
 
 @ApplyOptions<ICommandOptions>({
   description: "Checks the current active cache for this server",

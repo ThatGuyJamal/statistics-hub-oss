@@ -64,10 +64,18 @@ export const GuildDocumentModel = getModelForClass(GuildDocument);
 export interface GuildSchema {
   /** Tracks the guild member message activity */
   message?: number;
-  /** Tracks the member join rates */
+  /** Tracks the member information*/
   member?: GuildSchemaMemberType;
+  /** Tracks voice channel information */
   voice?: number;
+  /** Tracks Channel information. */
   channel?: GuildSchemaChannelType;
+  /**
+   * Tracks the guild's premium status
+   * This will require a guild owner to set this up. They will active the premium status for there 
+   * account and then can enable the guild.
+   */
+  premium?: boolean;
 }
 
 /**
@@ -88,21 +96,3 @@ export interface GuildSchemaChannelType {
   created: number;
   deleted: number;
 }
-
-/**
- * The default data object for the database schema creation object.
- */
-export const DefaultDataModelObject = {
-  member: {
-    guildJoins: 0,
-    guildLeaves: 0,
-    lastJoin: undefined,
-    guildBans: 0,
-  },
-  message: 1,
-  voice: 0,
-  channel: {
-    created: 0,
-    deleted: 0,
-  },
-} as GuildSchema

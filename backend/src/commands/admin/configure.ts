@@ -19,7 +19,7 @@ import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCom
 import { TextChannel } from "discord.js";
 import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
-import { DefaultDataModelObject } from "../../lib/database/guild/model";
+import { DefaultDataModelObject } from "../../lib/database";
 import { BaseEmbed } from "../../lib/utils/embed";
 import { pauseThread } from "../../lib/utils/promises";
 import { seconds } from "../../lib/utils/time";
@@ -62,11 +62,11 @@ export class UserCommand extends ICommand {
               _id: interaction.guild!.id,
               guild_name: interaction.guild!.name,
               language: result,
-              data: oldData.data ??  DefaultDataModelObject,
+              data: oldData.data ?? DefaultDataModelObject,
             });
           }
 
-         const updatedData = await this.container.client.GuildSettingsModel._model
+         await this.container.client.GuildSettingsModel._model
             .updateOne({ _id: interaction.guildId }, { $set: { language: result } })
             .then((res) => {
               this.container.logger.info(res);

@@ -17,6 +17,7 @@
 import { container } from "@sapphire/framework";
 import { connect, connection } from "mongoose";
 import { ENV } from "../../config";
+import { GuildSchema } from "./guild/model";
 
 export async function initializeTypeGooseConnection() {
   try {
@@ -49,3 +50,22 @@ connection.on("connected", () => {
 connection.on("close", () => {
   container.logger.info(`Mongoose connection closed!`);
 });
+
+
+/**
+ * The default data object for the database schema creation object.
+ */
+ export const DefaultDataModelObject = {
+  member: {
+    guildJoins: 0,
+    guildLeaves: 0,
+    lastJoin: undefined,
+    guildBans: 0,
+  },
+  message: 1,
+  voice: 0,
+  channel: {
+    created: 0,
+    deleted: 0,
+  }
+} as GuildSchema

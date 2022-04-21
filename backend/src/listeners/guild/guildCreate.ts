@@ -18,6 +18,7 @@ import { ApplyOptions } from "@sapphire/decorators";
 import { ListenerOptions, Events, Listener } from "@sapphire/framework";
 import { Guild } from "discord.js";
 import { guildEventLevel } from "../../lib/controllers/statistics/logger";
+import { DefaultDataModelObject } from "../../lib/database";
 
 @ApplyOptions<ListenerOptions>({
   event: Events.GuildCreate,
@@ -34,20 +35,7 @@ export class UserEvent extends Listener {
         .create({
           _id: guild.id,
           guild_name: guild.name,
-          data: {
-            member: {
-              guildJoins: 0,
-              guildLeaves: 0,
-              lastJoin: null,
-              guildBans: 0,
-            },
-            message: 0,
-            voice: 0,
-            channel: {
-              created: 0,
-              deleted: 0,
-            },
-          },
+          data: DefaultDataModelObject,
         })
         .then((res) => {
           this.container.logger.info(res);
