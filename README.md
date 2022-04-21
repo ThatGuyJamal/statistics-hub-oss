@@ -8,9 +8,18 @@ _This project is in rapid development and any information is subject to change a
 
 📊 An open source data analytics discord bot dedicated for server owners. Created by [ThatGuyJamal](https://github.com/ThatGuyJamal) and [contributors](./.github/contributors.md)
 
-## `Get starting`
+## `Tech Stack Used`
 
-Coming soon...
+- [MongoDB](https://www.mongodb.com/) is the main database for the project.
+- [Remix-run](https://remix.run/) is the client side website for the project
+- [Discord.js](https://discord.js.org/) is the discord api library used for the project.
+- [Sapphire.js](https://www.sapphirejs.dev/) is the discord plugin framework for the project.
+
+### directory's
+
+- [Backend](./backend/) is the main source code of the bot and its functions.
+- [api](./api/) is the handler for the bots api and cloud functions.
+- [frontend](./frontend/) is the react client side for the bot.
 
 ## `Commands`
 
@@ -30,7 +39,7 @@ Coming soon...
 ## `Languages`
 
 Currently supported translations. If you would like to help improve them, join our support server. You can also clone this repository, make changes to
-the language [folder](./src/languages/) and submit a pull request.
+the language [folder](./backend/src/languages/) and submit a pull request.
 
 - English (default)
 - Spanish
