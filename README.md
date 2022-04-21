@@ -28,7 +28,7 @@ _This project is in rapid development and any information is subject to change a
 | ping       | Shows the bot latency.                               | everyone      | slash & message | Global     |
 | invite     | Sends a url to invite the bot in discord.            | everyone      | slash & message | Global     |
 | commands   | Shows detailed information about the bot commands.   | everyone      | slash           | Global     |
-| info      | Shows detailed statistics on the bots host computer. | everyone      | slash & message | Global     |
+| info       | Shows detailed statistics on the bots host computer. | everyone      | slash & message | Global     |
 | statistics | Manages or views guild information                   | Administrator | slash           | Global     |
 | configure  | Enables a admin to change bot property's.            | Administrator | slash           | Global     |
 | cache      | Shows the current active cache values collected.     | Developer     | slash           | Guild Only |
