@@ -6,7 +6,7 @@ Below are planned features I will be adding to the bot in now specific order...
 
 - [ ] Voice Stats \[Joins]
 
-- [ ] Switch setInterval Functions to the interval controller class for more control
+- [x] Switch setInterval Functions to the interval controller class for more control
 
 - [ ] Welcome System used slash commands \[Welcome, Leave] Using - [w-card](https://github.com/AKORA-Studios/DiscordWelcomeCard)
 
@@ -19,3 +19,5 @@ Below are planned features I will be adding to the bot in now specific order...
 - [ ] Update information / info command to include [b-card](https://github.com/discord-card/bot)
 
 - [ ] Add support for enable or disabling of commands.
+
+- [ ] Add caching to some of the db query's
