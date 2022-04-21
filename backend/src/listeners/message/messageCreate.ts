@@ -15,9 +15,30 @@
  */
 
 import { ApplyOptions } from "@sapphire/decorators";
-import { ListenerOptions, Events, Listener } from "@sapphire/framework";
+import { ListenerOptions, Events, Listener, container } from "@sapphire/framework";
 import { Message } from "discord.js";
+import { DefaultDataModelObject } from "../../lib/database/";
 import { isGuildMessage } from "../../lib/utils/guards";
+import { minutes } from "../../lib/utils/time";
+
+const ratelimit = new Map<
+  string,
+  {
+    /** The value of the new cache */
+    value: number;
+    /** Ratelimit stack increment */
+    stack: number;
+  }
+>();
+
+// clear the ratelimit every 5 minutes for all guilds
+container.client.IntervalsController.start(
+  "messageCreate-interval-queue",
+  () => {
+    ratelimit.clear();
+  },
+  minutes(10)
+);
 
 @ApplyOptions<ListenerOptions>({
   event: Events.MessageCreate,
@@ -26,27 +47,44 @@ export class UserEvent extends Listener {
   public async run(ctx: Message) {
     if (ctx.partial || !isGuildMessage(ctx) || ctx.author.bot) return;
 
+    let result = ratelimit.get(ctx.guild.id);
+    if (!result) result = { value: 0, stack: 0 };
+
+    if (ratelimit.has(ctx.guild.id)) {
+      if (result.stack > 25) {
+        this.upload(ctx).then(() => ratelimit.delete(ctx.guild.id))
+      } else {
+        ratelimit.set(ctx.guild.id, {
+          value: result.value + 1,
+          stack: result.stack + 1,
+        });
+      }
+    } else {
+      this.upload(ctx);
+    }
+  }
+
+  /**
+   * Update the db with the new cache
+   * @param ctx 
+   * @returns 
+   */
+  private async upload(ctx: Message) {
+    if (!isGuildMessage(ctx)) return;
+
     const fetch = await this.container.client.GuildSettingsModel.getDocument(ctx.guild);
+
+    ratelimit.set(ctx.guild.id, {
+      value: 1,
+      stack: 0,
+    });
 
     if (!fetch) {
       await this.container.client.GuildSettingsModel._model
         .create({
           _id: ctx.guild.id,
           guild_name: ctx.guild.name,
-          data: {
-            member: {
-              guildJoins: 0,
-              guildLeaves: 0,
-              lastJoin: null,
-              guildBans: 0,
-            },
-            message: 1,
-            voice: 0,
-            channel: {
-              created: 0,
-              deleted: 0,
-            },
-          },
+          data: DefaultDataModelObject,
         })
         .then((res) => {
           this.container.logger.info(res);
@@ -59,11 +97,11 @@ export class UserEvent extends Listener {
           },
           {
             $inc: {
-              "data.message": 1,
+              "data.message": ratelimit,
             },
             $set: {
               guild_name: ctx.guild.name,
-            }
+            },
           }
         )
         .then((res) => {
