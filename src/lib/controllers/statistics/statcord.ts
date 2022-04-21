@@ -27,10 +27,13 @@ export class StatisticsHandler {
     this.client = c;
   }
   public init(): void {
-
-    container.client.IntervalsController.start("statcord-post-interval", async () => {
-      await this.statcordPost();
-    }, hours(1));
+    container.client.IntervalsController.start(
+      "statcord-post-interval",
+      async () => {
+        await this.statcordPost();
+      },
+      hours(1)
+    );
 
     this.client.statcord.on("autopost-start", () => {
       // Emitted when statcord autopost starts

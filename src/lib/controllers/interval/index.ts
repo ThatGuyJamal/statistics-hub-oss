@@ -67,9 +67,9 @@ export class IntervalsController {
   public async stop(name: string): Promise<void> {
     if (this.intervals.has(name)) {
       this.intervals.delete(name);
-        this.client.logger.info(`[Interval] ${name} has stopped`);
+      this.client.logger.info(`[Interval] ${name} has stopped`);
     } else {
-        this.client.logger.info(`[Interval] ${name} does not exist, nothing was stopped`);
+      this.client.logger.info(`[Interval] ${name} does not exist, nothing was stopped`);
     }
   }
 
