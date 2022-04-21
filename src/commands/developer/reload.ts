@@ -24,7 +24,7 @@ import {
 } from "@sapphire/framework";
 import { Collection, AutocompleteInteraction } from "discord.js";
 import { ENV } from "../../config";
-import Fuse from "fuse.js";
+import Fuse from "fuse.js/dist/fuse.basic.min.js";
 import { Stopwatch } from "@sapphire/stopwatch";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { BaseEmbed } from "../../lib/utils/embed";
