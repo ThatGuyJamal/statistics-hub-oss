@@ -76,7 +76,10 @@ export class UserCommand extends ICommand {
       developer: `• **Name**: __${ENV.developer.name}__\n• **GitHub**: ${createHyperLink(
         "repository",
         ENV.developer.github_link
-      )}\n• **Discord**: ${createHyperLink("link", ENV.bot.server_link)}`,
+      )}\n• **Discord**: ${createHyperLink("link", ENV.bot.server_link)}\n • **Dashboard**: ${createHyperLink(
+        "link",
+        ENV.developer.dashboard_link
+        )}`,
     };
 
     return new BaseEmbed({
