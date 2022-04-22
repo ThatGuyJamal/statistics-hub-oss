@@ -51,7 +51,7 @@ export class UserEvent extends Listener {
     if (!result) result = { value: 0, stack: 0 };
 
     if (ratelimit.has(ctx.guild.id)) {
-      if (result.stack > 10) {
+      if (result.stack > 5) {
         // container.logger.info(`Ratelimit exceeded for ${ctx.guild.name} | ${ctx.guild.id} - Pushing to upload queue...`);
         this.upload(ctx)
       } else {
