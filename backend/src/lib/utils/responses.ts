@@ -18,6 +18,7 @@ import { ColorResolvable, CommandInteraction, MessageActionRow, MessageButton } 
 import { BrandingColors } from "./colors";
 import { ENV } from "../../config";
 import { BaseEmbed } from "./embed";
+import { codeBlock } from "./format";
 
 export const createEmbed = (description?: string, color: ColorResolvable = BrandingColors.Primary) => {
   return new BaseEmbed({ color, description }).setTimestamp();
@@ -34,7 +35,10 @@ export const sendError = (interaction: CommandInteraction, description: string, 
   const parsedDescription = `❌ ${description.endsWith(".") ? description.slice(0, -1) : description}!`;
 
   const payload = {
-    embeds: [createEmbed(parsedDescription, BrandingColors.Error)],
+    content: codeBlock("css", `
+     [Error Hit] - ${parsedDescription}
+    `),
+    // embeds: [createEmbed(parsedDescription, BrandingColors.Error)],
     components: [
       new MessageActionRow()
         .addComponents(
