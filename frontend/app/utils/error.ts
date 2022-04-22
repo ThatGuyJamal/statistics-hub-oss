@@ -14,14 +14,14 @@
     GNU Affero General Public License for more details.
  */
 
+import { environment } from "~/config";
+
 /**
- * Our project configuration
+ * Checks if we are in development mode or not.
+ * @param env The environment to check.
+ * @returns False if we are in production mode, true otherwise.
  */
-export const environment = {
-  production: false,
-  mongodbUrl: "mongodb://localhost:27017/test",
-  website_root_title: "Statistics Hub OSS",
-  website_root_description: "",
-  session_secret: "",
-  development_mode: true,
+export const renderFullError = () => {
+  if (environment.development_mode) return false;
+  else return true;
 };

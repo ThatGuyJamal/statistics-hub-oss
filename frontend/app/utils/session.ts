@@ -14,14 +14,26 @@
     GNU Affero General Public License for more details.
  */
 
-/**
- * Our project configuration
- */
-export const environment = {
-  production: false,
-  mongodbUrl: "mongodb://localhost:27017/test",
-  website_root_title: "Statistics Hub OSS",
-  website_root_description: "",
-  session_secret: "",
-  development_mode: true,
-};
+import { createCookieSessionStorage } from "@remix-run/node";
+import { environment } from "~/config";
+import { Milliseconds } from "./time";
+
+let sessionSecret = environment.session_secret;
+
+if (!sessionSecret) {
+  throw new Error("Session secret not set");
+}
+
+let storage = createCookieSessionStorage({
+  cookie: {
+    name: "shub-oss-user-session",
+    secure: true,
+    secrets: [sessionSecret],
+    sameSite: "lax",
+    path: "/",
+    maxAge: Milliseconds.Hour * 12,
+    httpOnly: true,
+  },
+});
+
+export { storage };

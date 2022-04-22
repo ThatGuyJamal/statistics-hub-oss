@@ -1,5 +1,5 @@
 {
-  "name": "remix-template-remix",
+  "name": "@website/stats-hu-oss",
   "private": true,
   "description": "",
   "license": "",
@@ -7,7 +7,9 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix dev",
-    "start": "remix-serve build"
+    "start": "remix-serve build",
+    "push:docs": "node ./gh-pages.script.js",
+    "fmt": "prettier --ignore-path .gitignore --write ."
   },
   "dependencies": {
     "@remix-run/node": "^1.4.1",
@@ -24,7 +26,7 @@
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
     "eslint": "^8.11.0",
-    "gh-pages": "^3.2.3",
+    "prettier": "^2.6.2",
     "typescript": "^4.5.5"
   },
   "engines": {

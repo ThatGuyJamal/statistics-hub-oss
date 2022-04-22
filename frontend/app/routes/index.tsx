@@ -20,44 +20,48 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { environment } from "~/config";
 
 export const loader: LoaderFunction = async () => {
-  return json(IndexPropsValue)
+  return json(IndexPropsValue);
 };
 
 export default function Index() {
   const data = useLoaderData<IndexProps>();
+  const date = new Date();
   return (
-    <div >
+    <div>
       <h1>{environment.website_root_title} Landing Page</h1>
+      <p>
+        This is the test landing page for the bot, it is not intended to be used
+        in production. Feel free to roam around the site and view the mock data.
+      </p>
 
-      This is the test landing page for the bot, it is not intended to be used in production.
-      Feel free to roam around the site and view the mock data.
-      
-      {/* Create a line below the title */}
+      <p>
+        This site was created to help me play around with{" "}
+        <a target="_blank" href="https://github.com/remix-run/remix">
+          react remix
+        </a>{" "}
+        and see if I want to use it in the further development of the bot.
+      </p>
+
       <hr />
-
       {data.map((i) => (
         <div key={i.id}>
           <h2>{i.name}</h2>
           <p>{i.description}</p>
-          <a href={i.url} target="_blank">Link</a>
+          <a href={i.url} target="_blank">
+            Link
+          </a>
         </div>
       ))}
-
       <hr />
-
+      <h2>Routing test:</h2>
       <ul>
         <li>
-          <Link to={`/user/1`}>
-            mock user page
-          </Link>
-        </li>
-        <li>
-          <Link to={`/user/1/guild/1`}>
-            mock guild page
-          </Link>
+          <Link to={`/user/1`}>mock user page</Link>
         </li>
       </ul>
-
+      <footer>
+        <p>This page was rendered at {date.toLocaleDateString()}</p>
+      </footer>
     </div>
   );
 }
@@ -75,12 +79,12 @@ const IndexPropsValue = [
     id: "1",
     name: "Github",
     description: "The site source code",
-    url: "https://github.com/ThatGuyJamal/statistics-hub-oss/tree/master/frontend"
+    url: "https://github.com/ThatGuyJamal/statistics-hub-oss/tree/master/frontend",
   },
   {
     id: "2",
     name: "Discord Server",
     description: "The bot support server",
-    url: "https://discord.com/invite/N79DZsm3m2"
+    url: "https://discord.com/invite/N79DZsm3m2",
   },
-] as IndexProps[]
+] as IndexProps[];

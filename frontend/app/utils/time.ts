@@ -14,14 +14,12 @@
     GNU Affero General Public License for more details.
  */
 
-/**
- * Our project configuration
- */
-export const environment = {
-  production: false,
-  mongodbUrl: "mongodb://localhost:27017/test",
-  website_root_title: "Statistics Hub OSS",
-  website_root_description: "",
-  session_secret: "",
-  development_mode: true,
-};
+export enum Milliseconds {
+  Year = 1000 * 60 * 60 * 24 * 30 * 12,
+  Month = 1000 * 60 * 60 * 24 * 30,
+  Week = 1000 * 60 * 60 * 24 * 7,
+  Day = 1000 * 60 * 60 * 24,
+  Hour = 1000 * 60 * 60,
+  Minute = 1000 * 60,
+  Second = 1000,
+}

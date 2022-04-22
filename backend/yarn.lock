@@ -260,9 +260,16 @@
   dependencies:
     tslib "^2.3.1"
 
-"@sapphire/ratelimits@^2.1.12", "@sapphire/ratelimits@^2.3.0":
+"@sapphire/ratelimits@^2.3.0":
   version "2.4.4"
   resolved "https://registry.npmjs.org/@sapphire/ratelimits/-/ratelimits-2.4.4.tgz"
+  integrity sha512-9gZ1BaY99HLWOcfuhlu0WklirHhVc6QD1pm5/v2W0O9pBpMHrd1GImVMXjYZRoy1qpmE2ZggSmN1665lktTCMw==
+  dependencies:
+    "@sapphire/time-utilities" "^1.7.4"
+
+"@sapphire/ratelimits@^2.4.4":
+  version "2.4.4"
+  resolved "https://registry.yarnpkg.com/@sapphire/ratelimits/-/ratelimits-2.4.4.tgz#5472f0c629779b6831d8fdde86e2c8b4666e92f6"
   integrity sha512-9gZ1BaY99HLWOcfuhlu0WklirHhVc6QD1pm5/v2W0O9pBpMHrd1GImVMXjYZRoy1qpmE2ZggSmN1665lktTCMw==
   dependencies:
     "@sapphire/time-utilities" "^1.7.4"
