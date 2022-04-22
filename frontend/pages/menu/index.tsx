@@ -1,5 +1,4 @@
 import { NextPage, GetServerSidePropsContext } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { GuildMenuItem } from "../../components/guilds/GuildMenuItem";
 import { Guild } from "../../utils/types";
@@ -25,10 +24,6 @@ const MenuPage: NextPage<Props> = ({ guilds }) => {
           </div>
         ))}
       </div>
-
-      <h2>
-        <Link href="/">Home</Link>
-      </h2>
     </div>
   );
 };

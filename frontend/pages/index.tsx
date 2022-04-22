@@ -6,7 +6,9 @@ import { FaDiscord } from "react-icons/fa";
 
 const Home: NextPage = () => {
   const handleLogin = () => {
-    window.location.href = "http://localhost:3000/menu";
+    // window.location.href = "http://localhost:3001/api/auth/discord";
+
+    window.location.href = "/menu"
 
     alert("Website under construction...redirecting to menu");
   };
