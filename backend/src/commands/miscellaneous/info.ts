@@ -67,45 +67,35 @@ export class UserCommand extends ICommand {
     const stats = this.generalStatistics;
     const uptime = this.uptimeStatistics;
     const usage = this.usageStatistics;
-    //    const global = this.commandStatistics;
+    //  const global = this.clientStatistics;
 
     const fields = {
       stats: `• **Users**: ${stats.users}\n• **Guilds**: ${stats.guilds}\n• **Channels**: ${stats.channels}\n• **Discord.js**: ${stats.version}\n• **Node.js**: ${stats.nodeJs}\n• **Sapphire Framework**: ${stats.sapphireVersion}`,
       uptime: `• **Host**: ${uptime.host}\n• **Total**: ${uptime.total}\n• **Client**: ${uptime.client}`,
       serverUsage: `• **CPU Load**: ${usage.cpuLoad}\n• **Heap**: ${usage.ramUsed}MB (Total: ${usage.ramTotal}MB)`,
-      //   globalStats: `• **Commands Ran**: ${global.commands_ran} *Updated every 25 minutes*\n • **Blacklisted Guilds**: ${global.blacklisted_guilds}\n • **Blacklisted Users**: ${global.blacklisted_users}\n • **Errors Handed**: ${global.errors_triggered}`,
       developer: `• **Name**: __${ENV.developer.name}__\n• **GitHub**: ${createHyperLink(
         "repository",
         ENV.developer.github_link
       )}\n• **Discord**: ${createHyperLink("link", ENV.bot.server_link)}`,
     };
 
-    return (
-      new BaseEmbed({
-        footer: {
-          text: `Enjoy your day!`,
-        },
-      })
-        .setColor(BrandingColors.Primary)
-        .addField(titles.stats, fields.stats)
-        .addField(titles.uptime, fields.uptime)
-        .addField(titles.serverUsage, fields.serverUsage)
-        //   .addField(titles.globalStats, fields.globalStats)
-        .addField(titles.developer, fields.developer)
-        .setThumbnail(this.container.client.user?.displayAvatarURL() ?? "")
-    );
+    return new BaseEmbed({
+      footer: {
+        text: `Enjoy your day!`,
+      },
+    })
+      .setColor(BrandingColors.Primary)
+      .addField(titles.stats, fields.stats)
+      .addField(titles.uptime, fields.uptime)
+      .addField(titles.serverUsage, fields.serverUsage)
+      .addField(titles.developer, fields.developer)
+      .setThumbnail(this.container.client.user?.displayAvatarURL() ?? "");
   }
 
-  // private get commandStatistics(): StatsCommand {
-  // TODO - implement this later...
-  //    let cmd =
-  //    return {
-  //       commands_ran: cmd?.commands_ran ?? 0,
-  //       blacklisted_guilds: cmd?.blacklisted_guilds ?? 0,
-  //       blacklisted_users: cmd?.blacklisted_users ?? 0,
-  //       errors_triggered: cmd?.errors_triggered ?? 0,
-  //    };
-  // }
+  private async clientStatistics() {
+    const currentStats = await this.container.client.StatisticsHandler.statcordGet();
+    return currentStats;
+  }
 
   private get generalStatistics(): StatsGeneral {
     const { client } = this.container;
