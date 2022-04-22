@@ -44,9 +44,9 @@ const Home: NextPage = () => {
           </button>
           <br />
           <div className={styles.social_links}>
-            <a target="_blank" href={common.website_discord_server}>Discord Server</a> |{" "}
-            <a target="_blank" href={common.website_github_repo}>Github</a> |{" "}
-            <a target="_blank" href={common.developer_youtube_channel}>YouTube</a>
+            <a target="_blank"  rel="noreferrer" href={common.website_discord_server}>Discord Server</a> |{" "}
+            <a target="_blank"  rel="noreferrer" href={common.website_github_repo}>Github</a> |{" "}
+            <a target="_blank"  rel="noreferrer" href={common.developer_youtube_channel}>YouTube</a>
           </div>
         </div>
       </div>
