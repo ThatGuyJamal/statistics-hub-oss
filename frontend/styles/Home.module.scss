@@ -28,3 +28,14 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.social_links {
+  a {
+    color:rgb(147, 255, 255);
+  }
+  text-decoration: none;
+  // Make color of text change on hover
+  transition: color 0.2s ease-in-out;
+  // center text
+  text-align: center;
+}

@@ -19,4 +19,6 @@ export const common = {
   website_title: "Statistics Hub OSS",
   website_description: "A data analysis bot for discord servers",
   website_github_repo: "https://github.com/ThatGuyJamal/statistics-hub-oss",
+  website_discord_server: "",
+  developer_youtube_channel: "https://www.youtube.com/channel/UCVOQobByo_2WISQf2037eXQ",
 };

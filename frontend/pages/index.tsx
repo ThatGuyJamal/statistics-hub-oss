@@ -42,6 +42,12 @@ const Home: NextPage = () => {
             <FaDiscord size={50} color="#7289DA" />
             <span>Login with Discord</span>
           </button>
+          <br />
+          <div className={styles.social_links}>
+            <a target="_blank" href={common.website_discord_server}>Discord Server</a> |{" "}
+            <a target="_blank" href={common.website_github_repo}>Github</a> |{" "}
+            <a target="_blank" href={common.developer_youtube_channel}>YouTube</a>
+          </div>
         </div>
       </div>
       <div></div>
