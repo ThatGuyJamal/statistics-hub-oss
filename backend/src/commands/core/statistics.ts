@@ -19,6 +19,7 @@ import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCom
 import { TextChannel } from "discord.js";
 import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
+import { codeBlock } from "../../lib/utils/format";
 import { seconds } from "../../lib/utils/time";
 
 @ApplyOptions<ICommandOptions>({
@@ -38,7 +39,11 @@ import { seconds } from "../../lib/utils/time";
 export class UserCommand extends ICommand {
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
     return await interaction.reply({
-      content: await this.translate(interaction.channel as TextChannel, "commands/data:statistics.success"),
+      content: codeBlock("diff", 
+      `
+      - ${await this.translate(interaction.channel as TextChannel, "commands/core:statistics.success")}
+      `
+      ),
     });
   }
   // slash command registry

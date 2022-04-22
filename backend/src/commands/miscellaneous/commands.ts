@@ -15,7 +15,7 @@
  */
 
 import { ApplyOptions } from "@sapphire/decorators";
-import { ApplicationCommandRegistry, Args, BucketScope, Identifiers, RegisterBehavior } from "@sapphire/framework";
+import { ApplicationCommandRegistry, Args, BucketScope, RegisterBehavior } from "@sapphire/framework";
 import { Message, CommandInteraction, TextChannel, AutocompleteInteraction } from "discord.js";
 import Fuse from "fuse.js";
 import { ENV } from "../../config";
