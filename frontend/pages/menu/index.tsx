@@ -36,7 +36,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         {
           id: "837830514130812970",
           name: "Statistics Hub OSS - Community & Support",
-          icon: "064038d71473bb5f142a6b85a324a930",
+          icon: "2dc9595c86f1a007a269cc425e295025",
         }
       ],
     },
