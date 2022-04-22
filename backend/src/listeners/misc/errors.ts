@@ -42,11 +42,7 @@ export class UserEvent2 extends Listener {
 })
 export class UserEvent3 extends Listener {
   public async run(limit: RateLimitData): Promise<void> {
-    try {
       await this.container.client.logger.fatal(`RATE LIMITED:\n\n${JSON.stringify(limit, null, 4)}`);
-    } catch (err) {
-      return this.container.client.logger.error(err);
-    }
   }
 }
 
