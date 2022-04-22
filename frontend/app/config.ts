@@ -18,10 +18,10 @@
  * Our project configuration
  */
 export const environment = {
-  production: false,
-  mongodbUrl: "mongodb://localhost:27017/test",
-  website_root_title: "Statistics Hub OSS",
-  website_root_description: "",
-  session_secret: "",
-  development_mode: true,
-};
+    production: process.env.production,
+    mongodbUrl: process.env.mongodbUrl,
+    website_root_title: process.env.website_root_title,
+    website_root_description: process.env.website_root_description,
+    session_secret: process.env.session_secret,
+    development_mode: process.env.development_mode,
+}
