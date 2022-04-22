@@ -8,17 +8,17 @@ const Home: NextPage = () => {
   const handleLogin = () => {
     // window.location.href = "http://localhost:3001/api/auth/discord";
 
-    window.location.href = "/menu"
+    window.location.href = "/menu";
 
     alert("Website under construction...redirecting to menu");
   };
 
   return (
-    <div>
+    <>
       <Head>
         <title>{common.website_title}</title>
         <meta name="description" content={common.website_description} />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/image2vector.svg" />
       </Head>
       <div className="page aligned-center">
         <div>
@@ -29,7 +29,7 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div></div>
-    </div>
+    </>
   );
 };
 
