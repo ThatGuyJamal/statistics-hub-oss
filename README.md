@@ -11,7 +11,7 @@ _This project is in rapid development and any information is subject to change a
 ## `Tech Stack Used`
 
 - [MongoDB](https://www.mongodb.com/) is the main database for the project.
-- [Remix-run](https://remix.run/) is the client side website for the project
+- [Next-js](https://nextjs.org/) is the client side website for the project
 - [Discord.js](https://discord.js.org/) is the discord api library used for the project.
 - [Sapphire.js](https://www.sapphirejs.dev/) is the discord plugin framework for the project.
 
