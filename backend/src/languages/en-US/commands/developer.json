@@ -12,5 +12,8 @@
   "cache_command": {
     "help_description": "Allows the developer to view the cache of the bot for this guild.",
     "success": "Server Data"
+  },
+  "guilds_command": {
+    "help_description": "List all active guilds in the bots cache."
   }
 }
