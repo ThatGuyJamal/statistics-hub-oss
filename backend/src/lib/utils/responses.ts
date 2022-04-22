@@ -36,7 +36,7 @@ export const sendError = (interaction: CommandInteraction, description: string, 
 
   const payload = {
     content: codeBlock("css", `
-     [Error Hit] - ${parsedDescription}
+     [Notice] - ${parsedDescription}
     `),
     // embeds: [createEmbed(parsedDescription, BrandingColors.Error)],
     components: [
