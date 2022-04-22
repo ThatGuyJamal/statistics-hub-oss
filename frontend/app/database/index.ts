@@ -15,11 +15,11 @@
  */
 
 import { connect, connection } from "mongoose";
-import { environment } from "~/config";
+import { environment } from "~/config.server";
 
 export async function initializeTypeGooseConnection() {
   try {
-    await connect(environment.mongodbUrl);
+    await connect(environment.mongodbUrl!);
   } catch (err) {
     console.error(err);
   }

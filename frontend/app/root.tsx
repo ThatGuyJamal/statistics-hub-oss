@@ -15,7 +15,7 @@
  */
 
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
-import { environment } from "./config";
+import { environment } from "./config.server";
 import {
   Links,
   LiveReload,
@@ -26,7 +26,6 @@ import {
 } from "@remix-run/react";
 
 import stylesUrl from "./styles/global.css";
-import { renderFullError } from "./utils/error";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -69,3 +68,8 @@ export function ErrorBoundary({ error }: { error: Error }) {
     </div>
   );
 }
+
+const renderFullError = () => {
+  if (environment.development_mode) return false;
+  else return true;
+};

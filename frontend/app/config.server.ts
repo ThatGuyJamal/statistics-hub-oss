@@ -18,10 +18,10 @@
  * Our project configuration
  */
 export const environment = {
-    production: process.env.production,
-    mongodbUrl: process.env.mongodbUrl,
-    website_root_title: process.env.website_root_title,
-    website_root_description: process.env.website_root_description,
-    session_secret: process.env.session_secret,
-    development_mode: process.env.development_mode,
-}
+  production: process.env.production,
+  mongodbUrl: process.env.mongodbUrl,
+  website_root_title: process.env.website_root_title,
+  website_root_description: process.env.website_root_description,
+  session_secret: process.env.session_secret,
+  development_mode: process.env.development_mode,
+};

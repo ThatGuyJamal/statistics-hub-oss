@@ -1,5 +1,5 @@
 {
-  "name": "@website/stats-hu-oss",
+  "name": "website",
   "private": true,
   "description": "",
   "license": "",
@@ -8,7 +8,6 @@
     "build": "remix build",
     "dev": "remix dev",
     "start": "remix-serve build",
-    "push:docs": "node ./gh-pages.script.js",
     "fmt": "prettier --ignore-path .gitignore --write ."
   },
   "dependencies": {
@@ -23,6 +22,7 @@
   },
   "devDependencies": {
     "@remix-run/dev": "^1.4.1",
+    "@remix-run/serve": "*",
     "@remix-run/eslint-config": "^1.4.1",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",

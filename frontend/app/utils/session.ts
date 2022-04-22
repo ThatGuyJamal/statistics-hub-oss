@@ -15,7 +15,7 @@
  */
 
 import { createCookieSessionStorage } from "@remix-run/node";
-import { environment } from "~/config";
+import { environment } from "~/config.server";
 import { Milliseconds } from "./time";
 
 let sessionSecret = environment.session_secret;

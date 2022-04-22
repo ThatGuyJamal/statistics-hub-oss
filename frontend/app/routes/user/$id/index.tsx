@@ -16,19 +16,7 @@
 
 import { LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-
-export const MockGuildData = [
-  {
-    id: "1",
-    name: "Server 1",
-    description: "The first server",
-  },
-  {
-    id: "2",
-    name: "Server 2",
-    description: "The second server",
-  },
-] as GuildProps[];
+import { GuildProps, MockGuildData } from "~/database/mock.server";
 
 export const loader: LoaderFunction = async ({ params }) => {
   const id = params.id;
@@ -66,10 +54,4 @@ interface UserProps {
   map(consume: (value: UserProps) => JSX.Element): import("react").ReactNode;
   id: string;
   guilds: GuildProps[];
-}
-
-interface GuildProps {
-  id: string;
-  name: string;
-  description: string;
 }

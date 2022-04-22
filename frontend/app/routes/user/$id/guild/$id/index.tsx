@@ -16,7 +16,7 @@
 
 import { LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { MockGuildData } from "../..";
+import { MockGuildData } from "~/database/mock.server";
 
 export const loader: LoaderFunction = async ({ params }) => {
   const id = params.id;
@@ -24,6 +24,10 @@ export const loader: LoaderFunction = async ({ params }) => {
   console.log(`Loading guild ${id}`);
 
   const data = MockGuildData.find((guild) => guild.id === id);
+
+  if(!data) {
+    return null
+  }
 
   return {
     id,
@@ -53,7 +57,7 @@ export default function Guild() {
       </p>
 
       <Link to="/user/0">back</Link>
-    <br />
+      <br />
       <Link to="/">Home</Link>
     </div>
   );
