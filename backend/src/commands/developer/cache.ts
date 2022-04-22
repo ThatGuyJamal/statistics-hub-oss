@@ -33,14 +33,71 @@ import { DefaultDataModelObject } from "../../lib/database/";
   nsfw: false,
   enabled: true,
   preconditions: ["OwnerOnly"],
+  extendedDescription: {
+    command_type: "slash",
+  },
 })
 export class UserCommand extends ICommand {
   // Message Based Command
   public async messageRun(ctx: Message) {
-    ctx.channel.send("This command is not available in this context. Please use slash commands.").then((msg) => {
-      setTimeout(() => {
-        msg.delete();
-      }, seconds(10));
+    if (!ctx.guild) return;
+
+    const msg = await ctx.reply({
+      content: `Fetching data...`,
+    });
+    await pauseThread(3, "seconds", "Cache Command").then(async () => {
+      const fetch = await this.container.client.GuildSettingsModel.getDocument(ctx.guild!);
+
+      if (!fetch) {
+        await this.container.client.GuildSettingsModel._model
+          .create({
+            _id: ctx.guild!.id,
+            guild_name: ctx.guild!.name,
+            data: DefaultDataModelObject,
+          })
+          .then((res) => {
+            this.container.logger.info(res);
+          });
+
+        return ctx.reply({
+          content: `No cache found. Creating new cache...`,
+        });
+      } else {
+        const memData =
+          //@ts-ignore
+          fetch.data.member?.guildJoins + fetch.data.member?.guildLeaves + fetch.data.member?.guildBans ?? 0;
+        //@ts-ignore
+        const msgData = fetch.data.message ?? 0;
+        //@ts-ignore
+        const voiceData = fetch.data.voice ?? 0;
+        //@ts-ignore
+        const chanCreateData = fetch.data.channel?.created ?? 0;
+        //@ts-ignore
+        const chanDeleteData = fetch.data.channel?.deleted ?? 0;
+        //@ts-ignore
+        const memJoinData = fetch.data.member?.guildJoins ?? 0;
+        //@ts-ignore
+        const memLeaveData = fetch.data.member?.guildLeaves ?? 0;
+
+        return await msg.edit({
+          content: codeBlock(
+            "css",
+            `
+            = = = Server Data = = =
+            [Message Size] = ${msgData}
+            [Member Join Size] = ${memJoinData}
+            [Member Leave Size] = ${memLeaveData}
+            [Voice Channels Joined] = ${voiceData}
+            [Channels Create] = ${chanCreateData}
+            [Channels Delete] = ${chanDeleteData}
+ 
+            More stats coming soon...
+ 
+            Total data size Cached = ${msgData! + memData + voiceData + chanCreateData + chanDeleteData}
+             `
+          ),
+        });
+      }
     });
   }
   // Slash Based Command
