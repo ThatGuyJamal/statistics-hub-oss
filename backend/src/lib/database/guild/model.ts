@@ -40,6 +40,9 @@ export class GuildDocument {
   @prop({ type: () => String, required: false, default: null })
   public guild_name?: string;
 
+  @prop({ type: () => String, required: false, default: "sh!" })
+  public prefix?: string;
+
   @prop({ type: () => String, required: false, default: "en-US" })
   /**
    * The guild's language config

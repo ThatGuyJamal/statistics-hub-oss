@@ -5,5 +5,9 @@
   "language": {
     "success_reply": "Language settings were updated to __{{lang}}__!",
     "error_reply": "Error setting language...No language provided"
+  },
+  "prefix": {
+    "success_reply": "Prefix settings were updated to __{{prefix}}__!",
+    "error_reply": "Error setting prefix...No prefix provided"
   }
 }

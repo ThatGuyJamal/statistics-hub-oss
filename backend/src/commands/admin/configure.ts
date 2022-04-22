@@ -54,10 +54,9 @@ export class UserCommand extends ICommand {
         });
 
         await pauseThread(3, "seconds", "Configure Command").then(async () => {
-
           // Make sure to update the current cache if the language is changed
-          const oldData = this.container.client.GuildSettingsModel._cache.get(interaction.guild!.id)
-          if(oldData) {
+          const oldData = this.container.client.GuildSettingsModel._cache.get(interaction.guild!.id);
+          if (oldData) {
             this.container.client.GuildSettingsModel._cache.set(interaction.guild!.id, {
               _id: interaction.guild!.id,
               guild_name: interaction.guild!.name,
@@ -66,7 +65,7 @@ export class UserCommand extends ICommand {
             });
           }
 
-         await this.container.client.GuildSettingsModel._model
+          await this.container.client.GuildSettingsModel._model
             .updateOne({ _id: interaction.guildId }, { $set: { language: result } })
             .then((res) => {
               this.container.logger.info(res);
@@ -84,6 +83,42 @@ export class UserCommand extends ICommand {
                     "commands/configurations:language.success_reply",
                     {
                       lang: result,
+                    }
+                  ),
+                },
+                interaction
+              ),
+            ],
+          });
+        });
+      case "prefix":
+        // fetches the prefix option we want
+        const _prefix = interaction.options.getString("regex", true);
+
+        await interaction.reply({
+          content: `Saving configuration...`,
+        });
+
+        await pauseThread(3, "seconds", "Configure Command").then(async () => {
+            
+          await this.container.client.GuildSettingsModel._model
+            .updateOne({ _id: interaction.guildId }, { $set: { prefix: _prefix } })
+            .then((res) => {
+              this.container.logger.info(res);
+            })
+            .catch((err) => {
+              this.container.logger.error(err);
+            });
+
+          return await interaction.editReply({
+            embeds: [
+              new BaseEmbed().interactionEmbed(
+                {
+                  description: await this.translate(
+                    interaction.channel as TextChannel,
+                    "commands/configurations:prefix.success_reply",
+                    {
+                      _prefix,
                     }
                   ),
                 },
@@ -115,6 +150,14 @@ export class UserCommand extends ICommand {
                     ["Portuguese", "pt-BR"],
                   ])
                   .setRequired(true)
+              )
+          )
+          .addSubcommand((options) =>
+            options
+              .setName("prefix")
+              .setDescription("Sets the prefix the bot will use.")
+              .addStringOption((stringOption) =>
+                stringOption.setName("regex").setDescription("The prefix string expression.")
               )
           ),
       {

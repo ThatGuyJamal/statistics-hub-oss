@@ -26,16 +26,17 @@ import { isPrivateMessage } from "../../lib/utils/guards";
 })
 export class UserEvent extends Listener {
   public async run(ctx: Message) {
+    const _prefix = this.container.client.GuildSettingsModel._cache.get(ctx.guild!.id)?.prefix;
     if (!isPrivateMessage(ctx)) {
-      let query = await this.container.client.GuildSettingsModel.getDocument(ctx.guild!);
-
       await ctx.channel.send({
-        content: await translate(ctx.channel as DMChannel, "events/errors:prefix_mention_reply_guild"),
+        content: await translate(ctx.channel as DMChannel, "events/errors:prefix_mention_reply_guild", {
+          prefix: _prefix ?? ENV.bot.prefix,
+        }),
       });
     } else {
       await ctx.channel.send({
         content: await translate(ctx.channel, "events/errors:prefix_mention_reply_dm", {
-          prefix: ENV.bot.prefix,
+          prefix: _prefix ?? ENV.bot.prefix,
         }),
       });
     }
