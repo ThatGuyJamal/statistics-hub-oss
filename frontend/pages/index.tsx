@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { common } from "../utils/common";
-import styles from "../styles/home.module.scss";
+import styles from "../styles/Home.module.scss";
 import { FaDiscord } from "react-icons/fa";
 
 const Home: NextPage = () => {
