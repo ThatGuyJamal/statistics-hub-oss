@@ -74,6 +74,8 @@ started with the bot.
 
 2. As of now, the current version of the bot is being updated rapidly and is not in a stable version. It is also being developed to be a multi-guild bot in mind, meaning you may want to disabled or enable some of the features depending on your needs.
 
+3. If you want to host on linux, read this gist for the [commands](https://gist.github.com/ThatGuyJamal/42a65ede25b5da6d84c04eada89d12ff).
+
 ---
 
 Join my support server [here](https://discord.com/invite/N79DZsm3m2). You can find planned features [here](./planned.md).
