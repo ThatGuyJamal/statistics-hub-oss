@@ -60,12 +60,6 @@ export class GuildDocument {
    */
   @prop({ type: () => Object, required: false, default: null })
   public data?: GuildSchema;
-
-  /**
-   * A list of all disabled commands for this guild
-   */
-  @prop({ type: () => String, required: false, default: null })
-  public disabled_commands?: string[];
 }
 
 export const GuildDocumentModel = getModelForClass(GuildDocument);
@@ -91,6 +85,7 @@ export interface GuildSchema {
     /** Id of the guild owner who enabled this guild. */
     enabled_by: string;
   };
+  disabled_commands?: string[];
 }
 
 /**

@@ -67,6 +67,7 @@ export const DefaultGuildDataModelObject = {
     created: 0,
     deleted: 0,
   },
+  disabled_commands: [],
 } as GuildSchema;
 
 /**

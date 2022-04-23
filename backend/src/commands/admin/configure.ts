@@ -19,10 +19,7 @@ import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCom
 import { TextChannel } from "discord.js";
 import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
-import { DefaultGuildDataModelObject } from "../../lib/database";
-import { BaseEmbed } from "../../lib/utils/embed";
 import { codeBlock } from "../../lib/utils/format";
-import { pauseThread } from "../../lib/utils/promises";
 import { seconds } from "../../lib/utils/time";
 
 @ApplyOptions<ICommandOptions>({
@@ -45,101 +42,73 @@ export class UserCommand extends ICommand {
     if (!interaction.guild) return;
 
     const oldData = this.container.client.GuildSettingsModel._cache.get(interaction.guild!.id);
+    const document = await this.container.client.GuildSettingsModel.getDocument(interaction.guild!);
 
     // Access the sub commands
     switch (interaction.options.getSubcommand()) {
       case "language":
-        // fetches the language option we want
-        const result = interaction.options.getString("select", true);
+        const languageOption = interaction.options.getString("select", true);
 
-          // Make sure to update the current cache if the language is changed
-          if (oldData) {
-            this.container.client.GuildSettingsModel._cache.set(interaction.guild!.id, {
-              _id: interaction.guild!.id,
-              guild_name: interaction.guild!.name,
-              language: result,
-              blacklisted: oldData.blacklisted,
-              data: oldData.data ?? DefaultGuildDataModelObject,
-              disabled_commands: oldData.disabled_commands,
-            });
-          }
-
-          await this.container.client.GuildSettingsModel._model
-            .updateOne({ _id: interaction.guildId }, { $set: { language: result } })
-            .then((res) => {
-              this.container.logger.info(res);
-            })
-            .catch((err) => {
-              this.container.logger.error(err);
-            });
-
-          return await interaction.reply({
-            embeds: [
-              new BaseEmbed().interactionEmbed(
-                {
-                  description: await this.translate(
-                    interaction.channel as TextChannel,
-                    "commands/configurations:language.success_reply",
-                    {
-                      lang: result,
-                    }
-                  ),
-                },
-                interaction
-              ),
-            ],
+        this.container.client.GuildSettingsModel._cache.set(interaction.guild!.id, {
+          ...oldData,
+          language: languageOption,
         });
-      case "prefix":
-        // fetches the prefix option we want
-        const _prefix = interaction.options.getString("regex", true);
 
-        // Make sure to update the cache if the prefix is changed
-        if (oldData) {
-          this.container.client.GuildSettingsModel._cache.set(interaction.guild!.id, {
-            _id: interaction.guild!.id,
-            guild_name: interaction.guild!.name,
-            language: oldData.language,
-            prefix: _prefix,
-            blacklisted: oldData.blacklisted,
-            data: oldData.data ?? DefaultGuildDataModelObject,
-            disabled_commands: oldData.disabled_commands,
-          });
-        }
-
-        await this.container.client.GuildSettingsModel._model
-          .updateOne({ _id: interaction.guildId }, { $set: { prefix: _prefix } })
+        return await this.container.client.GuildSettingsModel._model
+          .updateOne({ _id: interaction.guildId }, { $set: { language: languageOption } })
           .then((res) => {
             this.container.logger.info(res);
           })
-          .catch((err) => {
-            this.container.logger.error(err);
+          .then(async () => {
+            interaction.reply({
+              content: codeBlock(
+                "diff",
+                `
+              - ${await this.translate(
+                interaction.channel as TextChannel,
+                "commands/configurations:language.success_reply",
+                {
+                  lang: languageOption,
+                }
+              )}
+              `
+              ),
+            });
           });
 
-        return await interaction.reply({
-          embeds: [
-            new BaseEmbed().interactionEmbed(
-              {
-                description: await this.translate(
-                  interaction.channel as TextChannel,
-                  "commands/configurations:prefix.success_reply",
-                  {
-                    prefix: _prefix,
-                  }
-                ),
-              },
-              interaction
-            ),
-          ],
+      case "prefix":
+        const prefixOption = interaction.options.getString("regex", true);
+
+        this.container.client.GuildSettingsModel._cache.set(interaction.guild!.id, {
+          ...oldData,
+          prefix: prefixOption,
         });
+
+        return await this.container.client.GuildSettingsModel._model
+          .updateOne({ _id: interaction.guildId }, { $set: { prefix: prefixOption } })
+          .then((res) => {
+            this.container.logger.info(res);
+          })
+          .then(async () => {
+            interaction.reply({
+              content: codeBlock(
+                "diff",
+                `
+              - ${await this.translate(
+                interaction.channel as TextChannel,
+                "commands/configurations:prefix.success_reply",
+                {
+                  prefix: prefixOption,
+                }
+              )}
+              `
+              ),
+            });
+          });
       case "clear":
-        return await interaction.reply({
-          content: `Not yet implemented.`,
-        });
+        const option = interaction.options.getBoolean("confirm", true);
 
-      case "view":
-        const data = await this.container.client.GuildSettingsModel.getDocument(interaction.guild!);
-
-        if (!data) {
+        if (!document) {
           return await interaction.reply({
             content: codeBlock(
               "diff",
@@ -147,19 +116,50 @@ export class UserCommand extends ICommand {
           - No configuration found for ${interaction.guild.name}.
           `
             ),
+            ephemeral: true,
           });
         }
-
+        if (option) {
+          await interaction.reply({
+            content: `The confirmation has been received... clearing the configuration...`,
+          });
+          this.container.client.GuildSettingsModel._cache.set(interaction.guild!.id, {
+            ...oldData,
+            language: "en-US",
+            prefix: ENV.bot.prefix,
+          });
+          await this.container.client.GuildSettingsModel._model
+            .updateOne({ _id: interaction.guildId }, { $set: { language: "en-US", prefix: ENV.bot.prefix } })
+            .then((res) => {
+              this.container.logger.info(res);
+            })
+            .then((res) => {
+              this.container.logger.info(res);
+            })
+            .catch((err) => {
+              this.container.logger.error(err);
+            });
+          return await interaction.channel?.send({
+            content: `The configuration has been cleared. You can view the default configuration by running \`/configure view\``,
+          });
+          // return collector.stop("success");
+        } else {
+          return await interaction.reply({
+            content: `The confirmation has been received... cancelling...`,
+          });
+        }
+      case "view":
         return await interaction.reply({
           content: codeBlock(
             "css",
             `
-          ${interaction.guild.name.length > 25 ? interaction.guild.name : "Server"} Settings
+          ${interaction.guild.name.length > 25 ? interaction.guild.name : "Server"} - Configuration
           
-          [Current Language] = ${data.language ?? "en-US"}
-          [Current Prefix] = ${data.prefix ?? this.container.client.environment.bot.prefix}
+          [Current Language] = ${document?.language ?? "en-US"}
+          [Current Prefix] = ${document?.prefix ?? this.container.client.environment.bot.prefix}
           `
           ),
+          ephemeral: true,
         });
     }
   }
