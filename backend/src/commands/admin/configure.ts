@@ -95,37 +95,39 @@ export class UserCommand extends ICommand {
         // fetches the prefix option we want
         const _prefix = interaction.options.getString("regex", true);
 
-        await interaction.reply({
-          content: `Saving configuration...`,
+        await this.container.client.GuildSettingsModel._model
+          .updateOne({ _id: interaction.guildId }, { $set: { prefix: _prefix } })
+          .then((res) => {
+            this.container.logger.info(res);
+          })
+          .catch((err) => {
+            this.container.logger.error(err);
+          });
+
+        return await interaction.reply({
+          embeds: [
+            new BaseEmbed().interactionEmbed(
+              {
+                description: await this.translate(
+                  interaction.channel as TextChannel,
+                  "commands/configurations:prefix.success_reply",
+                  {
+                    _prefix,
+                  }
+                ),
+              },
+              interaction
+            ),
+          ],
+        });
+      case "clear":
+        return await interaction.reply({
+          content: `Not yet implemented.`,
         });
 
-        await pauseThread(3, "seconds", "Configure Command").then(async () => {
-            
-          await this.container.client.GuildSettingsModel._model
-            .updateOne({ _id: interaction.guildId }, { $set: { prefix: _prefix } })
-            .then((res) => {
-              this.container.logger.info(res);
-            })
-            .catch((err) => {
-              this.container.logger.error(err);
-            });
-
-          return await interaction.editReply({
-            embeds: [
-              new BaseEmbed().interactionEmbed(
-                {
-                  description: await this.translate(
-                    interaction.channel as TextChannel,
-                    "commands/configurations:prefix.success_reply",
-                    {
-                      _prefix,
-                    }
-                  ),
-                },
-                interaction
-              ),
-            ],
-          });
+      case "view":
+        return await interaction.reply({
+          content: `Not yet implemented.`,
         });
     }
   }
@@ -157,9 +159,21 @@ export class UserCommand extends ICommand {
               .setName("prefix")
               .setDescription("Sets the prefix the bot will use.")
               .addStringOption((stringOption) =>
-                stringOption.setName("regex").setDescription("The prefix string expression.")
+                stringOption.setName("regex").setDescription("The prefix string expression.").setRequired(true)
               )
-          ),
+          )
+          .addSubcommand((options) =>
+            options
+              .setName("clear")
+              .setDescription("Clear all settings")
+              .addBooleanOption((booleanOption) =>
+                booleanOption
+                  .setName("confirm")
+                  .setDescription("Confirm that you want to clear all settings.")
+                  .setRequired(true)
+              )
+          )
+          .addSubcommand((options) => options.setName("view").setDescription("View the current settings.")),
       {
         guildIds: ENV.bot.test_guild_id,
         registerCommandIfMissing: ENV.bot.register_commands,

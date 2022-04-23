@@ -58,8 +58,14 @@ export class GuildDocument {
   /**
    * The guild's tracking data
    */
-  @prop({ type: () => Object, required: false, default: undefined })
+  @prop({ type: () => Object, required: false, default: null })
   public data?: GuildSchema;
+
+  /**
+   * A list of all disabled commands for this guild
+   */
+  @prop({ type: () => String, required: false, default: null })
+  public disabled_commands?: string[];
 }
 
 export const GuildDocumentModel = getModelForClass(GuildDocument);
