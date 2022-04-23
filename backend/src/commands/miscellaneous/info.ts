@@ -79,7 +79,7 @@ export class UserCommand extends ICommand {
       )}\n• **Discord**: ${createHyperLink("link", ENV.bot.server_link)}\n • **Dashboard**: ${createHyperLink(
         "link",
         ENV.developer.dashboard_link
-        )}`,
+      )}`,
     };
 
     return new BaseEmbed({

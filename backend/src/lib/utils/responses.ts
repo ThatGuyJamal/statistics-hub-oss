@@ -35,9 +35,12 @@ export const sendError = (interaction: CommandInteraction, description: string, 
   const parsedDescription = `❌ ${description.endsWith(".") ? description.slice(0, -1) : description}!`;
 
   const payload = {
-    content: codeBlock("css", `
+    content: codeBlock(
+      "css",
+      `
      [Notice] - ${parsedDescription}
-    `),
+    `
+    ),
     // embeds: [createEmbed(parsedDescription, BrandingColors.Error)],
     components: [
       new MessageActionRow()

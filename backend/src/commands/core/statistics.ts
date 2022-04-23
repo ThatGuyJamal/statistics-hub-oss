@@ -39,8 +39,9 @@ import { seconds } from "../../lib/utils/time";
 export class UserCommand extends ICommand {
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
     return await interaction.reply({
-      content: codeBlock("diff", 
-      `
+      content: codeBlock(
+        "diff",
+        `
       - ${await this.translate(interaction.channel as TextChannel, "commands/core:statistics.success")}
       `
       ),

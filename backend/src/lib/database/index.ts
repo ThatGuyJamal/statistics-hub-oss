@@ -51,11 +51,10 @@ connection.on("close", () => {
   container.logger.info(`Mongoose connection closed!`);
 });
 
-
 /**
  * The default data object for the guild database schema creation object.
  */
- export const DefaultGuildDataModelObject = {
+export const DefaultGuildDataModelObject = {
   member: {
     guildJoins: 0,
     guildLeaves: 0,
@@ -67,8 +66,8 @@ connection.on("close", () => {
   channel: {
     created: 0,
     deleted: 0,
-  }
-} as GuildSchema
+  },
+} as GuildSchema;
 
 /**
  * The default object for the user database schema creation object.
@@ -77,5 +76,5 @@ export const DefaultUserModelObject = {
   paymentId: undefined,
   status: false,
   tier: 0,
-  total_guilds_enabled: 0
-}
+  total_guilds_enabled: 0,
+};

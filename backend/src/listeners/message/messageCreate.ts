@@ -53,7 +53,7 @@ export class UserEvent extends Listener {
     if (ratelimit.has(ctx.guild.id)) {
       if (result.stack > 5) {
         // container.logger.info(`Ratelimit exceeded for ${ctx.guild.name} | ${ctx.guild.id} - Pushing to upload queue...`);
-        this.upload(ctx)
+        this.upload(ctx);
       } else {
         // container.logger.info(`[Ratelimit] ${ctx.guild.name} | ${ctx.guild.id} - Incrementing stack...`);
         ratelimit.set(ctx.guild.id, {
@@ -72,8 +72,8 @@ export class UserEvent extends Listener {
 
   /**
    * Update the db with the new cache
-   * @param ctx 
-   * @returns 
+   * @param ctx
+   * @returns
    */
   private async upload(ctx: Message) {
     if (!isGuildMessage(ctx)) return;
@@ -89,7 +89,7 @@ export class UserEvent extends Listener {
         })
         .then((res) => {
           this.container.logger.info(res);
-          ratelimit.delete(ctx.guild.id)
+          ratelimit.delete(ctx.guild.id);
         });
     } else {
       let result = ratelimit.get(ctx.guild.id);
@@ -109,7 +109,7 @@ export class UserEvent extends Listener {
         )
         .then((res) => {
           this.container.logger.info(res);
-          ratelimit.delete(ctx.guild.id)
+          ratelimit.delete(ctx.guild.id);
         });
     }
   }

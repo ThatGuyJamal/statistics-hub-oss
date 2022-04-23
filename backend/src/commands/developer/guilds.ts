@@ -19,25 +19,28 @@ import { seconds } from "../../lib/utils/time";
   extendedDescription: {
     command_type: "message",
   },
-  preconditions: ["OwnerOnly"]
+  preconditions: ["OwnerOnly"],
 })
 export class UserCommand extends ICommand {
   // Message Based Command
   public async messageRun(ctx: Message) {
-    const embed = new BaseEmbed().setDescription(
-      `${codeBlock(
-        "css",
-        `
+    const embed = new BaseEmbed()
+      .setDescription(
+        `${codeBlock(
+          "css",
+          `
         [Active Guilds] - ${this.container.client.guilds.cache.size}
         `
-      )}
+        )}
         `
-    ).setTimestamp().setColor("DARK_ORANGE")
+      )
+      .setTimestamp()
+      .setColor("DARK_ORANGE");
 
     const limit = [];
 
     for (const guild of this.container.client.guilds.cache.values()) {
-        // Make sure we dont go over the limit
+      // Make sure we dont go over the limit
       if (limit.length > 15) {
         break;
       } else {

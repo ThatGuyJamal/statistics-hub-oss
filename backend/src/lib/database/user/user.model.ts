@@ -47,7 +47,7 @@ export class UserDocument {
  * Typings for guild premium data structure
  */
 export interface GuildSchemaPremiumType {
-  /** 
+  /**
    * payment ID from our provider after payment.
    * This will be used for other authentication methods in the future.
    */

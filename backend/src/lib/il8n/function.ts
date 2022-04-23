@@ -24,7 +24,7 @@ export function parseInternationalizationOptions(): InternationalizationOptions 
     fetchLanguage: async (context: InternationalizationContext) => {
       if (!context.guild) return "en-US";
       else {
-        let langFetch = await container.client.GuildSettingsModel._cache.get(context.guild.id)
+        let langFetch = await container.client.GuildSettingsModel._cache.get(context.guild.id);
         if (langFetch) {
           return langFetch.language ?? "en-US";
         } else {
