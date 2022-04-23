@@ -21,6 +21,7 @@ import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { DefaultDataModelObject } from "../../lib/database";
 import { BaseEmbed } from "../../lib/utils/embed";
+import { codeBlock } from "../../lib/utils/format";
 import { pauseThread } from "../../lib/utils/promises";
 import { seconds } from "../../lib/utils/time";
 
@@ -61,7 +62,9 @@ export class UserCommand extends ICommand {
               _id: interaction.guild!.id,
               guild_name: interaction.guild!.name,
               language: result,
+              blacklisted: oldData.blacklisted,
               data: oldData.data ?? DefaultDataModelObject,
+              disabled_commands: oldData.disabled_commands,
             });
           }
 
@@ -74,7 +77,7 @@ export class UserCommand extends ICommand {
               this.container.logger.error(err);
             });
 
-          return await interaction.editReply({
+          return await interaction.reply({
             embeds: [
               new BaseEmbed().interactionEmbed(
                 {
@@ -95,6 +98,20 @@ export class UserCommand extends ICommand {
         // fetches the prefix option we want
         const _prefix = interaction.options.getString("regex", true);
 
+        // Make sure to update the cache if the prefix is changed
+        const oldData = this.container.client.GuildSettingsModel._cache.get(interaction.guild!.id);
+        if (oldData) {
+          this.container.client.GuildSettingsModel._cache.set(interaction.guild!.id, {
+            _id: interaction.guild!.id,
+            guild_name: interaction.guild!.name,
+            language: oldData.language,
+            prefix: _prefix,
+            blacklisted: oldData.blacklisted,
+            data: oldData.data ?? DefaultDataModelObject,
+            disabled_commands: oldData.disabled_commands,
+          });
+        }
+
         await this.container.client.GuildSettingsModel._model
           .updateOne({ _id: interaction.guildId }, { $set: { prefix: _prefix } })
           .then((res) => {
@@ -112,7 +129,7 @@ export class UserCommand extends ICommand {
                   interaction.channel as TextChannel,
                   "commands/configurations:prefix.success_reply",
                   {
-                    _prefix,
+                    prefix: _prefix,
                   }
                 ),
               },
@@ -126,8 +143,29 @@ export class UserCommand extends ICommand {
         });
 
       case "view":
+        const data = await this.container.client.GuildSettingsModel.getDocument(interaction.guild!);
+
+        if (!data) {
+          return await interaction.reply({
+            content: codeBlock(
+              "diff",
+              `
+          - No configuration found for ${interaction.guild.name}.
+          `
+            ),
+          });
+        }
+
         return await interaction.reply({
-          content: `Not yet implemented.`,
+          content: codeBlock(
+            "css",
+            `
+          ${interaction.guild.name.length > 25 ? interaction.guild.name : "Server"} Settings
+          
+          [Current Language] = ${data.language ?? "en-US"}
+          [Current Prefix] = ${data.prefix ?? this.container.client.environment.bot.prefix}
+          `
+          ),
         });
     }
   }
