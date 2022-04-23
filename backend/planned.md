@@ -1,6 +1,6 @@
 # `Planned Features`
 
-Below are planned features I will be adding to the bot in now specific order...
+Below are planned features I will be adding to the bot in no specific order...
 
 - [x] Channel Stats \[Create, Delete]
 
