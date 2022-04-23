@@ -6,8 +6,8 @@ Currently the bot is on version 0.0.1 and is unstable. This document will update
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 0.0.1|:x:                |
+| 0.0.2   | :white_check_mark: |
+| 0.0.1   | :x:                |
 
 ## Reporting a Vulnerability
 

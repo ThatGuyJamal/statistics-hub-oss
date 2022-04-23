@@ -1,6 +1,6 @@
 {
   "name": "@statistics-hub-oss/core",
-  "version": "0.1.0",
+  "version": "0.0.2",
   "description": "A discord bot for tracking statistics in your server.",
   "main": "out/registry.js",
   "scripts": {
