@@ -17,7 +17,7 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { ListenerOptions, Events, Listener, container } from "@sapphire/framework";
 import { Message } from "discord.js";
-import { DefaultDataModelObject } from "../../lib/database/";
+import { DefaultGuildDataModelObject } from "../../lib/database/";
 import { isGuildMessage } from "../../lib/utils/guards";
 import { minutes } from "../../lib/utils/time";
 
@@ -85,7 +85,7 @@ export class UserEvent extends Listener {
         .create({
           _id: ctx.guild.id,
           guild_name: ctx.guild.name,
-          data: DefaultDataModelObject,
+          data: DefaultGuildDataModelObject,
         })
         .then((res) => {
           this.container.logger.info(res);

@@ -55,7 +55,7 @@ connection.on("close", () => {
 /**
  * The default data object for the database schema creation object.
  */
- export const DefaultDataModelObject = {
+ export const DefaultGuildDataModelObject = {
   member: {
     guildJoins: 0,
     guildLeaves: 0,

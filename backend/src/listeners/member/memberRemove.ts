@@ -17,7 +17,7 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener, ListenerOptions } from "@sapphire/framework";
 import { GuildMember } from "discord.js";
-import { DefaultDataModelObject } from "../../lib/database";
+import { DefaultGuildDataModelObject } from "../../lib/database";
 
 @ApplyOptions<ListenerOptions>({
   event: Events.GuildMemberRemove,
@@ -31,7 +31,7 @@ export class UserEvent extends Listener {
         .create({
           _id: member.guild.id,
           guild_name: member.guild.name,
-          data: DefaultDataModelObject,
+          data: DefaultGuildDataModelObject,
         })
         .then((res) => {
           this.container.logger.info(res);

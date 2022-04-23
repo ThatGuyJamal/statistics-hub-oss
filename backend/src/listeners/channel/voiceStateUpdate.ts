@@ -1,7 +1,7 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener, ListenerOptions } from "@sapphire/framework";
 import { VoiceState } from "discord.js";
-import { DefaultDataModelObject } from "../../lib/database";
+import { DefaultGuildDataModelObject } from "../../lib/database";
 
 @ApplyOptions<ListenerOptions>({
   event: Events.VoiceStateUpdate,
@@ -15,7 +15,7 @@ export class UserEvent extends Listener {
         .create({
           _id: voice.guild.id,
           guild_name: voice.guild.name,
-          data: DefaultDataModelObject,
+          data: DefaultGuildDataModelObject,
         })
         .then((res) => {
           this.container.logger.info(res);

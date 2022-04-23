@@ -22,7 +22,7 @@ import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { seconds } from "../../lib/utils/time";
 import { codeBlock } from "../../lib/utils/format";
 import { pauseThread } from "../../lib/utils/promises";
-import { DefaultDataModelObject } from "../../lib/database/";
+import { DefaultGuildDataModelObject } from "../../lib/database/";
 
 @ApplyOptions<ICommandOptions>({
   description: "Checks the current active cache for this server",
@@ -53,7 +53,7 @@ export class UserCommand extends ICommand {
           .create({
             _id: ctx.guild!.id,
             guild_name: ctx.guild!.name,
-            data: DefaultDataModelObject,
+            data: DefaultGuildDataModelObject,
           })
           .then((res) => {
             this.container.logger.info(res);
@@ -115,7 +115,7 @@ export class UserCommand extends ICommand {
               .create({
                 _id: interaction.guild!.id,
                 guild_name: interaction.guild!.name,
-                data: DefaultDataModelObject,
+                data: DefaultGuildDataModelObject,
               })
               .then((res) => {
                 this.container.logger.info(res);

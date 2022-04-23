@@ -19,7 +19,7 @@ import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCom
 import { TextChannel } from "discord.js";
 import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
-import { DefaultDataModelObject } from "../../lib/database";
+import { DefaultGuildDataModelObject } from "../../lib/database";
 import { BaseEmbed } from "../../lib/utils/embed";
 import { codeBlock } from "../../lib/utils/format";
 import { pauseThread } from "../../lib/utils/promises";
@@ -63,7 +63,7 @@ export class UserCommand extends ICommand {
               guild_name: interaction.guild!.name,
               language: result,
               blacklisted: oldData.blacklisted,
-              data: oldData.data ?? DefaultDataModelObject,
+              data: oldData.data ?? DefaultGuildDataModelObject,
               disabled_commands: oldData.disabled_commands,
             });
           }
@@ -107,7 +107,7 @@ export class UserCommand extends ICommand {
             language: oldData.language,
             prefix: _prefix,
             blacklisted: oldData.blacklisted,
-            data: oldData.data ?? DefaultDataModelObject,
+            data: oldData.data ?? DefaultGuildDataModelObject,
             disabled_commands: oldData.disabled_commands,
           });
         }

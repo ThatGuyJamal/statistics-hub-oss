@@ -1,7 +1,7 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener, ListenerOptions } from "@sapphire/framework";
 import { GuildChannel } from "discord.js";
-import { DefaultDataModelObject } from "../../lib/database";
+import { DefaultGuildDataModelObject } from "../../lib/database";
 
 @ApplyOptions<ListenerOptions>({
   event: Events.ChannelDelete,
@@ -15,7 +15,7 @@ export class UserEvent extends Listener {
         .create({
           _id: channel.guildId,
           guild_name: channel.guild.name,
-          data: DefaultDataModelObject,
+          data: DefaultGuildDataModelObject,
         })
         .then((res) => {
           this.container.logger.info(res);
