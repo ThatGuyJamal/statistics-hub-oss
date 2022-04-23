@@ -8,7 +8,7 @@ Below are planned features I will be adding to the bot in no specific order...
 
 - [x] Switch setInterval Functions to the interval controller class for more control.
 
-- [ ] Basic configuration commands (prefix, language, clear, view, reset)
+- [x] Basic configuration commands (prefix, language, clear, view, reset)
 
 - [ ] Welcome System used slash commands \[Welcome, Leave] Using - [w-card](https://github.com/AKORA-Studios/DiscordWelcomeCard)
 
