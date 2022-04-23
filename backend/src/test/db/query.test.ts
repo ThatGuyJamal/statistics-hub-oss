@@ -1,4 +1,4 @@
-import {GuildDocumentModel} from "../../lib/database/guild/model" 
+import {GuildDocumentModel} from "../../lib/database/guild/guild.model" 
 
 const query = GuildDocumentModel
 

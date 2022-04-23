@@ -15,7 +15,7 @@
  */
 
 import { getModelForClass, modelOptions, prop, Severity } from "@typegoose/typegoose";
-import { GuildSchemaPremiumTier } from "../user/model";
+import { GuildSchemaPremiumTier } from "../user/user.model";
 
 @modelOptions({
   schemaOptions: {

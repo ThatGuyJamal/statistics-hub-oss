@@ -44,19 +44,15 @@ export class UserCommand extends ICommand {
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
     if (!interaction.guild) return;
 
+    const oldData = this.container.client.GuildSettingsModel._cache.get(interaction.guild!.id);
+
     // Access the sub commands
     switch (interaction.options.getSubcommand()) {
       case "language":
         // fetches the language option we want
         const result = interaction.options.getString("select", true);
 
-        await interaction.reply({
-          content: `Saving configuration...`,
-        });
-
-        await pauseThread(3, "seconds", "Configure Command").then(async () => {
           // Make sure to update the current cache if the language is changed
-          const oldData = this.container.client.GuildSettingsModel._cache.get(interaction.guild!.id);
           if (oldData) {
             this.container.client.GuildSettingsModel._cache.set(interaction.guild!.id, {
               _id: interaction.guild!.id,
@@ -92,14 +88,12 @@ export class UserCommand extends ICommand {
                 interaction
               ),
             ],
-          });
         });
       case "prefix":
         // fetches the prefix option we want
         const _prefix = interaction.options.getString("regex", true);
 
         // Make sure to update the cache if the prefix is changed
-        const oldData = this.container.client.GuildSettingsModel._cache.get(interaction.guild!.id);
         if (oldData) {
           this.container.client.GuildSettingsModel._cache.set(interaction.guild!.id, {
             _id: interaction.guild!.id,

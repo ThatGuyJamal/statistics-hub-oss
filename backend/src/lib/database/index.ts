@@ -17,7 +17,7 @@
 import { container } from "@sapphire/framework";
 import { connect, connection } from "mongoose";
 import { ENV } from "../../config";
-import { GuildSchema } from "./guild/model";
+import { GuildSchema } from "./guild/guild.model";
 
 export async function initializeTypeGooseConnection() {
   try {
@@ -53,7 +53,7 @@ connection.on("close", () => {
 
 
 /**
- * The default data object for the database schema creation object.
+ * The default data object for the guild database schema creation object.
  */
  export const DefaultGuildDataModelObject = {
   member: {
@@ -62,10 +62,20 @@ connection.on("close", () => {
     lastJoin: undefined,
     guildBans: 0,
   },
-  message: 1,
+  message: 0,
   voice: 0,
   channel: {
     created: 0,
     deleted: 0,
   }
 } as GuildSchema
+
+/**
+ * The default object for the user database schema creation object.
+ */
+export const DefaultUserModelObject = {
+  paymentId: undefined,
+  status: false,
+  tier: 0,
+  total_guilds_enabled: 0
+}

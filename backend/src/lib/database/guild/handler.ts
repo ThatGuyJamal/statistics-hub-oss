@@ -14,7 +14,7 @@
     GNU Affero General Public License for more details.
  */
 
-import { GuildDocument, GuildDocumentModel } from "./model";
+import { GuildDocument, GuildDocumentModel } from "./guild.model";
 import { Collection, Guild } from "discord.js";
 import { container } from "@sapphire/framework";
 import { hours } from "../../utils/time";

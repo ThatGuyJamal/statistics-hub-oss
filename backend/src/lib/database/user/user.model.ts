@@ -26,7 +26,7 @@ import { modelOptions, prop, Severity } from "@typegoose/typegoose";
     runSyncIndexes: true,
   },
 })
-export class GuildDocument {
+export class UserDocument {
   @prop({ type: () => String, required: true })
   /**
    * User ID

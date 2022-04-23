@@ -15,7 +15,7 @@
  */
 
 import { Guild } from "discord.js";
-import { GuildSchemaMemberType } from "../../database/guild/model";
+import { GuildSchemaMemberType } from "../../database/guild/guild.model";
 import { BaseCache } from "./cache";
 
 type MemberDataType = "guildJoins" | "guildLeaves" | "lastJoin" | "guildBans";
