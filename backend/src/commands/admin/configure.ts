@@ -155,8 +155,9 @@ export class UserCommand extends ICommand {
             `
           ${interaction.guild.name.length > 25 ? interaction.guild.name : "Server"} - Configuration
           
-          [Current Language] = ${document?.language ?? "en-US"}
-          [Current Prefix] = ${document?.prefix ?? this.container.client.environment.bot.prefix}
+          [ Current Language ] = ${document?.language ?? "en-US"}
+          [ Current Prefix ] = ${document?.prefix ?? this.container.client.environment.bot.prefix}
+          [ Welcome Plugin  ] = Coming soon...
           `
           ),
           ephemeral: true,
