@@ -81,7 +81,7 @@ export class UserEvent extends Listener {
     const fetch = await this.container.client.GuildSettingsModel.getDocument(ctx.guild);
 
     if (!fetch) {
-      await this.container.client.GuildSettingsModel._model
+      await this.container.client.GuildSettingsModel.CoreModel
         .create({
           _id: ctx.guild.id,
           guild_name: ctx.guild.name,
@@ -93,7 +93,7 @@ export class UserEvent extends Listener {
         });
     } else {
       let result = ratelimit.get(ctx.guild.id);
-      await this.container.client.GuildSettingsModel._model
+      await this.container.client.GuildSettingsModel.CoreModel
         .updateOne(
           {
             _id: ctx.guild.id,

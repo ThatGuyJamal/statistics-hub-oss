@@ -31,7 +31,7 @@ export class UserEvent extends Listener {
       let msg = `✅ ${this.container.client.environment.bot.name} has been added to \`${guild.name} | id:(${guild.id})\` **Now in** \`${client.guilds.cache.size} servers.\``;
 
       // When the bot is added to a guild, we need to add the guild to the database
-      this.container.client.GuildSettingsModel._model
+      this.container.client.GuildSettingsModel.CoreModel
         .create({
           _id: guild.id,
           guild_name: guild.name,

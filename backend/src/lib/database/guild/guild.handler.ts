@@ -15,13 +15,16 @@
  */
 
 import { GuildDocument, GuildDocumentModel } from "./guild.model";
+import { WelcomeDocumentModel } from "./guild.welcome.plugin";
 import { Collection, Guild } from "discord.js";
 import { container } from "@sapphire/framework";
 import { hours } from "../../utils/time";
 
 export class GuildModelHandler {
-  /** Model types for mongoose query's... */
-  public _model = GuildDocumentModel;
+  /** Model types for the main guild mongoose query's... */
+  public CoreModel = GuildDocumentModel;
+  public WelcomeModel = WelcomeDocumentModel
+
   /** The local cache for quick setting information */
   public _cache = new Collection<string, GuildDocument>();
 
@@ -51,7 +54,7 @@ export class GuildModelHandler {
     const guildsToCacheLimit = container.client.guilds.cache.size;
 
     if (guildsToCacheLimit < 100) {
-      const documents = await this._model.find();
+      const documents = await this.CoreModel.find();
 
       if (documents) {
         // add them to the cache
@@ -78,7 +81,7 @@ export class GuildModelHandler {
    * @returns The guild settings for the given guild id
    */
   public async getDocument(guild: Guild) {
-    const doc = await this._model.findById(guild.id);
+    const doc = await this.CoreModel.findById(guild.id);
     if (doc) this._cache.set(guild.id, doc);
     return doc;
   }
@@ -89,6 +92,6 @@ export class GuildModelHandler {
    */
   public async wipe(id: string) {
     this._cache.delete(id);
-    return this._model.findByIdAndDelete(id);
+    return this.CoreModel.findByIdAndDelete(id);
   }
 }

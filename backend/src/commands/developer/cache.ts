@@ -49,7 +49,7 @@ export class UserCommand extends ICommand {
       const fetch = await this.container.client.GuildSettingsModel.getDocument(ctx.guild!);
 
       if (!fetch) {
-        await this.container.client.GuildSettingsModel._model
+        await this.container.client.GuildSettingsModel.CoreModel
           .create({
             _id: ctx.guild!.id,
             guild_name: ctx.guild!.name,
@@ -111,7 +111,7 @@ export class UserCommand extends ICommand {
           const fetch = await this.container.client.GuildSettingsModel.getDocument(interaction.guild!);
 
           if (!fetch) {
-            await this.container.client.GuildSettingsModel._model
+            await this.container.client.GuildSettingsModel.CoreModel
               .create({
                 _id: interaction.guild!.id,
                 guild_name: interaction.guild!.name,

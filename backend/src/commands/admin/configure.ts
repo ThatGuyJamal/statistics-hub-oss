@@ -54,7 +54,7 @@ export class UserCommand extends ICommand {
           language: languageOption,
         });
 
-        return await this.container.client.GuildSettingsModel._model
+        return await this.container.client.GuildSettingsModel.CoreModel
           .updateOne({ _id: interaction.guildId }, { $set: { language: languageOption } })
           .then((res) => {
             this.container.logger.info(res);
@@ -84,7 +84,7 @@ export class UserCommand extends ICommand {
           prefix: prefixOption,
         });
 
-        return await this.container.client.GuildSettingsModel._model
+        return await this.container.client.GuildSettingsModel.CoreModel
           .updateOne({ _id: interaction.guildId }, { $set: { prefix: prefixOption } })
           .then((res) => {
             this.container.logger.info(res);
@@ -128,7 +128,7 @@ export class UserCommand extends ICommand {
             language: "en-US",
             prefix: ENV.bot.prefix,
           });
-          await this.container.client.GuildSettingsModel._model
+          await this.container.client.GuildSettingsModel.CoreModel
             .updateOne({ _id: interaction.guildId }, { $set: { language: "en-US", prefix: ENV.bot.prefix } })
             .then((res) => {
               this.container.logger.info(res);
