@@ -14,7 +14,7 @@
     GNU Affero General Public License for more details.
  */
 
-import { modelOptions, prop, Severity } from "@typegoose/typegoose";
+import { modelOptions, prop, Severity, getModelForClass } from "@typegoose/typegoose";
 
 @modelOptions({
   schemaOptions: {
@@ -42,6 +42,8 @@ export class UserDocument {
   @prop({ type: () => String, required: false, default: null })
   premium?: GuildSchemaPremiumType;
 }
+
+export const UserDocumentModel = getModelForClass(UserDocument)
 
 /**
  * Typings for guild premium data structure
