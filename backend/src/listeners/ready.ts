@@ -34,7 +34,7 @@ export class UserEvent extends Listener {
     await client.user?.setPresence({
       activities: [
         {
-          name: "/commands",
+          name: "The charts | /commands",
           type: "WATCHING",
         },
       ],
