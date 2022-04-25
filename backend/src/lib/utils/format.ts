@@ -172,7 +172,8 @@ export function codeBlock(
     | "xl"
     | "js"
     | "ts"
-    | "xml",
+    | "xml"
+    | "text",
   code: string
 ) {
   return `\`\`\`${language}\n${stripIndent(code)}\`\`\``;

@@ -1,6 +1,6 @@
 {
   "ping_command": {
-    "description": "Pong! Bot Latency {{wsLatency}}. API Latency {{APILatency}}",
+    "description": "Pong! Bot Latency {{wsLatency}}.\n Discord API Latency {{APILatency}}",
     "help_description": "Check's the bot latency with discords api."
   },
   "info_command": {

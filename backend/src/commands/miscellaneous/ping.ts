@@ -22,7 +22,7 @@ import ms from "ms";
 import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { BrandingColors } from "../../lib/utils/colors";
-import { inlineCode } from "../../lib/utils/format";
+import { codeBlock, inlineCode } from "../../lib/utils/format";
 import { createEmbed } from "../../lib/utils/responses";
 import { seconds } from "../../lib/utils/time";
 
@@ -44,15 +44,22 @@ export class UserCommand extends ICommand {
   public override async messageRun(ctx: Message) {
     const msg = await send(ctx, "fetching current latency...");
 
-    let content = await this.translate(ctx.channel as TextChannel, "commands/miscellaneous:ping_command.description", {
-      replace: {
-        APILatency: inlineCode(
-          `${ms((msg.editedTimestamp || msg.createdTimestamp) - (ctx.editedTimestamp || ctx.createdTimestamp))}`
-        ),
-        wsLatency: inlineCode(`${ms(Math.round(this.container.client.ws.ping))}`),
-      },
+    const result = codeBlock(
+      "diff",
+      `
+      + ${await this.translate(ctx.channel as TextChannel, "commands/miscellaneous:ping_command.description", {
+        replace: {
+          APILatency: `${ms(
+            (msg.editedTimestamp || msg.createdTimestamp) - (ctx.editedTimestamp || ctx.createdTimestamp)
+          )}`,
+          wsLatency: `${ms(Math.round(this.container.client.ws.ping))}`,
+        }})}
+    `
+    );
+
+    return await msg.edit({
+      content: result,
     });
-    return await send(ctx, content);
   }
 
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
