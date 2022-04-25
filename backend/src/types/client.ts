@@ -19,7 +19,7 @@ import { IMessageCache } from "../lib/controllers/cache/messageCache";
 import { IntervalsController } from "../lib/controllers/interval";
 import { IEventLogger } from "../lib/controllers/statistics/logger";
 import { StatisticsHandler } from "../lib/controllers/statistics/statcord";
-import { GuildModelHandler } from "../lib/database/guild/handler";
+import { GuildModelHandler } from "../lib/database/guild/guild.handler";
 import { env_types } from "./env";
 
 /** Type over-writes, so we get typings in our client extensions. */

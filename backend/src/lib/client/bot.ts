@@ -23,7 +23,7 @@ import { IntervalsController } from "../controllers/interval";
 import { IEventLogger } from "../controllers/statistics/logger";
 import { StatisticsHandler } from "../controllers/statistics/statcord";
 import { initializeTypeGooseConnection } from "../database";
-import { GuildModelHandler } from "../database/guild/handler";
+import { GuildModelHandler } from "../database/guild/guild.handler";
 import { loadImportantMembers } from "../utils/loaders";
 
 class ExtendedClient extends SapphireClient {

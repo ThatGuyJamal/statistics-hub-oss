@@ -60,6 +60,12 @@ export interface GuildSchemaPremiumType {
    * How many guilds they can have premium in total
    */
   total_guilds_enabled: number;
+
+  /**
+   * When the user's premium expires
+   * @default 1 month
+   **/
+  expiresAt: Date;
 }
 
 /**

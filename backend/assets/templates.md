@@ -33,6 +33,7 @@ import { seconds } from "../../lib/utils/time";
   extendedDescription: {
     usage: "",
     examples: [""],
+    command_type: ""
   },
 })
 export class UserCommand extends ICommand {
@@ -43,7 +44,7 @@ export class UserCommand extends ICommand {
   // slash command registry
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
     registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
-      guildIds: [ENV.bot.test_guild_id],
+      guildIds: ENV.bot.test_guild_id,
       registerCommandIfMissing: ENV.bot.register_commands,
       behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
       idHints: [],
