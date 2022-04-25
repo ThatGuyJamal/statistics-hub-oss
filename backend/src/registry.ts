@@ -47,6 +47,15 @@ process.on("uncaughtException", (error) => {
   container.logger.error("Uncaught exception:", error);
 });
 
+process.on("uncaughtExceptionMonitor", (err, origin) => {
+  container.logger.warn(" [antiCrash] :: Uncaught Exception/Catch (MONITOR)");
+  container.logger.error(err, origin);
+});
+process.on("multipleResolves", (type, promise, reason) => {
+  container.logger.warn(" [antiCrash] :: Multiple Resolves");
+  container.logger.error(type, promise, reason);
+});
+
 process.on("exit", (code) => {
   container.logger.info(`Exiting with code ${code}`);
 });
