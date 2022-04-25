@@ -15,7 +15,7 @@
  */
 
 import { GuildDocument, GuildDocumentModel } from "./guild.model";
-import { WelcomeDocumentModel } from "./guild.welcome.plugin";
+import { WelcomeDocumentModel } from "./plugins/welcome.plugin";
 import { Collection, Guild } from "discord.js";
 import { container } from "@sapphire/framework";
 import { hours } from "../../utils/time";

@@ -28,10 +28,10 @@ import { GuildSchemaPremiumTier } from "../user/user.model";
   },
 })
 export class GuildDocument {
-  @prop({ type: () => String, required: true })
   /**
    * Guild ID
    */
+  @prop({ type: () => String, required: true })
   public _id?: string;
 
   /**
@@ -40,20 +40,29 @@ export class GuildDocument {
   @prop({ type: () => String, required: false, default: null })
   public guild_name?: string;
 
+  /**
+   * The guild prefix
+   */
   @prop({ type: () => String, required: false, default: "sh!" })
   public prefix?: string;
 
-  @prop({ type: () => String, required: false, default: "en-US" })
   /**
    * The guild's language config
    */
+  @prop({ type: () => String, required: false, default: "en-US" })
   public language?: string;
 
-  @prop({ type: () => Boolean, required: false, default: false })
   /**
    * The guild's blacklist status
    */
-  public blacklisted?: boolean;
+  @prop({
+    type: () => Boolean,
+    required: false,
+    default: {
+      isBlacklisted: false,
+    },
+  })
+  public blacklisted?: GuildBlackListSchema;
 
   /**
    * The guild's tracking data
@@ -105,4 +114,9 @@ export interface GuildSchemaMemberType {
 export interface GuildSchemaChannelType {
   created: number;
   deleted: number;
+}
+
+interface GuildBlackListSchema {
+  isBlacklisted: boolean;
+  reason?: string;
 }

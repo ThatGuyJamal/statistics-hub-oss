@@ -17,7 +17,8 @@
 import { container } from "@sapphire/framework";
 import { connect, connection } from "mongoose";
 import { ENV } from "../../config";
-import { GuildSchema } from "./guild/guild.model";
+import type { GuildSchema } from "./guild/guild.model";
+import { WelcomeCardOptions, WelcomeEmbedObject } from "./guild/plugins/welcome/welcome.plugin";
 
 export async function initializeTypeGooseConnection() {
   try {
@@ -79,3 +80,41 @@ export const DefaultUserModelObject = {
   tier: 0,
   total_guilds_enabled: 0,
 };
+
+/**
+ * The default props used in the welcome embed option
+ */
+export const DefaultWelcomeEmbed = {
+  title: "Welcome to the server!",
+  description: "Welcome to the server {user}! Please read the rules and have fun!",
+  color: "#00ff00",
+  timestamp: true,
+} as WelcomeEmbedObject;
+
+/**
+ * The default props used in the welcome message
+ */
+export const DefaultWelcomeMessage = `Welcome to the server {user}! Please read the rules and have fun!`;
+
+/**
+ * The default props used in the welcome card options
+ */
+export const DefaultWelcomeCard = {
+  theme: "dark",
+  text: {
+    title: "Welcome to the server!",
+    // This will be replaced with the real user tag when the message is sent
+    text: `{userTag}`,
+    subtitle: `Please read the rules and have fun!`,
+    color: "#00ff00",
+  },
+  avatar: {
+    url: "https://i.imgur.com/ZOKp8LH.png",
+    outlineWidth: 0,
+  },
+  card: {
+    blur: 1,
+    border: true,
+    rounded: true,
+  },
+} as WelcomeCardOptions;
