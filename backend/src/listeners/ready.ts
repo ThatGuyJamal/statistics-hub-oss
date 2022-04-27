@@ -34,16 +34,16 @@ export class UserEvent extends Listener {
     await client.user?.setPresence({
       activities: [
         {
-          name: "The charts | /commands",
-          type: "WATCHING",
+          name: "to a mathematics lecture",
+          type: "LISTENING",
         },
       ],
     });
 
     /**
-     * Useful for purging all commands globally on the bot.
+     * Useful for purging all commands globally or guild(s) on the bot.
      */
-    // client.application?.commands.set([])
+    client.application?.commands.set([], "837830514130812970")
 
     // let commands = await client.application!.commands;
     // this.container.logger.trace(commands);

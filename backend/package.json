@@ -7,7 +7,7 @@
     "pm2": "pm2 start pm2.ecosystem.yml",
     "compile": "tsc -p tsconfig.json",
     "start:nodemon": "nodemon ./out/registry.js",
-    "start:development": "concurrently \"yarn ts:watch\" \"yarn start:production\"",
+    "start:development": "concurrently \"yarn ts:watch\" \"yarn start\"",
     "ts:watch": "tsc --watch",
     "start:production": "node out/registry.js",
     "check:format": "prettier --ignore-path .gitignore --write .",
