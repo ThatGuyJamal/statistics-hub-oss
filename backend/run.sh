@@ -24,12 +24,16 @@ if [ -d "$DIR" ]; then
   rm -rf "./$DIR"
   echo "Deleted out directory, continuing..."
   yarn run compile
+    # Clears the console before running the rest of the script
+  clear
   echo "Compilation finished. Starting bot process..."
   npm run start
 else
   # If it doesn't, run the rest of the script
   echo "The out directory doesn't exist, continuing compilation of typescript files..."
   yarn run compile
+  # Clears the console before running the rest of the script
+  clear
   @echo "Compilation finished, running the bot process..."
   npm run start
 fi
