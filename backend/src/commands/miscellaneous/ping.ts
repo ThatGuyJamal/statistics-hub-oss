@@ -25,6 +25,7 @@ import { BrandingColors } from "../../lib/utils/colors";
 import { codeBlock, inlineCode } from "../../lib/utils/format";
 import { createEmbed } from "../../lib/utils/responses";
 import { seconds } from "../../lib/utils/time";
+import { getTestGuilds } from "../../lib/utils/utils";
 
 @ApplyOptions<ICommandOptions>({
   aliases: ["pong", "latency"],
@@ -97,7 +98,7 @@ export class UserCommand extends ICommand {
         description: this.description,
       },
       {
-        guildIds: ENV.bot.test_guild_id,
+        guildIds: getTestGuilds(),
         registerCommandIfMissing: ENV.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
         idHints: ["964164545482473582"],

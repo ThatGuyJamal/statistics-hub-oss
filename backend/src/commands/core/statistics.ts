@@ -21,6 +21,7 @@ import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { codeBlock } from "../../lib/utils/format";
 import { seconds } from "../../lib/utils/time";
+import { getTestGuilds } from "../../lib/utils/utils";
 
 @ApplyOptions<ICommandOptions>({
   description: "Manage or view statistics",
@@ -50,7 +51,7 @@ export class UserCommand extends ICommand {
   // slash command registry
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
     registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
-      guildIds: ENV.bot.test_guild_id,
+      guildIds: getTestGuilds(),
       registerCommandIfMissing: ENV.bot.register_commands,
       behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
       idHints: ["966095079506845726"],

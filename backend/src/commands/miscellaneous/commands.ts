@@ -24,6 +24,7 @@ import { BrandingColors } from "../../lib/utils/colors";
 import { BaseEmbed } from "../../lib/utils/embed";
 import { capitalizeFirstLetter, inlineCode } from "../../lib/utils/format";
 import { seconds } from "../../lib/utils/time";
+import { getTestGuilds } from "../../lib/utils/utils";
 
 @ApplyOptions<ICommandOptions>({
   aliases: ["help", "commands"],
@@ -330,7 +331,7 @@ export class UserCommand extends ICommand {
               .setAutocomplete(true);
           }),
       {
-        guildIds: ENV.bot.test_guild_id,
+        guildIds: getTestGuilds(),
         registerCommandIfMissing: ENV.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
         idHints: ["964236971163672667"],

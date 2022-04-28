@@ -21,6 +21,7 @@ import Docs from "discord.js-docs";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { seconds } from "../../lib/utils/time";
 import { TextChannel } from "discord.js";
+import { getTestGuilds } from "../../lib/utils/utils";
 
 @ApplyOptions<ICommandOptions>({
   description: "Read the discord.js documentation.",
@@ -122,7 +123,7 @@ export class UserCommand extends ICommand {
               .setDescription("The query to search for from the discord.js documentation.");
           }),
       {
-        guildIds: ENV.bot.test_guild_id,
+        guildIds: getTestGuilds(),
         registerCommandIfMissing: ENV.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
         idHints: ["964542816921460906"],

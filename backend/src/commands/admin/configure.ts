@@ -21,6 +21,7 @@ import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { codeBlock } from "../../lib/utils/format";
 import { seconds } from "../../lib/utils/time";
+import { getTestGuilds } from "../../lib/utils/utils";
 
 @ApplyOptions<ICommandOptions>({
   description: "Configure bot settings",
@@ -208,7 +209,7 @@ export class UserCommand extends ICommand {
           )
           .addSubcommand((options) => options.setName("view").setDescription("View the current settings.")),
       {
-        guildIds: ENV.bot.test_guild_id,
+        guildIds: getTestGuilds(),
         registerCommandIfMissing: ENV.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
         idHints: ["966111289652969532"],

@@ -23,6 +23,7 @@ import { seconds } from "../../lib/utils/time";
 import { codeBlock } from "../../lib/utils/format";
 import { pauseThread } from "../../lib/utils/promises";
 import { DefaultGuildDataModelObject } from "../../lib/database/";
+import { getTestGuilds } from "../../lib/utils/utils";
 
 @ApplyOptions<ICommandOptions>({
   description: "Checks the current active cache for this server",
@@ -166,7 +167,7 @@ export class UserCommand extends ICommand {
   // slash command registry
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
     registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
-      guildIds: ENV.bot.test_guild_id,
+      guildIds: getTestGuilds(),
       registerCommandIfMissing: ENV.bot.register_commands,
       behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
       idHints: ["966100577790607460"],

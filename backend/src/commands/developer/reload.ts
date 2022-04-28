@@ -29,6 +29,7 @@ import { Stopwatch } from "@sapphire/stopwatch";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { BaseEmbed } from "../../lib/utils/embed";
 import { seconds } from "../../lib/utils/time";
+import { getTestGuilds } from "../../lib/utils/utils";
 
 @ApplyOptions<ICommandOptions>({
   description: "Reload a command, listener, or piece.",
@@ -166,7 +167,7 @@ export class UserCommand extends ICommand {
               .setDescription("Reload all stores and pieces")
           ),
       {
-        guildIds: ENV.bot.test_guild_id,
+        guildIds: getTestGuilds(),
         registerCommandIfMissing: ENV.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
       }

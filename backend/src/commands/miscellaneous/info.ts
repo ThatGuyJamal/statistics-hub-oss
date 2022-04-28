@@ -33,6 +33,7 @@ import { BrandingColors } from "../../lib/utils/colors";
 import { BaseEmbed } from "../../lib/utils/embed";
 import { createHyperLink } from "../../lib/utils/format";
 import { seconds } from "../../lib/utils/time";
+import { getTestGuilds } from "../../lib/utils/utils";
 
 @ApplyOptions<ICommandOptions>({
   description: "Shows information about the bot.",
@@ -138,7 +139,7 @@ export class UserCommand extends ICommand {
   // slash command registry
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
     registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
-      guildIds: ENV.bot.test_guild_id,
+      guildIds: getTestGuilds(),
       registerCommandIfMissing: ENV.bot.register_commands,
       behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
       idHints: ["964236972241600522"],

@@ -22,6 +22,7 @@ import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { BaseEmbed } from "../../lib/utils/embed";
 import { createHyperLink } from "../../lib/utils/format";
 import { seconds } from "../../lib/utils/time";
+import { getTestGuilds } from "../../lib/utils/utils";
 
 @ApplyOptions<ICommandOptions>({
   description: "Add the bot to your server.",
@@ -75,7 +76,7 @@ export class UserCommand extends ICommand {
   // slash command registry
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
     registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
-      guildIds: ENV.bot.test_guild_id,
+      guildIds: getTestGuilds(),
       registerCommandIfMissing: ENV.bot.register_commands,
       behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
     });

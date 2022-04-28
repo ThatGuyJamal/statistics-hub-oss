@@ -27,3 +27,5 @@ Below are planned features I will be adding to the bot in no specific order...
 - [ ] Fix ping command latency bug for slash command. Not showing discord api info
 
 - [ ] Add premium system for bot. This will limit some functions and commands. Also we need to make another simple bot for handling the premium form setup.
+
+- [ ] Redo help command with categories and information pointing to the documentation.
