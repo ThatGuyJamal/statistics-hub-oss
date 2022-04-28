@@ -9,9 +9,9 @@
     "start:nodemon": "nodemon ./out/registry.js",
     "start:development": "concurrently \"yarn ts:watch\" \"yarn start\"",
     "ts:watch": "tsc --watch",
-    "start:production": "node out/registry.js",
+    "start:production": "node out/registry.js --trace-warnings",
     "check:format": "prettier --ignore-path .gitignore --write .",
-    "start": "node ./out/registry.js"
+    "start": "node ./out/registry.js --trace-warnings"
   },
   "keywords": [
     "discord-bot",
