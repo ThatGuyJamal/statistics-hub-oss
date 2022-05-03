@@ -44,3 +44,12 @@
   // center text
   text-align: center;
 }
+
+.description {
+    display: absolute;
+    top: 50%
+    text-align: center;
+    a {
+        color:rgb(255,255,255);
+    }
+}
