@@ -27,7 +27,7 @@ import { seconds } from "../../lib/utils/time";
 import { getTestGuilds } from "../../lib/utils/utils";
 
 @ApplyOptions<ICommandOptions>({
-  aliases: ["help", "commands"],
+  aliases: ["help", "commands", "h"],
   description: "Advanced Command help system.",
   cooldownDelay: seconds(20),
   cooldownScope: BucketScope.User,
