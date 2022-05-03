@@ -36,6 +36,9 @@ const Home: NextPage = () => {
         <meta name="description" content={common.website_description} />
         <link rel="icon" href="/image2vector.svg" />
       </Head>
+        <div className="page aligned-left">
+            <a>An open-source statistics bot for server analytics.</a>
+          </div>
       <div className="page aligned-center">
         <div>
           <button className={styles.button} onClick={handleLogin}>
