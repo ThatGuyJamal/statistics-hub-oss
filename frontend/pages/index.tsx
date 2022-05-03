@@ -43,7 +43,7 @@ const Home: NextPage = () => {
             <span>Login with Discord</span>
           </button>
           <br />
-          <br />
+            <a>An open-source statistics bot for server analytics.<a>
           <br />
           <div className={styles.social_links}>
             <a target="_blank"  rel="noreferrer" href={common.website_discord_server}>Discord Server</a> |{" "}
