@@ -27,10 +27,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: 1.5s;
+  transition: 0.5s ease-in-out;
 }
 
 .button:hover {
+      transition: 0.5s ease-in-out;
     border: none;
 }
 
