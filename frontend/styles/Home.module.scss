@@ -29,6 +29,10 @@
   justify-content: space-between;
 }
 
+.button:hover {
+    border: none;
+}
+
 .social_links {
   a {
     color:rgb(147, 255, 255);
