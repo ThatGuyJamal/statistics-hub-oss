@@ -14,12 +14,13 @@
   GNU Affero General Public License for more details.
  */
 
-import { startBot } from "discordeno"
+import { startBot } from "discordeno";
 import { environment } from "./config";
 import { Client } from "./Client";
+import { Logger } from "./utils/logger";
 
 async function bootstrap(): Promise<void> {
-  console.clear();
+  Logger.clear();
 
   const command = {
     name: "ping",
@@ -27,40 +28,41 @@ async function bootstrap(): Promise<void> {
     options: [],
   };
 
-  await Client.helpers.createApplicationCommand(command, BigInt(environment.bot.test_guild_id))
+  await Client.helpers.createApplicationCommand(command, BigInt(environment.bot.test_guild_id));
 
-  await startBot(Client)
+  await startBot(Client);
 }
 
 bootstrap()
   .then(() => {
-    console.info("Bootstrap complete! All services are online!");
+    Logger.success("Bootstrap complete! All services are online!");
   })
   .catch((err) => {
-    console.error(err);
+    Logger.error(err);
   });
 
 process.on("unhandledRejection", (error) => {
-  console.error("Unhandled promise rejection:", error);
+  Logger.error(`Unhandled promise rejection: ${error}`);
 });
 
 process.on("rejectionHandled", (error) => {
-  console.error("Promise rejection handled:", error);
+  Logger.error(`Promise rejection handled: ${error}`);
 });
 
 process.on("uncaughtException", (error) => {
-  console.error("Uncaught exception:", error);
+  Logger.error(`Uncaught exception: ${error}`);
 });
 
 process.on("uncaughtExceptionMonitor", (err, origin) => {
-  console.warn(" [antiCrash] :: Uncaught Exception/Catch (MONITOR)");
-  console.error(err, origin);
+  Logger.warn(" [antiCrash] :: Uncaught Exception/Catch (MONITOR)");
+  Logger.error(`${err}`);
+  Logger.error(origin);
 });
 process.on("multipleResolves", (type, promise, reason) => {
-  console.warn(" [antiCrash] :: Multiple Resolves");
-  console.error(type, promise, reason);
+  Logger.warn(" [antiCrash] :: Multiple Resolves");
+  Logger.error(`${type} :: ${promise} :: ${reason}`);
 });
 
 process.on("exit", (code) => {
-  console.info(`Exiting with code ${code}`);
+  Logger.info(`Exiting with code ${code}`);
 });

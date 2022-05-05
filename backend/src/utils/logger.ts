@@ -17,46 +17,53 @@
 import Consola from "consola";
 import { environment } from "../config";
 
+/**
+ * Internal Logger Object. This is used to log messages to the console.
+ */
 export const Logger = {
-    info(message: string) {
-        Consola.info(message);
-    },
-    error(message: string) {
-        Consola.error(message);
-    },
-    warn(message: string) {
-        Consola.warn(message);
-    },
-    debug(message: string) {
-        if (environment.bot.dev) {
-            Consola.debug(message);
-        }
-    },
-    success(message: string) {
-        Consola.success(message);
-    },
-    log(message: string) {
-        Consola.log(message);
-    },
-    fatal(message: string) {
-        Consola.fatal(message);
-    },
-    trace(message: string) {
-        Consola.trace(message);
-    },
-    getLogger() {
-        return Consola;
+  info(message: string) {
+    Consola.info(message);
+  },
+  error(message: string) {
+    Consola.error(message);
+  },
+  warn(message: string) {
+    Consola.warn(message);
+  },
+  debug(message: string) {
+    if (environment.bot.dev) {
+      Consola.debug(message);
     }
-}
+  },
+  success(message: string) {
+    Consola.success(message);
+  },
+  log(message: string) {
+    Consola.log(message);
+  },
+  fatal(message: string) {
+    Consola.fatal(message);
+  },
+  trace(message: string) {
+    Consola.trace(message);
+  },
+  clear() {
+    console.clear();
+  },
+  getLogger() {
+    return Consola;
+  },
+};
 
 export interface LoggerType {
-    info(message: string): void
-    error(message: string): void
-    warn(message: string): void
-    debug(message: string): void
-    success(message: string): void
-    log(message: string): void;
-    fatal(message: string): void;
-    trace(message: string): void;
-    getLogger(): typeof Consola;
+  info(message: string): void;
+  error(message: string): void;
+  warn(message: string): void;
+  debug(message: string): void;
+  success(message: string): void;
+  log(message: string): void;
+  fatal(message: string): void;
+  trace(message: string): void;
+  clear(): void;
+  getLogger(): typeof Consola;
 }

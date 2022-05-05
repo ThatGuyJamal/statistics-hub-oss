@@ -14,45 +14,45 @@
   GNU Affero General Public License for more details.
  */
 
-import { createBot, InteractionResponseTypes, type Bot } from "discordeno"
-import { environment } from "./config"
-import { Collection } from "@discordjs/collection"
+import { createBot, InteractionResponseTypes, type Bot } from "discordeno";
+import { environment } from "./config";
+import { Collection } from "@discordjs/collection";
 import { Logger, LoggerType } from "./utils/logger";
 
 /**
  * Extended Bot Types
  */
 export interface BotClientType extends Bot {
-    /**
-     * The commands that the bot has loaded.
-     * A custom cache to access the commands.
-     * TODO - Add typings for the command object.
-     */
-    slashCommands: Collection<string, any>;
-    logger: LoggerType
+  /**
+   * The commands that the bot has loaded.
+   * A custom cache to access the commands.
+   * TODO - Add typings for the command object.
+   */
+  slashCommands: Collection<string, any>;
+  logger: LoggerType;
 }
 
 export const Client = createBot({
-    token: environment.bot.token,
-    intents: ["Guilds"],
-    botId: BigInt("946398697254703174"),
-    events: {
-        ready(_client, payload) {
-            console.log(`Successfully connected Shard ${payload.shardId} to the gateway`);
-        },
+  token: environment.bot.token,
+  intents: ["Guilds"],
+  botId: BigInt("946398697254703174"),
+  events: {
+    ready(_client, payload) {
+      Logger.success(`Successfully connected Shard ${payload.shardId} to the gateway`);
+    },
 
-        async interactionCreate(client, interaction) {
-            if (interaction.data?.name === "ping") {
-                return await client.helpers.sendInteractionResponse(interaction.id, interaction.token, {
-                    type: InteractionResponseTypes.ChannelMessageWithSource,
-                    data: { content: "🏓 Pong!" },
-                });
-            }
+    async interactionCreate(client, interaction) {
+      if (interaction.data?.name === "ping") {
+        return await client.helpers.sendInteractionResponse(interaction.id, interaction.token, {
+          type: InteractionResponseTypes.ChannelMessageWithSource,
+          data: { content: "🏓 Pong!" },
+        });
+      }
 
-            return;
-        },
-    }
-}) as BotClientType
+      return;
+    },
+  },
+}) as BotClientType;
 
 Client.slashCommands = new Collection();
-Client.logger = Logger
+Client.logger = Logger;

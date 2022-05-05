@@ -10,7 +10,7 @@
     "start:development": "concurrently \"yarn ts:watch\" \"yarn start\"",
     "ts:watch": "tsc --watch",
     "start:production": "node out/registry.js --trace-warnings",
-    "check:format": "prettier --ignore-path .gitignore --write .",
+    "format": "prettier --ignore-path .gitignore --write .",
     "start": "node ./out/registry.js --trace-warnings"
   },
   "keywords": [
