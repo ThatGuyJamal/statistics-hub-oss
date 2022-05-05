@@ -14,48 +14,52 @@
     GNU Affero General Public License for more details.
  */
 
-import "@sapphire/plugin-logger/register";
-import "@sapphire/plugin-i18next/register";
-import "@kaname-png/plugin-statcord/register";
-import "@sapphire/plugin-hmr/register";
-import { container } from "@sapphire/framework";
-import { BotClient } from "./lib/client/bot";
+import { environment } from "./config";
 
 console.clear();
 
 async function bootstrap(): Promise<void> {
-  await BotClient.startClient();
+  const Discord = (await import("discordeno"))
+
+  const Client = Discord.createBot({
+    token: environment.bot.token,
+    intents: ["Guilds"],
+    botId: BigInt("946398697254703174"),
+    events: {}
+  })
+
+  Discord.startBot(Client)
 }
 
 bootstrap()
   .then(() => {
-    container.logger.info("Bootstrap complete! All services are online!");
+    console.info("Bootstrap complete! All services are online!");
   })
   .catch((err) => {
-    container.logger.error(err);
+    console.error(err);
   });
 
 process.on("unhandledRejection", (error) => {
-  container.logger.error("Unhandled promise rejection:", error);
+  console.error("Unhandled promise rejection:", error);
 });
 
 process.on("rejectionHandled", (error) => {
-  container.logger.error("Promise rejection handled:", error);
+  console.error("Promise rejection handled:", error);
 });
 
 process.on("uncaughtException", (error) => {
-  container.logger.error("Uncaught exception:", error);
+  console.error("Uncaught exception:", error);
 });
 
 process.on("uncaughtExceptionMonitor", (err, origin) => {
-  container.logger.warn(" [antiCrash] :: Uncaught Exception/Catch (MONITOR)");
-  container.logger.error(err, origin);
+  console.warn(" [antiCrash] :: Uncaught Exception/Catch (MONITOR)");
+  console.error(err, origin);
 });
 process.on("multipleResolves", (type, promise, reason) => {
-  container.logger.warn(" [antiCrash] :: Multiple Resolves");
-  container.logger.error(type, promise, reason);
+  console.warn(" [antiCrash] :: Multiple Resolves");
+  console.error(type, promise, reason);
 });
 
 process.on("exit", (code) => {
-  container.logger.info(`Exiting with code ${code}`);
+  console.info(`Exiting with code ${code}`);
 });
