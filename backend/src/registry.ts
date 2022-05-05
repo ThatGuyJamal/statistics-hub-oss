@@ -14,21 +14,22 @@
     GNU Affero General Public License for more details.
  */
 
+import { startBot } from "discordeno"
 import { environment } from "./config";
-
-console.clear();
+import { Client } from "./structures/Client";
 
 async function bootstrap(): Promise<void> {
-  const Discord = (await import("discordeno"))
+  console.clear();
 
-  const Client = Discord.createBot({
-    token: environment.bot.token,
-    intents: ["Guilds"],
-    botId: BigInt("946398697254703174"),
-    events: {}
-  })
+  const command = {
+    name: "ping",
+    description: "Retrieves the Bot latency",
+    options: [],
+  };
 
-  Discord.startBot(Client)
+  await Client.helpers.createApplicationCommand(command, BigInt(environment.bot.test_guild_id))
+
+  await startBot(Client)
 }
 
 bootstrap()
