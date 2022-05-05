@@ -20,7 +20,7 @@ import {
   RegisterBehavior,
   ChatInputCommand,
   Piece,
-  ApplicationCommandRegistry,
+  ApplicationCommandRegistry, Store,
 } from "@sapphire/framework";
 import { Collection, AutocompleteInteraction } from "discord.js";
 import { ENV } from "../../config";

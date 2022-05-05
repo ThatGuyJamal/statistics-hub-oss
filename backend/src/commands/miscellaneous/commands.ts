@@ -15,7 +15,7 @@
  */
 
 import { ApplyOptions } from "@sapphire/decorators";
-import { ApplicationCommandRegistry, Args, BucketScope, RegisterBehavior } from "@sapphire/framework";
+import {ApplicationCommandRegistry, Args, BucketScope, CommandStore, RegisterBehavior} from "@sapphire/framework";
 import { Message, CommandInteraction, TextChannel, AutocompleteInteraction } from "discord.js";
 import Fuse from "fuse.js";
 import { ENV } from "../../config";
@@ -205,7 +205,7 @@ export class UserCommand extends ICommand {
 
     const commands = this.container.stores.get("commands");
 
-    for (const category of commands.categories) {
+    for (const category of commands instanceof CommandStore ? commands?.categories : []) {
       // Filters through each command based on the category and builds the embed for each category.
       let filteredCommand = [...this.container.stores.get("commands").values()]
         .filter((c) => c.category === category)

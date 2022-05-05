@@ -34,7 +34,7 @@ export interface env_types {
     dev: boolean;
     /**
      * If slash commands should be registered on startup.
-     * Make sure your using slash commands in test mode before enabling this or else you may spam the global api.
+     * Make sure you're using slash commands in test mode before enabling this or else you may spam the global api.
      */
     register_commands: boolean;
     prefix: string;

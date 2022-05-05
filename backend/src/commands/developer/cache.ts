@@ -64,7 +64,7 @@ export class UserCommand extends ICommand {
           content: `No cache found. Creating new cache...`,
         });
       } else {
-        const memData =
+        let memData =
           //@ts-ignore
           fetch.data.member?.guildJoins + fetch.data.member?.guildLeaves + fetch.data.member?.guildBans ?? 0;
         //@ts-ignore

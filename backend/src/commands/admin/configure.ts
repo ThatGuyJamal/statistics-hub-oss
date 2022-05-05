@@ -16,7 +16,7 @@
 
 import { ApplyOptions } from "@sapphire/decorators";
 import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand } from "@sapphire/framework";
-import { TextChannel } from "discord.js";
+import {Guild, TextChannel} from "discord.js";
 import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { codeBlock } from "../../lib/utils/format";
@@ -61,17 +61,17 @@ export class UserCommand extends ICommand {
             this.container.logger.info(res);
           })
           .then(async () => {
-            interaction.reply({
+            await interaction.reply({
               content: codeBlock(
-                "diff",
-                `
+                  "diff",
+                  `
               - ${await this.translate(
-                interaction.channel as TextChannel,
-                "commands/configurations:language.success_reply",
-                {
-                  lang: languageOption,
-                }
-              )}
+                      interaction.channel as TextChannel,
+                      "commands/configurations:language.success_reply",
+                      {
+                        lang: languageOption,
+                      }
+                  )}
               `
               ),
             });
@@ -91,17 +91,17 @@ export class UserCommand extends ICommand {
             this.container.logger.info(res);
           })
           .then(async () => {
-            interaction.reply({
+            await interaction.reply({
               content: codeBlock(
-                "diff",
-                `
+                  "diff",
+                  `
               - ${await this.translate(
-                interaction.channel as TextChannel,
-                "commands/configurations:prefix.success_reply",
-                {
-                  prefix: prefixOption,
-                }
-              )}
+                      interaction.channel as TextChannel,
+                      "commands/configurations:prefix.success_reply",
+                      {
+                        prefix: prefixOption,
+                      }
+                  )}
               `
               ),
             });
@@ -114,7 +114,7 @@ export class UserCommand extends ICommand {
             content: codeBlock(
               "diff",
               `
-          - No configuration found for ${interaction.guild.name}.
+          - No configuration found for ${interaction.guild?.name}.
           `
             ),
             ephemeral: true,
@@ -154,7 +154,7 @@ export class UserCommand extends ICommand {
           content: codeBlock(
             "css",
             `
-          ${interaction.guild.name.length > 25 ? interaction.guild.name : "Server"} - Configuration
+          ${!(interaction.guild instanceof Guild) || interaction.guild.name.length > 25 ? interaction.guild?.name : "Server"} - Configuration
           
           [ Current Language ] = ${document?.language ?? "en-US"}
           [ Current Prefix ] = ${document?.prefix ?? this.container.client.environment.bot.prefix}

@@ -40,7 +40,7 @@ export class UserCommand extends ICommand {
     const limit = [];
 
     for (const guild of this.container.client.guilds.cache.values()) {
-      // Make sure we dont go over the limit
+      // Make sure we don't go over the limit
       if (limit.length > 15) {
         break;
       } else {
