@@ -14,10 +14,10 @@
   GNU Affero General Public License for more details.
  */
 
-import { createBot, InteractionResponseTypes, type Bot } from "discordeno";
 import { environment } from "./config";
-import { Collection } from "@discordjs/collection";
 import { Logger, LoggerType } from "./utils/logger";
+import { SlashCommand } from "./types/Command";
+import { Bot, Collection, createBot, InteractionResponseTypes } from "./deps";
 
 /**
  * Extended Bot Types
@@ -28,7 +28,7 @@ export interface BotClientType extends Bot {
    * A custom cache to access the commands.
    * TODO - Add typings for the command object.
    */
-  slashCommands: Collection<string, any>;
+  slashCommands: Collection<string, SlashCommand>;
   logger: LoggerType;
 }
 
