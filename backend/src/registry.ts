@@ -14,23 +14,18 @@
   GNU Affero General Public License for more details.
  */
 
-import { startBot } from "discordeno";
-import { environment } from "./config";
-import { Client } from "./Client";
 import { Logger } from "./utils/logger";
+import { environment } from "./config";
 
 async function bootstrap(): Promise<void> {
   Logger.clear();
 
-  const command = {
-    name: "ping",
-    description: "Retrieves the Bot latency",
-    options: [],
-  };
-
-  await Client.helpers.createApplicationCommand(command, BigInt(environment.bot.test_guild_id));
-
-  await startBot(Client);
+  try {
+    
+  }
+  catch (error: any) {
+    Logger.error(error);
+  }
 }
 
 bootstrap()

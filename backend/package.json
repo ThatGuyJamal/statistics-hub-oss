@@ -33,10 +33,9 @@
     "url": "https://github.com/ThatGuyJamal/statistics-hub-oss/issues"
   },
   "dependencies": {
-    "@discordjs/collection": "^0.6.0",
     "consola": "^2.15.3",
     "discord-welcome-card": "^4.7.0",
-    "discordeno": "^13.0.0-rc35",
+    "discord.js": "^13.6.0",
     "min-indent": "^1.0.1",
     "mongoose": "^6.3.2",
     "ms": "^2.1.3"
