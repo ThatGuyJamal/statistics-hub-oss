@@ -263,10 +263,10 @@ export function hideLinkEmbed(url: string): string {
  * @param id The id of the channel
  * @returns
  */
-export function channelMention(id: string): string {
+export function channelMention(id: string | null): string {
   if (id) {
     return `<#${id}>`;
   } else {
-    return "".replaceAll("<#>", "No Channel");
+    return "".replaceAll("<#>", "No Channel Found");
   }
 }

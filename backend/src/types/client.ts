@@ -21,7 +21,7 @@ import { IEventLogger } from "../lib/controllers/statistics/logger";
 import { StatisticsHandler } from "../lib/controllers/statistics/statcord";
 import { GuildModelHandler } from "../lib/database/guild/guild.handler";
 import { env_types } from "./env";
-import { MessageEmbed } from "discord.js";
+import { RedisController } from "../lib/controllers/redis";
 
 /** Type over-writes, so we get typings in our client extensions. */
 declare module "discord.js" {
@@ -43,6 +43,8 @@ declare module "discord.js" {
     BotDevelopers: Set<string>;
     BotSupporters: Set<string>;
     BotStaff: Set<string>;
+    // redis
+    RedisController: RedisController;
   }
 }
 
@@ -52,4 +54,8 @@ declare module "@sapphire/framework" {
     development: never;
     OwnerOnly: never;
   }
+}
+
+declare module "@sapphire/pieces" {
+  interface Container {}
 }

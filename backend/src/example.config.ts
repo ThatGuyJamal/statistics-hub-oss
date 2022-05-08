@@ -35,6 +35,12 @@ export const ENV: env_types = {
     enabled: true,
     mongodb_url: "",
     dev: true,
+    redis: {
+      host: "",
+      port: 4404,
+      password: "",
+      username: "",
+    },
   },
   bot: {
     name: "",
@@ -50,11 +56,6 @@ export const ENV: env_types = {
     invite_url:
       "https://discord.com/api/oauth2/authorize?client_id=946398697254703174&permissions=415001496704&scope=bot%20applications.commands",
     server_link: "https://discord.com/invite/N79DZsm3m2",
-    redis: {
-      host: "",
-      port: 4404,
-      password: "",
-    },
     statcord: {
       key: "",
       autopost: false,

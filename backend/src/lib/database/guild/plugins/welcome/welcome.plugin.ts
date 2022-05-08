@@ -46,7 +46,7 @@ export class PluginDocument {
    * Checks if the welcome config should be send as an embed or not
    */
   @prop({ type: () => String, required: false, default: "text" })
-  public welcome_type?: "embed" | "text" | "card";
+  public theme?: "embed" | "text" | "card";
 
   @prop({ type: () => Object, required: false, default: null })
   public welcome_embed?: WelcomeEmbedObject;

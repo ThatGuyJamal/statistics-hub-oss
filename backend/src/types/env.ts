@@ -23,6 +23,13 @@ export interface env_types {
     /** Our mongoose connection string */
     mongodb_url: string;
     dev: boolean;
+    /** Redis server config */
+    redis: {
+      host: string;
+      port: number;
+      username: string;
+      password: string;
+    };
   };
   /** Config Options for our bot client */
   bot: {
@@ -48,12 +55,6 @@ export interface env_types {
     invite_url: string;
     /** The link to your support server */
     server_link: string;
-    /** Redis server config */
-    redis: {
-      host: string;
-      port: number;
-      password: string;
-    };
     /** Statcord config */
     statcord: {
       key: string;

@@ -20,6 +20,7 @@ import { CLIENT_OPTIONS, ENV } from "../../config";
 import { IMemberCache } from "../controllers/cache/memberCache";
 import { IMessageCache } from "../controllers/cache/messageCache";
 import { IntervalsController } from "../controllers/interval";
+import { RedisController } from "../controllers/redis";
 import { IEventLogger } from "../controllers/statistics/logger";
 import { StatisticsHandler } from "../controllers/statistics/statcord";
 import { initializeTypeGooseConnection } from "../database";
@@ -35,6 +36,7 @@ class ExtendedClient extends SapphireClient {
     // this.cluster = new ShardCluster.Client(this);
     this.EventLogger = new IEventLogger();
     this.StatisticsHandler = new StatisticsHandler(container);
+    this.RedisController = new RedisController();
     this.TemporaryCaches = {
       MessageCache: new IMessageCache(),
       MemberCache: new IMemberCache(),

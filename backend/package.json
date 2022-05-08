@@ -50,6 +50,7 @@
     "discord.js": "^13.6.0",
     "discord.js-docs": "^0.3.0",
     "fuse.js": "^6.5.3",
+    "ioredis": "^5.0.4",
     "min-indent": "^1.0.1",
     "mongoose": "^6.2.10",
     "ms": "^2.1.3",
