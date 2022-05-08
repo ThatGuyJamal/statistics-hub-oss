@@ -44,7 +44,7 @@ export class UserCommand extends ICommand {
     if (!interaction.guild) return;
 
     const oldData = this.container.client.GuildSettingsModel._cache.get(interaction.guild!.id);
-    const document = await this.container.client.GuildSettingsModel.getDocument(interaction.guild!) as GuildDocument
+    const document = (await this.container.client.GuildSettingsModel.getDocument(interaction.guild!)) as GuildDocument;
 
     // Access the sub commands
     switch (interaction.options.getSubcommand()) {
@@ -65,6 +65,7 @@ export class UserCommand extends ICommand {
           })
           .then(async () => {
             await interaction.reply({
+              ephemeral: true,
               content: codeBlock(
                 "diff",
                 `
@@ -97,6 +98,7 @@ export class UserCommand extends ICommand {
           })
           .then(async () => {
             await interaction.reply({
+              ephemeral: true,
               content: codeBlock(
                 "diff",
                 `
@@ -141,13 +143,10 @@ export class UserCommand extends ICommand {
             .then((res) => {
               this.container.logger.info(res);
             })
-            .then((res) => {
-              this.container.logger.info(res);
-            })
             .catch((err) => {
               this.container.logger.error(err);
             });
-          return await interaction.channel?.send({
+          return await interaction.followUp({
             content: `The configuration has been cleared. You can view the default configuration by running \`/configure view\``,
           });
           // return collector.stop("success");
@@ -157,7 +156,9 @@ export class UserCommand extends ICommand {
           });
         }
       case "view":
-        const welcomeData = await this.container.client.GuildSettingsModel.WelcomeModel.findOne({ _id: interaction.guildId });
+        const welcomeData = await this.container.client.GuildSettingsModel.WelcomeModel.findOne({
+          _id: interaction.guildId,
+        });
 
         return await interaction.reply({
           content: codeBlock(

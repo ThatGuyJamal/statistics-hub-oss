@@ -43,10 +43,11 @@ export class WelcomePluginDocument {
   public goodbye_message?: string;
 
   /**
-   * Checks if the welcome config should be send as an embed or not
+   * Checks if the welcome config should be send as an embed or not.
+   * Options - "embed" | "text" | "card"
    */
   @prop({ type: () => String, required: false, default: "text" })
-  public theme?: "embed" | "text" | "card";
+  public theme?: string; //"embed" | "text" | "card";
 
   @prop({ type: () => Object, required: false, default: null })
   public welcome_embed?: WelcomeEmbedObject;

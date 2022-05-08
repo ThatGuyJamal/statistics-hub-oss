@@ -82,17 +82,20 @@ export class GuildModelHandler {
    * @param type The type of document to find. Defaults to "guild"
    * @returns The guild settings for the given guild id or null if not found
    */
-  public async getDocument(guild: Guild, type?: "welcome" | "guild") {
+  public async getDocument(
+    guild: Guild,
+    type?: "welcome" | "guild"
+  ): Promise<GuildDocument | WelcomePluginDocument | null> {
     if (!type) type = "guild";
 
     if (type === "guild") {
       const doc = await this.CoreModel.findById(guild.id);
       if (doc) this._cache.set(guild.id, doc);
-      return doc
+      return doc;
     } else if (type === "welcome") {
       const doc = await this.WelcomeModel.findById(guild.id);
       if (doc) this._welcomeCache.set(guild.id, doc);
-      return doc
+      return doc;
     }
 
     return null;

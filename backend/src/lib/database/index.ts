@@ -81,12 +81,21 @@ export const DefaultUserModelObject = {
   total_guilds_enabled: 0,
 };
 
+export const DefaultWelcomeModelObject = {
+  enabled: false,
+  welcome_channel: null,
+  welcome_message: null,
+  goodbye_channel: null,
+  goodbye_message: null,
+  theme: null,
+}
+
 /**
  * The default props used in the welcome embed option
  */
 export const DefaultWelcomeEmbed = {
   title: "Welcome to the server!",
-  description: "Welcome to the server {user}! Please read the rules and have fun!",
+  description: "Welcome to the server {{user}}! Please read the rules and have fun!",
   color: "#00ff00",
   timestamp: true,
 } as WelcomeEmbedObject;
@@ -94,7 +103,7 @@ export const DefaultWelcomeEmbed = {
 /**
  * The default props used in the welcome message
  */
-export const DefaultWelcomeMessage = `Welcome to the server {user}! Please read the rules and have fun!`;
+export const DefaultWelcomeMessage = `Welcome to the server {{user}}! Please read the rules and have fun!`;
 
 /**
  * The default props used in the welcome card options
@@ -104,7 +113,7 @@ export const DefaultWelcomeCard = {
   text: {
     title: "Welcome to the server!",
     // This will be replaced with the real user tag when the message is sent
-    text: `{userTag}`,
+    text: `{{user.tag}}`,
     subtitle: `Please read the rules and have fun!`,
     color: "#00ff00",
   },
