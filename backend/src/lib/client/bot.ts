@@ -54,7 +54,7 @@ class ExtendedClient extends SapphireClient {
   }
 
   /** Kills the node process and all its components */
-  public override async destroy() {
+  public override async destroyClient() {
     this.logger.fatal("Bot Process has been killed.");
     await connection.close(); // kills the db connection before killing the bot instance.
     super.destroy();
