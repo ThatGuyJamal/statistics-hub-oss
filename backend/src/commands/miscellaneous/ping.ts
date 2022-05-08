@@ -21,10 +21,8 @@ import { Message, TextChannel } from "discord.js";
 import ms from "ms";
 import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
-import { BrandingColors } from "../../lib/utils/colors";
-import { codeBlock, inlineCode } from "../../lib/utils/format";
+import { codeBlock } from "../../lib/utils/format";
 import { pauseThread } from "../../lib/utils/promises";
-import { createEmbed } from "../../lib/utils/responses";
 import { seconds } from "../../lib/utils/time";
 import { getTestGuilds } from "../../lib/utils/utils";
 
@@ -48,8 +46,7 @@ export class UserCommand extends ICommand {
 
     const result = codeBlock(
       "diff",
-      `
-      + ${await this.translate(ctx.channel as TextChannel, "commands/miscellaneous:ping_command.description", {
+      `+ ${await this.translate(ctx.channel as TextChannel, "commands/miscellaneous:ping_command.description", {
         replace: {
           APILatency: `${ms(
             (msg.editedTimestamp || msg.createdTimestamp) - (ctx.editedTimestamp || ctx.createdTimestamp)
@@ -70,10 +67,13 @@ export class UserCommand extends ICommand {
 
     await pauseThread(2000, "seconds");
 
+    const result = codeBlock(
+      "diff",
+      `- Pong! My websocket connection took... ${ms(Math.round(this.container.client.ws.ping))} to respond.`
+    );
+
     return await interaction.editReply({
-      content: `***Pong!** My websocket connection took... \`${ms(
-        Math.round(this.container.client.ws.ping)
-      )}\` to respond.`,
+      content: result,
     });
   }
 
@@ -91,7 +91,7 @@ export class UserCommand extends ICommand {
         guildIds: getTestGuilds(),
         registerCommandIfMissing: ENV.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
-        idHints: ["964164545482473582"],
+        idHints: ["972952567741050920"],
       }
     );
   }

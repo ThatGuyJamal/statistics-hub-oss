@@ -38,7 +38,7 @@ export class UserEvent extends Listener {
       await ctx.channel.send({
         content: await translate(ctx.channel, "events/errors:prefix_mention_reply_dm", {
           prefix: _prefix ?? ENV.bot.prefix,
-          server_invite: ENV.bot.server_link,
+          server_invite: ENV.bot.invite_url,
         }),
       });
     }

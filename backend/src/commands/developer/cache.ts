@@ -166,7 +166,7 @@ export class UserCommand extends ICommand {
       guildIds: getTestGuilds(),
       registerCommandIfMissing: ENV.bot.register_commands,
       behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
-      idHints: ["966100577790607460"],
+      idHints: ["972952654462476421"],
     });
   }
 }

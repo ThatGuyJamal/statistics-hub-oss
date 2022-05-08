@@ -12,17 +12,21 @@ export class RedisController {
   /**
    * The redis client.
    */
-  public client: Redis;
+  public client: Redis | undefined;
+  public readonly config;
 
-  public constructor() {
-    this.client = new Redis({
-      // port: ENV.database.redis.port,
-      // host: ENV.database.redis.host,
-      // username: ENV.database.redis.username,
-      // password: ENV.database.redis.password,
-      // autoResubscribe: true,
-      // commandTimeout: seconds(30),
-    });
+  public constructor(options: { enabled: boolean }) {
+    this.config = options;
+    if (options.enabled) {
+      this.client = new Redis({
+        port: ENV.database.redis.port,
+        host: ENV.database.redis.host,
+        // username: ENV.database.redis.username,
+        // password: ENV.database.redis.password,
+        autoResubscribe: true,
+        commandTimeout: seconds(30),
+      });
+    }
   }
 
   /**
@@ -31,6 +35,7 @@ export class RedisController {
    * @returns {Promise<string | null>} The value or null if not found.
    */
   public async get(key: string): Promise<string | null> {
+    if (!this.client) throw new Error("Redis is not enabled!");
     return this.client.get(key, function (err, result) {
       if (err) {
         container.logger.error(err);
@@ -49,6 +54,7 @@ export class RedisController {
    * @returns {Promise<string | null>} The value or null if not found.
    */
   public async set(key: string, value: string, expire?: number): Promise<string | null> {
+    if (!this.client) throw new Error("Redis is not enabled!");
     if (!expire) expire = hours(1);
     return this.client.set(key, value, "EX", expire);
   }
@@ -59,6 +65,7 @@ export class RedisController {
    * @returns {Promise<boolean>} Whether the key was deleted or not.
    */
   public async del(key: string): Promise<boolean> {
+    if (!this.client) throw new Error("Redis is not enabled!");
     try {
       await this.client.del(key);
       return true;
@@ -74,6 +81,7 @@ export class RedisController {
    * @returns {Promise<boolean>} Whether the key exists or not.
    */
   public async exists(key: string): Promise<boolean> {
+    if (!this.client) throw new Error("Redis is not enabled!");
     try {
       await this.client.exists(key);
 

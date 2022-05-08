@@ -15,15 +15,19 @@
  */
 
 import { ApplyOptions } from "@sapphire/decorators";
-import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand } from "@sapphire/framework";
+import {
+  BucketScope,
+  ApplicationCommandRegistry,
+  RegisterBehavior,
+  ChatInputCommand,
+  Events,
+} from "@sapphire/framework";
 import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { DefaultWelcomeEmbed } from "../../lib/database";
 import { WelcomeDocumentModel } from "../../lib/database/guild/plugins/welcome/welcome.plugin";
 import { seconds } from "../../lib/utils/time";
 import { getTestGuilds } from "../../lib/utils/utils";
-
-const schema = WelcomeDocumentModel;
 
 @ApplyOptions<ICommandOptions>({
   description: "Configure the welcome system.",
@@ -35,6 +39,7 @@ const schema = WelcomeDocumentModel;
   runIn: "GUILD_TEXT",
   nsfw: false,
   enabled: true,
+  preconditions: ["DevelopmentOnly"],
   extendedDescription: {
     examples: ["setup <options>"],
     command_type: "both",
@@ -45,19 +50,11 @@ export class UserCommand extends ICommand {
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
     if (!interaction.guild) return;
 
-    await interaction.deferReply({
-      fetchReply: true,
-      ephemeral: true,
-    });
-
     if (interaction.options.getSubcommand() === "setup") {
-      await interaction.deferReply({
-        ephemeral: true,
-      })
-
+      
       const themeOptions = interaction.options.getString("theme-type", true);
-      const welcomeChannel = interaction.options.getString("welcome-channel", true);
-      const goodbyeChannel = interaction.options.getString("goodbye-channel", true);
+      const welcomeChannel = interaction.options.getChannel("welcome-channel", true);
+      const goodbyeChannel = interaction.options.getChannel("goodbye-channel", true);
       let welcomeMessage = interaction.options.getString("welcome-message", false);
 
       if (!welcomeMessage) welcomeMessage = "Welcome to the server, {{user}}!";
@@ -66,22 +63,50 @@ export class UserCommand extends ICommand {
 
       if (!goodbyeMessage) goodbyeMessage = "Goodbye, {{user}}!";
 
-      await schema.updateOne({ _id: interaction.guildId }, {
-        $set: {
-          enabled: true,
-          welcome_channel: welcomeChannel,
-          goodbye_channel: goodbyeChannel,
-          welcome_message: welcomeMessage,
-          goodbye_message: goodbyeMessage,
-          theme: themeOptions,
-          // If the theme is set to embed, we will add the default embed object
-          welcome_embed: themeOptions === "embed" ? DefaultWelcomeEmbed : null,
+      await this.container.client.GuildSettingsModel.WelcomeModel.updateOne(
+        { _id: interaction.guildId },
+        {
+          $set: {
+            enabled: true,
+            welcome_channel: welcomeChannel,
+            goodbye_channel: goodbyeChannel,
+            welcome_message: welcomeMessage,
+            goodbye_message: goodbyeMessage,
+            theme: themeOptions,
+            // If the theme is set to embed, we will add the default embed object
+            welcome_embed: themeOptions === "embed" ? DefaultWelcomeEmbed : null,
+          },
         },
-      }, {
-        upsert: true,
-      })
+        {
+          upsert: true,
+        }
+      )
+        .then((res) => {
+          this.container.logger.info(res);
+        })
+        .catch((err) => {
+          this.container.logger.error(err);
+        });
 
-      await interaction.editReply("Welcome system has been setup. You can use the `welcome test` command to view it in action.");
+      await interaction.reply({
+        content: "Welcome system has been setup. You can use the `welcome test` command to view it in action.",
+        ephemeral: true,
+      });
+
+    } else if (interaction.options.getSubcommand() === "test") {
+      await interaction.reply({
+        content: `Running welcome plugin test...`,
+        ephemeral: true,
+      });
+
+      // this.container.client.emit(Events.GuildMemberAdd)
+
+      await interaction.followUp({
+        content: `Test complete!`,
+        ephemeral: true,
+      });
+    } else {
+      await interaction.editReply("Invalid subcommand for the welcome-plugin was used.");
     }
   }
   // slash command registry
@@ -93,6 +118,9 @@ export class UserCommand extends ICommand {
           .setDescription(this.description)
           .addSubcommand((options) =>
             options
+              /**
+               * ! setup command data
+               */
               .setName("setup")
               .setDescription("Setup the welcome system.")
               .addStringOption((options) =>
@@ -124,12 +152,13 @@ export class UserCommand extends ICommand {
                   .setDescription("The message to send in the goodbye.")
                   .setRequired(false)
               )
-          ),
+          )
+          .addSubcommand((options) => options.setName("test").setDescription("Test the welcome system.")),
       {
         guildIds: getTestGuilds(),
         registerCommandIfMissing: ENV.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
-        idHints: [],
+        idHints: ["972952564444328047"],
       }
     );
   }

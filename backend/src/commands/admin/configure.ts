@@ -19,6 +19,7 @@ import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCom
 import { Guild, TextChannel } from "discord.js";
 import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
+import { GuildDocument } from "../../lib/database/guild/guild.model";
 import { codeBlock } from "../../lib/utils/format";
 import { seconds } from "../../lib/utils/time";
 import { getTestGuilds } from "../../lib/utils/utils";
@@ -35,7 +36,7 @@ import { getTestGuilds } from "../../lib/utils/utils";
     usage: "[option] <value>",
     examples: ["configure language Spanish"],
   },
-  preconditions: ["development"],
+  preconditions: ["DevelopmentOnly"],
   requiredUserPermissions: ["ADMINISTRATOR"],
 })
 export class UserCommand extends ICommand {
@@ -43,7 +44,7 @@ export class UserCommand extends ICommand {
     if (!interaction.guild) return;
 
     const oldData = this.container.client.GuildSettingsModel._cache.get(interaction.guild!.id);
-    const document = await this.container.client.GuildSettingsModel.getDocument(interaction.guild!);
+    const document = await this.container.client.GuildSettingsModel.getDocument(interaction.guild!) as GuildDocument
 
     // Access the sub commands
     switch (interaction.options.getSubcommand()) {
@@ -156,6 +157,8 @@ export class UserCommand extends ICommand {
           });
         }
       case "view":
+        const welcomeData = await this.container.client.GuildSettingsModel.WelcomeModel.findOne({ _id: interaction.guildId });
+
         return await interaction.reply({
           content: codeBlock(
             "css",
@@ -164,11 +167,11 @@ export class UserCommand extends ICommand {
             !(interaction.guild instanceof Guild) || interaction.guild.name.length > 25
               ? interaction.guild?.name
               : "Server"
-          } - Configuration
+          } - Configuration Settings
           
-          [ Current Language ] = ${document?.language ?? "en-US"}
-          [ Current Prefix ] = ${document?.prefix ?? this.container.client.environment.bot.prefix}
-          [ Welcome Plugin  ] = Coming soon...
+          [ Current Language ] = ${document.language ?? "en-US"}
+          [ Current Prefix   ] = ${document?.prefix ?? this.container.client.environment.bot.prefix}
+          [ Welcome Plugin   ] = ${welcomeData?.enabled ? "Enabled" : "Disabled"}
           `
           ),
           ephemeral: true,
@@ -222,7 +225,7 @@ export class UserCommand extends ICommand {
         guildIds: getTestGuilds(),
         registerCommandIfMissing: ENV.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
-        idHints: ["966111289652969532"],
+        idHints: ["972952650926682173"],
       }
     );
   }

@@ -11,7 +11,7 @@ import type { CardOptions } from "discord-welcome-card/lib/types";
     runSyncIndexes: true,
   },
 })
-export class PluginDocument {
+export class WelcomePluginDocument {
   /**
    * Guild ID
    */
@@ -52,7 +52,7 @@ export class PluginDocument {
   public welcome_embed?: WelcomeEmbedObject;
 }
 
-export const WelcomeDocumentModel = getModelForClass(PluginDocument);
+export const WelcomeDocumentModel = getModelForClass(WelcomePluginDocument);
 
 export interface WelcomeEmbedObject {
   title?: string;

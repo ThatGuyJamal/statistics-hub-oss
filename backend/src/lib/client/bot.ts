@@ -16,7 +16,7 @@
 
 import { container, SapphireClient } from "@sapphire/framework";
 import { connection } from "mongoose";
-import { CLIENT_OPTIONS, ENV } from "../../config";
+import { ENV } from "../../config";
 import { IMemberCache } from "../controllers/cache/memberCache";
 import { IMessageCache } from "../controllers/cache/messageCache";
 import { IntervalsController } from "../controllers/interval";
@@ -26,6 +26,7 @@ import { StatisticsHandler } from "../controllers/statistics/statcord";
 import { initializeTypeGooseConnection } from "../database";
 import { GuildModelHandler } from "../database/guild/guild.handler";
 import { loadImportantMembers } from "../utils/loaders";
+import { CLIENT_OPTIONS } from "./clientOptions";
 
 class ExtendedClient extends SapphireClient {
   public constructor() {
@@ -36,7 +37,7 @@ class ExtendedClient extends SapphireClient {
     // this.cluster = new ShardCluster.Client(this);
     this.EventLogger = new IEventLogger();
     this.StatisticsHandler = new StatisticsHandler(container);
-    this.RedisController = new RedisController();
+    this.RedisController = new RedisController({ enabled: false });
     this.TemporaryCaches = {
       MessageCache: new IMessageCache(),
       MemberCache: new IMemberCache(),

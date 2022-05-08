@@ -15,7 +15,7 @@
  */
 
 import { GuildDocument, GuildDocumentModel } from "./guild.model";
-import { WelcomeDocumentModel } from "./plugins/welcome/welcome.plugin";
+import { WelcomeDocumentModel, WelcomePluginDocument } from "./plugins/welcome/welcome.plugin";
 import { Collection, Guild } from "discord.js";
 import { container } from "@sapphire/framework";
 import { hours } from "../../utils/time";
@@ -27,6 +27,7 @@ export class GuildModelHandler {
 
   /** The local cache for quick setting information */
   public _cache = new Collection<string, GuildDocument>();
+  public _welcomeCache = new Collection<string, WelcomePluginDocument>();
 
   public constructor() {
     /**
@@ -76,14 +77,25 @@ export class GuildModelHandler {
   }
 
   /**
-   * Get a guild from the database
+   * Get a guild from the database.
    * @param guild The guild to get the settings for
-   * @returns The guild settings for the given guild id
+   * @param type The type of document to find. Defaults to "guild"
+   * @returns The guild settings for the given guild id or null if not found
    */
-  public async getDocument(guild: Guild) {
-    const doc = await this.CoreModel.findById(guild.id);
-    if (doc) this._cache.set(guild.id, doc);
-    return doc;
+  public async getDocument(guild: Guild, type?: "welcome" | "guild") {
+    if (!type) type = "guild";
+
+    if (type === "guild") {
+      const doc = await this.CoreModel.findById(guild.id);
+      if (doc) this._cache.set(guild.id, doc);
+      return doc
+    } else if (type === "welcome") {
+      const doc = await this.WelcomeModel.findById(guild.id);
+      if (doc) this._welcomeCache.set(guild.id, doc);
+      return doc
+    }
+
+    return null;
   }
 
   /**

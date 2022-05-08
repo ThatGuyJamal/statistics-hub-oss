@@ -51,7 +51,7 @@ declare module "discord.js" {
 /** Over-writes the default types for the Preconditions */
 declare module "@sapphire/framework" {
   interface Preconditions {
-    development: never;
+    DevelopmentOnly: never;
     OwnerOnly: never;
   }
 }
