@@ -43,7 +43,7 @@ export class UserDocument {
   premium?: GuildSchemaPremiumType;
 }
 
-export const UserDocumentModel = getModelForClass(UserDocument)
+export const UserDocumentModel = getModelForClass(UserDocument);
 
 /**
  * Typings for guild premium data structure

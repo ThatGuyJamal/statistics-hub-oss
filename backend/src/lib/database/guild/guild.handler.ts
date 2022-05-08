@@ -23,7 +23,7 @@ import { hours } from "../../utils/time";
 export class GuildModelHandler {
   /** Model types for the main guild mongoose query's... */
   public CoreModel = GuildDocumentModel;
-  public WelcomeModel = WelcomeDocumentModel
+  public WelcomeModel = WelcomeDocumentModel;
 
   /** The local cache for quick setting information */
   public _cache = new Collection<string, GuildDocument>();

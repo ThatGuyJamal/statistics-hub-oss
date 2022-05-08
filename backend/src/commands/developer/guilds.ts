@@ -1,7 +1,6 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand } from "@sapphire/framework";
 import { Message } from "discord.js";
-import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { BaseEmbed } from "../../lib/utils/embed";
 import { codeBlock } from "../../lib/utils/format";

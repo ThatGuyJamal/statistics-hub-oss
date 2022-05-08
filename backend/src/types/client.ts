@@ -21,7 +21,7 @@ import { IEventLogger } from "../lib/controllers/statistics/logger";
 import { StatisticsHandler } from "../lib/controllers/statistics/statcord";
 import { GuildModelHandler } from "../lib/database/guild/guild.handler";
 import { env_types } from "./env";
-import {MessageEmbed} from "discord.js";
+import { MessageEmbed } from "discord.js";
 
 /** Type over-writes, so we get typings in our client extensions. */
 declare module "discord.js" {

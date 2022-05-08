@@ -43,7 +43,7 @@ export class UserEvent extends Listener {
     /**
      * Useful for purging all commands globally or guild(s) on the bot.
      */
-    client.application?.commands.set([], "837830514130812970")
+    client.application?.commands.set([], "837830514130812970");
 
     // let commands = await client.application!.commands;
     // this.container.logger.trace(commands);

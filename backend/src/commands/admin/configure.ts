@@ -16,7 +16,7 @@
 
 import { ApplyOptions } from "@sapphire/decorators";
 import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand } from "@sapphire/framework";
-import {Guild, TextChannel} from "discord.js";
+import { Guild, TextChannel } from "discord.js";
 import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { codeBlock } from "../../lib/utils/format";
@@ -55,23 +55,25 @@ export class UserCommand extends ICommand {
           language: languageOption,
         });
 
-        return await this.container.client.GuildSettingsModel.CoreModel
-          .updateOne({ _id: interaction.guildId }, { $set: { language: languageOption } })
+        return await this.container.client.GuildSettingsModel.CoreModel.updateOne(
+          { _id: interaction.guildId },
+          { $set: { language: languageOption } }
+        )
           .then((res) => {
             this.container.logger.info(res);
           })
           .then(async () => {
             await interaction.reply({
               content: codeBlock(
-                  "diff",
-                  `
+                "diff",
+                `
               - ${await this.translate(
-                      interaction.channel as TextChannel,
-                      "commands/configurations:language.success_reply",
-                      {
-                        lang: languageOption,
-                      }
-                  )}
+                interaction.channel as TextChannel,
+                "commands/configurations:language.success_reply",
+                {
+                  lang: languageOption,
+                }
+              )}
               `
               ),
             });
@@ -85,23 +87,25 @@ export class UserCommand extends ICommand {
           prefix: prefixOption,
         });
 
-        return await this.container.client.GuildSettingsModel.CoreModel
-          .updateOne({ _id: interaction.guildId }, { $set: { prefix: prefixOption } })
+        return await this.container.client.GuildSettingsModel.CoreModel.updateOne(
+          { _id: interaction.guildId },
+          { $set: { prefix: prefixOption } }
+        )
           .then((res) => {
             this.container.logger.info(res);
           })
           .then(async () => {
             await interaction.reply({
               content: codeBlock(
-                  "diff",
-                  `
+                "diff",
+                `
               - ${await this.translate(
-                      interaction.channel as TextChannel,
-                      "commands/configurations:prefix.success_reply",
-                      {
-                        prefix: prefixOption,
-                      }
-                  )}
+                interaction.channel as TextChannel,
+                "commands/configurations:prefix.success_reply",
+                {
+                  prefix: prefixOption,
+                }
+              )}
               `
               ),
             });
@@ -129,8 +133,10 @@ export class UserCommand extends ICommand {
             language: "en-US",
             prefix: ENV.bot.prefix,
           });
-          await this.container.client.GuildSettingsModel.CoreModel
-            .updateOne({ _id: interaction.guildId }, { $set: { language: "en-US", prefix: ENV.bot.prefix } })
+          await this.container.client.GuildSettingsModel.CoreModel.updateOne(
+            { _id: interaction.guildId },
+            { $set: { language: "en-US", prefix: ENV.bot.prefix } }
+          )
             .then((res) => {
               this.container.logger.info(res);
             })
@@ -154,7 +160,11 @@ export class UserCommand extends ICommand {
           content: codeBlock(
             "css",
             `
-          ${!(interaction.guild instanceof Guild) || interaction.guild.name.length > 25 ? interaction.guild?.name : "Server"} - Configuration
+          ${
+            !(interaction.guild instanceof Guild) || interaction.guild.name.length > 25
+              ? interaction.guild?.name
+              : "Server"
+          } - Configuration
           
           [ Current Language ] = ${document?.language ?? "en-US"}
           [ Current Prefix ] = ${document?.prefix ?? this.container.client.environment.bot.prefix}

@@ -27,33 +27,29 @@ export class UserEvent extends Listener {
     const fetch = await this.container.client.GuildSettingsModel.getDocument(member.guild);
 
     if (!fetch) {
-      await this.container.client.GuildSettingsModel.CoreModel
-        .create({
-          _id: member.guild.id,
-          guild_name: member.guild.name,
-          data: DefaultGuildDataModelObject,
-        })
-        .then((res) => {
-          this.container.logger.info(res);
-        });
+      await this.container.client.GuildSettingsModel.CoreModel.create({
+        _id: member.guild.id,
+        guild_name: member.guild.name,
+        data: DefaultGuildDataModelObject,
+      }).then((res) => {
+        this.container.logger.info(res);
+      });
     } else {
-      await this.container.client.GuildSettingsModel.CoreModel
-        .updateOne(
-          {
-            _id: member.guild.id,
+      await this.container.client.GuildSettingsModel.CoreModel.updateOne(
+        {
+          _id: member.guild.id,
+        },
+        {
+          $inc: {
+            "data.member.guildJoins": 1,
           },
-          {
-            $inc: {
-              "data.member.guildJoins": 1,
-            },
-            $set: {
-              "data.member.lastJoin": new Date(),
-            },
-          }
-        )
-        .then((res) => {
-          this.container.logger.info(res);
-        });
+          $set: {
+            "data.member.lastJoin": new Date(),
+          },
+        }
+      ).then((res) => {
+        this.container.logger.info(res);
+      });
     }
   }
 }

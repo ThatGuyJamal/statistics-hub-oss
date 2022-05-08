@@ -14,41 +14,40 @@
     GNU Affero General Public License for more details.
  */
 
-    import { ApplyOptions } from "@sapphire/decorators";
-    import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand } from "@sapphire/framework";
-    import { Message } from "discord.js";
-    import { ENV } from "../../config";
-    import { ICommandOptions, ICommand } from "../../lib/client/command";
-    import { seconds } from "../../lib/utils/time";
+import { ApplyOptions } from "@sapphire/decorators";
+import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand } from "@sapphire/framework";
+import { ENV } from "../../config";
+import { ICommandOptions, ICommand } from "../../lib/client/command";
+import { seconds } from "../../lib/utils/time";
 import { getTestGuilds } from "../../lib/utils/utils";
-    
-    @ApplyOptions<ICommandOptions>({
-      description: "Configure the welcome system.",
-      cooldownDelay: seconds(20),
-      cooldownScope: BucketScope.User,
-      cooldownLimit: 2,
-      runIn: "GUILD_TEXT",
-      nsfw: false,
-      enabled: true,
-      extendedDescription: {
-        examples: ["setup <options>"],
-        command_type: "both",
-      },
-    })
-    export class UserCommand extends ICommand {
-      // Slash Based Command
-      public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
-          return interaction.reply({
-                content: "Not implemented yet.",
-          })
-      }
-      // slash command registry
-      public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
-        registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
-          guildIds: getTestGuilds(),
-          registerCommandIfMissing: ENV.bot.register_commands,
-          behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
-          idHints: [],
-        });
-      }
-    }
+
+@ApplyOptions<ICommandOptions>({
+  description: "Configure the welcome system.",
+  cooldownDelay: seconds(20),
+  cooldownScope: BucketScope.User,
+  cooldownLimit: 2,
+  runIn: "GUILD_TEXT",
+  nsfw: false,
+  enabled: true,
+  extendedDescription: {
+    examples: ["setup <options>"],
+    command_type: "both",
+  },
+})
+export class UserCommand extends ICommand {
+  // Slash Based Command
+  public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
+    return interaction.reply({
+      content: "Not implemented yet.",
+    });
+  }
+  // slash command registry
+  public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
+    registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
+      guildIds: getTestGuilds(),
+      registerCommandIfMissing: ENV.bot.register_commands,
+      behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
+      idHints: [],
+    });
+  }
+}

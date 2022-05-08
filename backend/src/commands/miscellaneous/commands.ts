@@ -15,7 +15,7 @@
  */
 
 import { ApplyOptions } from "@sapphire/decorators";
-import {ApplicationCommandRegistry, Args, BucketScope, CommandStore, RegisterBehavior} from "@sapphire/framework";
+import { ApplicationCommandRegistry, Args, BucketScope, CommandStore, RegisterBehavior } from "@sapphire/framework";
 import { Message, CommandInteraction, TextChannel, AutocompleteInteraction } from "discord.js";
 import Fuse from "fuse.js";
 import { ENV } from "../../config";
@@ -28,7 +28,7 @@ import { getTestGuilds } from "../../lib/utils/utils";
 
 @ApplyOptions<ICommandOptions>({
   aliases: ["help", "commands", "h"],
-  description: "Advanced Command help system.",
+  description: "Shows helpful information about my commands.",
   cooldownDelay: seconds(20),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,

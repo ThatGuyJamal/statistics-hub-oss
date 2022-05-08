@@ -14,8 +14,8 @@
     GNU Affero General Public License for more details.
  */
 
-import {type CpuInfo, cpus, uptime} from "node:os";
-import {roundNumber} from "@sapphire/utilities";
+import { type CpuInfo, cpus, uptime } from "node:os";
+import { roundNumber } from "@sapphire/utilities";
 import {
   ApplicationCommandRegistry,
   BucketScope,
@@ -24,16 +24,16 @@ import {
   version as sapphireVersion,
   version,
 } from "@sapphire/framework";
-import {ApplyOptions} from "@sapphire/decorators";
-import {Message} from "discord.js";
-import {ENV} from "../../config";
-import {time, TimestampStyles} from "@discordjs/builders";
-import {ICommand, ICommandOptions} from "../../lib/client/command";
-import {BrandingColors} from "../../lib/utils/colors";
-import {BaseEmbed} from "../../lib/utils/embed";
-import {createHyperLink} from "../../lib/utils/format";
-import {seconds} from "../../lib/utils/time";
-import {getTestGuilds} from "../../lib/utils/utils";
+import { ApplyOptions } from "@sapphire/decorators";
+import { Message } from "discord.js";
+import { ENV } from "../../config";
+import { time, TimestampStyles } from "@discordjs/builders";
+import { ICommand, ICommandOptions } from "../../lib/client/command";
+import { BrandingColors } from "../../lib/utils/colors";
+import { BaseEmbed } from "../../lib/utils/embed";
+import { createHyperLink } from "../../lib/utils/format";
+import { seconds } from "../../lib/utils/time";
+import { getTestGuilds } from "../../lib/utils/utils";
 
 @ApplyOptions<ICommandOptions>({
   description: "Shows information about the bot.",

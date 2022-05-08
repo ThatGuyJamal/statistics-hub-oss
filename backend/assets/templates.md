@@ -33,7 +33,7 @@ import { seconds } from "../../lib/utils/time";
   extendedDescription: {
     usage: "",
     examples: [""],
-    command_type: ""
+    command_type: "",
   },
 })
 export class UserCommand extends ICommand {

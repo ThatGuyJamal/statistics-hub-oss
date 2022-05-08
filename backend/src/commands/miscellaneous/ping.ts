@@ -23,6 +23,7 @@ import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { BrandingColors } from "../../lib/utils/colors";
 import { codeBlock, inlineCode } from "../../lib/utils/format";
+import { pauseThread } from "../../lib/utils/promises";
 import { createEmbed } from "../../lib/utils/responses";
 import { seconds } from "../../lib/utils/time";
 import { getTestGuilds } from "../../lib/utils/utils";
@@ -54,7 +55,8 @@ export class UserCommand extends ICommand {
             (msg.editedTimestamp || msg.createdTimestamp) - (ctx.editedTimestamp || ctx.createdTimestamp)
           )}`,
           wsLatency: `${ms(Math.round(this.container.client.ws.ping))}`,
-        }})}
+        },
+      })}
     `
     );
 
@@ -64,27 +66,15 @@ export class UserCommand extends ICommand {
   }
 
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
-    const embed = createEmbed("", BrandingColors.Secondary).setTitle("fetching current latency... 🏓");
-    const message = (await interaction.reply({
-      embeds: [embed],
-      fetchReply: true,
-    })) as Message;
+    await interaction.deferReply();
 
-    const botLatency: number = Math.round(this.container.client.ws.ping);
-    const apiLatency: number = message.createdTimestamp - message.createdTimestamp;
-    const uptime: string = ms(this.container.client.uptime ?? 1);
+    await pauseThread(2000, "seconds");
 
-    const displays = [
-      ["Bot Latency", botLatency],
-      ["API Latency", apiLatency],
-    ].map(([name, value]) => `${name} ➡️ ${inlineCode(`${value.toString()}ms`)}`);
-
-    const updatedEmbed = embed
-      .setColor(BrandingColors.Primary)
-      .setTitle("Pong! 🏓")
-      .setDescription(displays.join("\n") + `\nUptime ➡️ ${inlineCode(uptime)}`);
-
-    await interaction.editReply({ embeds: [updatedEmbed] });
+    return await interaction.editReply({
+      content: `***Pong!** My websocket connection took... \`${ms(
+        Math.round(this.container.client.ws.ping)
+      )}\` to respond.`,
+    });
   }
 
   /**

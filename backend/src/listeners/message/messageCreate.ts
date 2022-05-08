@@ -81,36 +81,32 @@ export class UserEvent extends Listener {
     const fetch = await this.container.client.GuildSettingsModel.getDocument(ctx.guild);
 
     if (!fetch) {
-      await this.container.client.GuildSettingsModel.CoreModel
-        .create({
-          _id: ctx.guild.id,
-          guild_name: ctx.guild.name,
-          data: DefaultGuildDataModelObject,
-        })
-        .then((res) => {
-          this.container.logger.info(res);
-          ratelimit.delete(ctx.guild.id);
-        });
+      await this.container.client.GuildSettingsModel.CoreModel.create({
+        _id: ctx.guild.id,
+        guild_name: ctx.guild.name,
+        data: DefaultGuildDataModelObject,
+      }).then((res) => {
+        this.container.logger.info(res);
+        ratelimit.delete(ctx.guild.id);
+      });
     } else {
       let result = ratelimit.get(ctx.guild.id);
-      await this.container.client.GuildSettingsModel.CoreModel
-        .updateOne(
-          {
-            _id: ctx.guild.id,
+      await this.container.client.GuildSettingsModel.CoreModel.updateOne(
+        {
+          _id: ctx.guild.id,
+        },
+        {
+          $inc: {
+            "data.message": result?.value ?? 1,
           },
-          {
-            $inc: {
-              "data.message": result?.value ?? 1,
-            },
-            $set: {
-              guild_name: ctx.guild.name,
-            },
-          }
-        )
-        .then((res) => {
-          this.container.logger.info(res);
-          ratelimit.delete(ctx.guild.id);
-        });
+          $set: {
+            guild_name: ctx.guild.name,
+          },
+        }
+      ).then((res) => {
+        this.container.logger.info(res);
+        ratelimit.delete(ctx.guild.id);
+      });
     }
   }
 }
