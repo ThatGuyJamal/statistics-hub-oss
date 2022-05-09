@@ -51,7 +51,7 @@ export class UserCommand extends ICommand {
         ],
       });
 
-      await client.RedisController.del("test-command-21903218");
+      // await client.RedisController.del("test-command-21903218");
     } catch (e) {
       errorTracked.push(1);
       client.logger.error(e);

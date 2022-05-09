@@ -58,6 +58,7 @@ export class UserEvent extends Listener {
     else {
       const { client } = this.container;
       client.application?.commands.set([], "837830514130812970");
+      client.logger.fatal("Application commands have been cleared!");
     }
   }
 

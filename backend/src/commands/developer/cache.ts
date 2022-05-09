@@ -52,7 +52,8 @@ _ Bot _
 [Emojis]   = ${client.emojis.cache.size}
             
 _ Database _ 
-[Data] = ${client.LocalCacheStore.size}
+[Mongodb] = ${client.LocalCacheStore.size}
+[Redis]   = ${client.RedisController.keys.length}
             `
           ),
         },
@@ -88,7 +89,8 @@ _ Bot _
 [Emojis]   = ${client.emojis.cache.size}
             
 _ Database _ 
-[Data] = ${client.LocalCacheStore.size}
+[Mongodb] = ${client.LocalCacheStore.size}
+[Redis]   = ${client.RedisController.keys.length}
             `
           ),
         },
