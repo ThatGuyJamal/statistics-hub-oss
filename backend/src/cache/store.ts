@@ -38,17 +38,17 @@ export class LocalCacheStore {
        * @param id The id of the guild.
        * @param value The guild to set.
        * @returns {GuildModelStructure | undefined} The guild or undefined if not found.
-        */
+       */
       set: (id: string, value: GuildModelStructure) => {
         return this.memory.guild.cache.set(id, value);
       },
       /**
        * Removes a value from the cache.
        * @param id The id of the guild.
-       */ 
+       */
       delete: (id: string) => {
         return this.memory.guild.cache.delete(id);
-      }
+      },
     },
     user: {
       cache: new Collection<string, UserModelStructure>(),
@@ -65,7 +65,7 @@ export class LocalCacheStore {
        * @param id The id of the user.
        * @param value The user to set.
        * @returns {UserModelStructure | undefined} The user or undefined if not found.
-        */
+       */
       set: (id: string, value: UserModelStructure) => {
         return this.memory.user.cache.set(id, value);
       },
@@ -75,8 +75,8 @@ export class LocalCacheStore {
        */
       delete: (id: string) => {
         return this.memory.user.cache.delete(id);
-      }
-    }
+      },
+    },
   };
 
   /**

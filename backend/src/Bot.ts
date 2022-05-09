@@ -43,7 +43,7 @@ class ExtendedClient extends SapphireClient {
 
   /** Starts our bot and all our private methods. Then authenticates into the discord api. */
   public async startClient() {
-    await this.startDatabase(environment.db.enabled).then(() => super.login(environment.bot.token))
+    await this.startDatabase(environment.db.enabled).then(() => super.login(environment.bot.token));
   }
 
   /** Kills the node process and all its components */

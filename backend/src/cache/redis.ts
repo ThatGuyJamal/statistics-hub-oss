@@ -22,4 +22,4 @@ import { Tedis } from "tedis";
  */
 export const RedisController = new Tedis({
   port: environment.db.redis.port,
-})
+});

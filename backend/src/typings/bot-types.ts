@@ -28,7 +28,7 @@ declare module "discord.js" {
     RedisController: typeof RedisController;
     StatCordHandler: StatCordHandler;
     LocalCacheStore: LocalCacheStore;
-    CacheKeys: CacheKeysEnum
+    CacheKeys: CacheKeysEnum;
     // Sets
     BotDevelopers: Set<string>;
     BotSupporters: Set<string>;
