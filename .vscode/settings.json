@@ -15,6 +15,7 @@
     "discordjs",
     "discordx",
     "fuzzer",
+    "hmset",
     "importx",
     "kaname",
     "Kodo",

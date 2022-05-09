@@ -88,8 +88,8 @@ export class LocalCacheStore {
     const guild = await GuildsMongoModel.find({});
     const user = await UsersMongoModel.find({});
 
-    if (!guild.length) return container.logger.warn("No guilds found in the database. Skipping cache.");
-    if (!user.length) return container.logger.warn("No users found in the database. Skipping cache.");
+    if (!guild.length) container.logger.warn("No guilds found in the database.");
+    if (!user.length) container.logger.warn("No users found in the database.");
 
     // Add the data to the memory
     for (const g of guild) {

@@ -31,7 +31,7 @@ class ExtendedClient extends SapphireClient {
 
     this.LocalCacheStore = new LocalCacheStore();
     this.IntervalController = new IntervalController(this);
-    this.RedisController = new RedisController({ enabled: environment.db.redis.enabled });
+    this.RedisController = RedisController;
     this.StatCordHandler = new StatCordHandler();
 
     this.BotDevelopers = new Set();

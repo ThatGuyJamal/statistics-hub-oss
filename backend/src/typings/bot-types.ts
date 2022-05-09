@@ -25,7 +25,7 @@ declare module "discord.js" {
     /** Our custom environment variables  */
     environment: typeof environment;
     // Cache
-    RedisController: RedisController;
+    RedisController: typeof RedisController;
     StatCordHandler: StatCordHandler;
     LocalCacheStore: LocalCacheStore;
     CacheKeys: CacheKeysEnum

@@ -39,6 +39,7 @@ import { createEmbed } from "../../internal/interactions/responses";
     usage: "<some code>",
     command_type: "slash",
     examples: ["eval this.container.client.ws.ping"],
+    hidden: true,
   },
   chatInputCommand: {
     register: environment.bot.register_commands,
