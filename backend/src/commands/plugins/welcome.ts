@@ -27,6 +27,7 @@ import { ENV } from "../../config";
 import { ICommandOptions, ICommand } from "../../lib/client/command";
 import { DefaultWelcomeEmbed, DefaultWelcomeModelObject } from "../../lib/database";
 import { WelcomePluginDocument } from "../../lib/database/guild/plugins/welcome/welcome.plugin";
+import { channelMention } from "../../lib/utils/format";
 import { seconds } from "../../lib/utils/time";
 import { getTestGuilds } from "../../lib/utils/utils";
 
@@ -73,12 +74,6 @@ export class UserCommand extends ICommand {
       await this.container.client.GuildSettingsModel.WelcomeModel.create({
         _id: interaction.guild!.id,
         guild_name: interaction.guild.name,
-        enabled: false,
-        welcome_channel: undefined,
-        welcome_message: undefined,
-        goodbye_channel: undefined,
-        goodbye_message: undefined,
-        theme: undefined,
       })
         .then((res) => {
           this.container.logger.info(res);
@@ -91,9 +86,6 @@ export class UserCommand extends ICommand {
     const oldData = this.container.client.GuildSettingsModel._welcomeCache.get(interaction.guild!.id);
 
     if (interaction.options.getSubcommand() === "setup") {
-      await interaction.deferReply({
-        ephemeral: true,
-      });
 
       const themeOptions = interaction.options.getString("theme-type", true);
       const welcomeChannel = interaction.options.getChannel("welcome-channel", true);
@@ -139,7 +131,7 @@ export class UserCommand extends ICommand {
         }
       )
         .then(async () => {
-          await interaction.editReply({
+          await interaction.channel?.send({
             content: "Welcome system has been setup. You can use the `welcome test` command to view it in action.",
           });
         })
@@ -157,8 +149,10 @@ export class UserCommand extends ICommand {
 
       if (!oldData) return await interaction.followUp({ content: "No welcome plugin data to test..." });
 
+      this.container.client.emit(Symbol(Events.GuildMemberAdd))
+
       return await interaction.followUp({
-        content: `Test complete!`,
+        content: `Test complete! you can find the results in ${channelMention(oldData.welcome_channel!)}`,
         ephemeral: true,
       });
     } else {
@@ -194,7 +188,7 @@ export class UserCommand extends ICommand {
                 options.setName("welcome-channel").setDescription("The welcome channel.").setRequired(true)
               )
               .addChannelOption((options) =>
-                options.setName("goodbye-channel").setDescription("The good-bye channel.").setRequired(false)
+                options.setName("goodbye-channel").setDescription("The good-bye channel.").setRequired(true)
               )
               .addStringOption((options) =>
                 options
