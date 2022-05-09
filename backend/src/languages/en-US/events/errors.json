@@ -1,6 +1,0 @@
-{
-  "command_input_error_event_embed_titles": "Command Error Occurred",
-  "command_input_error_event_embed_descriptions": "An error occurred while executing the command.",
-  "prefix_mention_reply_guild": "My prefix in this server is `{{prefix}}`, however I recommend using slash commands.\nTo get started type `/dashboard` or join my support server by running `{{prefix}}invite`.\n Dont see slash commands in your server? Reinvite me using this link: <{{server_invite}}>",
-  "prefix_mention_reply_dm": "Run `/commands` to see a list of commands."
-}

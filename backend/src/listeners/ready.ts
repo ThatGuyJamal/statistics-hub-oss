@@ -2,12 +2,10 @@
  *  Statistics Hub OSS - A data analytics discord bot.
     
     Copyright (C) 2022, ThatGuyJamal and contributors
-
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -17,10 +15,10 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { ListenerOptions, Events, Listener, Store } from "@sapphire/framework";
 import { Message } from "discord.js";
-import { ENV } from "../config";
 import { blue, bold, gray, green, magenta, magentaBright, white, yellow } from "colorette";
+import { environment } from "../config";
 
-const dev = ENV.bot.dev;
+const dev = environment.bot.enabled;
 
 @ApplyOptions<ListenerOptions>({
   event: Events.ClientReady,
@@ -32,6 +30,7 @@ export class UserEvent extends Listener {
     const { client } = this.container;
 
     await client.user?.setPresence({
+      status: "idle",
       activities: [
         {
           name: "a mathematics lecture",
@@ -39,26 +38,27 @@ export class UserEvent extends Listener {
         },
       ],
     });
-
-    /**
-     * Useful for purging all commands globally or guild(s) on the bot.
-     */
-    client.application?.commands.set([], "837830514130812970");
-
-    // let commands = await client.application!.commands;
-    // this.container.logger.trace(commands);
-
-    this.container.logger.info(
-      `${client.user?.tag} is online and ready to battle in ${client.guilds.cache.size} guilds!`
+    this.initializeFunctions().then(() =>
+      this.container.logger.info(
+        `${client.user?.tag} is online and ready to battle in ${client.guilds.cache.size} guilds!`
+      )
     );
+  }
 
+  private async initializeFunctions() {
+    this.clearApplicationCommands();
+    this.container.client.StatCordHandler.init();
+    this.container.client.LocalCacheStore.init();
     UserEvent.printBanner();
     this.printStoreDebugInformation();
-    // Save all guilds from the database to the cache
-    await this.container.client.GuildSettingsModel.initCache();
-    // await this.guildValidator(ctx);
+  }
 
-    this.container.client.StatisticsHandler.init();
+  private clearApplicationCommands(enabled = false) {
+    if (!enabled) return;
+    else {
+      const { client } = this.container;
+      client.application?.commands.set([], "837830514130812970");
+    }
   }
 
   private static printBanner() {
@@ -95,33 +95,4 @@ ${line03}${dev ? ` ${pad}${blc("<")}${llc("/")}${blc(">")} ${llc("DEVELOPMENT MO
   private styleStore(store: Store<any>, last: boolean) {
     return gray(`${last ? "└─" : "├─"} Loaded ${this.style(store.size.toString().padEnd(3, " "))} ${store.name}.`);
   }
-
-  // private async guildValidator(ctx: Message) {
-  //   const { client, logger } = this.container;
-
-  //   // Find all the guilds in our database
-  //   const documents = await client.GuildSettingsModel.initCache();
-
-  //   if (!documents) return;
-
-  //   logger.info("Starting guild validator...")
-
-  //   for (const collection of client.guilds.cache) {
-  //     const guild = collection[1];
-
-  //     let guilds = documents.find((doc) => doc._id === guild.id);
-
-  //     logger.info(`${this.style(guild.name)} (${guild.id}) - ${guilds ? "Found" : "Not found"} in database.`);
-
-  //     // check if the guild is blacklisted in our database
-  //     // if it is, leave the guild
-  //     if (guilds && guilds.blacklisted === true) {
-  //       await guild.leave();
-  //       let msg = `Guild ${bold(guild.name)} (${guild.id}) is on the guild blacklist, leaving...`;
-  //       logger.warn(msg);
-  //       await client.EventLogger.blackListLogs(ctx, blackListLevel.guild, msg);
-  //     }
-  //   }
-  //   logger.info(`Finished guild validator.`);
-  // }
 }

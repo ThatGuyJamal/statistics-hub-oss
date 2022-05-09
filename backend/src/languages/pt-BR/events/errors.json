@@ -1,6 +1,0 @@
-{
-  "command_input_error_event_embed_titles": "Ocorreu um erro no commando",
-  "command_input_error_event_embed_descriptions": "Ocorreu um erro durante a execução de um comando.",
-  "prefix_mention_reply_guild": "Desculpa eu ainda estou em desenvolvimento. Os comandos só funcionam no servidor de suporte. Podes juntar-te usando o comando: `sh!invite`\nUsa: `/commands` para ver a lista de comandos.",
-  "prefix_mention_reply_dm": "Usa: `/commands` para ver a lista de comandos."
-}

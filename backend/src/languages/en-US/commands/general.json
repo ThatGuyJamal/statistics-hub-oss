@@ -1,0 +1,6 @@
+{
+  "ping_command": {
+    "reply_one": "Fetching current latency...",
+    "reply_two": "Pong! Bot Latency {{wsLatency}}. Discord API Latency {{APILatency}}"
+  }
+}
