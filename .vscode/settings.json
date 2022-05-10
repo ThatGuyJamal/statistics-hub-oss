@@ -23,6 +23,7 @@
     "nocheck",
     "ratelimit",
     "ratelimits",
+    "setlang",
     "statcord",
     "statshub",
     "Tedis",

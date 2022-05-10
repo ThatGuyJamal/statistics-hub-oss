@@ -44,6 +44,11 @@ export const WelcomePluginMongoModel = mongo.model(
       required: false,
       default: null,
     },
+    GuildWelcomeTheme: {
+      type: String,
+      required: false,
+      default: "text",
+    },
     CreatedAt: {
       type: Date,
       required: false,
@@ -72,7 +77,7 @@ export interface WelcomePluginModelStructure {
 
 export interface WelcomeEmbedObject {
   title?: string;
-  description: string;
+  description?: string;
   color?: string;
   thumbnail?: string;
   fields?: Array<WelcomeEmbedFieldObject>;
@@ -80,7 +85,7 @@ export interface WelcomeEmbedObject {
     text: string;
     icon: string;
   };
-  timestamp: boolean;
+  timestamp?: boolean;
   image?: string;
   author?: {
     name: string;

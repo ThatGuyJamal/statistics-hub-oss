@@ -15,23 +15,19 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener, ListenerOptions } from "@sapphire/framework";
 import { GuildMember, TextChannel } from "discord.js";
-import { WelcomePluginMongoModel } from "../../database/models/plugins/welcome/welcome";
 import { memberMention } from "../../internal/functions/formatting";
 
 @ApplyOptions<ListenerOptions>({
+  name: "welcome-event",
   event: Events.GuildMemberAdd,
 })
 export class UserEvent extends Listener {
   public async run(member: GuildMember): Promise<void> {
     const { client } = this.container;
 
-    client.logger.trace(`[USER] ${member.user.tag} joined ${member.guild.name}`);
-
-    const data = await WelcomePluginMongoModel.findOne({ GuildId: member.guild.id });
+    const data = client.LocalCacheStore.memory.plugins.welcome.get(member.guild);
 
     if (!data || data.Enabled === false) return;
-
-    client.logger.trace(`Found data!`)
 
     if (data.GuildWelcomeChannelId) {
       const welcomeChannel = client.channels.cache.get(data.GuildWelcomeChannelId) as TextChannel;
@@ -53,7 +49,15 @@ export class UserEvent extends Listener {
           // TODO: Add embed theme
           break;
         default:
-          return;
+          // If no theme is set, use the text theme
+          welcomeChannel.send({
+            content: `${data
+              .GuildWelcomeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
+              .replaceAll("{{user.username}}", member.user.username)
+              .replaceAll("{{user.id}}", member.id)
+              .replaceAll("{{user.tag}}", member.user.tag)}`,
+          });
+          break;
       }
     }
   }

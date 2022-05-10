@@ -56,9 +56,9 @@ export class BaseEmbed extends MessageEmbed {
   public contextEmbed(data: MessageEmbedOptions, ctx: Message): BaseEmbed {
     return new BaseEmbed({
       ...data,
-      color: BrandingColors.Secondary,
+      color: BrandingColors.Legacy,
       footer: {
-        text: `✅ Try out slash commands!`,
+        text: `📈 | ${environment.bot.bot_name}`,
         iconURL: ctx.author.displayAvatarURL({
           dynamic: true,
           format: "png",
@@ -66,7 +66,7 @@ export class BaseEmbed extends MessageEmbed {
       },
       timestamp: Date.now(),
       author: {
-        name: `${ctx.author.username} | 🤍`,
+        name: `${ctx.author.username}`,
         url: environment.bot.support_server_url,
         iconURL: ctx.author.displayAvatarURL({
           dynamic: true,

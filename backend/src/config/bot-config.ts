@@ -8,11 +8,11 @@ import { parseInternationalizationOptions } from "../internal/il8n";
 export const CLIENT_OPTIONS: ClientOptions = {
   shards: "auto",
   shardCount: 1,
-  caseInsensitiveCommands: true,
+  caseInsensitiveCommands: false,
   caseInsensitivePrefixes: false,
   defaultPrefix: environment.bot.bot_prefix,
   logger: {
-    level: environment.bot.enabled ? LogLevel.Debug : LogLevel.Warn,
+    level: environment.production ? LogLevel.Warn : LogLevel.Debug,
   },
   fetchPrefix: async (ctx: Message) => {
     if (!isGuildMessage(ctx)) return environment.bot.bot_prefix;

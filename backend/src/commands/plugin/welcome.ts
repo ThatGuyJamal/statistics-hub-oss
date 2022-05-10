@@ -13,11 +13,18 @@
  */
 
 import { ApplyOptions } from "@sapphire/decorators";
-import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand, Events } from "@sapphire/framework";
+import {
+  BucketScope,
+  ApplicationCommandRegistry,
+  RegisterBehavior,
+  ChatInputCommand,
+  Events,
+} from "@sapphire/framework";
 import { GuildMember } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
 import { WelcomePluginMongoModel } from "../../database/models/plugins/welcome/welcome";
+import { channelMention } from "../../internal/functions/formatting";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
 import { BaseEmbed } from "../../internal/structures/Embed";
@@ -41,6 +48,7 @@ import { BaseEmbed } from "../../internal/structures/Embed";
 export class UserCommand extends ICommand {
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
     const { client } = this.container;
+    if(!interaction.guild) return;
 
     if (interaction.options.getSubcommand() === "setup") {
       const themeOptions = interaction.options.getString("theme-type", true);
@@ -66,18 +74,26 @@ export class UserCommand extends ICommand {
             GuildOwnerId: interaction.guild!.ownerId,
             Enabled: true,
             CreatedAt: new Date(),
+            GuildWelcomeTheme: themeOptions,
+            GuildWelcomeChannelId: welcomeChannel?.id,
+            GuildWelcomeMessage: welcomeMessage,
+            GuildGoodbyeChannelId: goodbyeChannel?.id,
+            GuildGoodbyeMessage: goodbyeMessage,
+            GuildWelcomeEmbed: {}
           });
         }
         await WelcomePluginMongoModel.create({
-          GuildId: interaction.guildId,
-          GuildName: interaction.guild?.name,
-          GuildOwnerId: interaction.guild?.ownerId,
+          GuildId: interaction.guildId as string,
+          GuildName: interaction.guild!.name,
+          GuildOwnerId: interaction.guild!.ownerId,
           Enabled: true,
-          GuildWelcomeChannelId: welcomeChannel?.id,
-          GuildGoodbyeChannelId: goodbyeChannel?.id,
-          GuildWelcomeMessage: welcomeMessage,
-          GuildGoodbyeMessage: goodbyeMessage,
+          CreatedAt: new Date(),
           GuildWelcomeTheme: themeOptions,
+          GuildWelcomeChannelId: welcomeChannel?.id,
+          GuildWelcomeMessage: welcomeMessage,
+          GuildGoodbyeChannelId: goodbyeChannel?.id,
+          GuildGoodbyeMessage: goodbyeMessage,
+          GuildWelcomeEmbed: {}
         }).then((res) => client.logger.info(res));
       }
       // If a document is found, we update it.
@@ -98,66 +114,105 @@ export class UserCommand extends ICommand {
           }
         ).then((res) => client.logger.info(res));
       }
-      await interaction.reply("Welcome plugin setup complete!");
+      await interaction.reply({
+        content: "Welcome plugin setup complete!",
+        ephemeral: true,
+      });
     } else if (interaction.options.getSubcommand() === "disable") {
       // When the command is disabled, we will clear up some cache. but it will not delete the document from the database.
       client.LocalCacheStore.memory.plugins.welcome.delete(interaction.guild!);
-      await WelcomePluginMongoModel.updateOne(
+      await WelcomePluginMongoModel.findOneAndUpdate(
         { GuildId: interaction.guildId },
         {
           $set: {
             Enabled: false,
           },
         }
-      ).then((res) => client.logger.info(res));
-      await interaction.reply("Welcome plugin disabled!");
+      ).then((res) => {
+        if(!res) return interaction.reply({
+          content: "Welcome plugin is already disabled!",
+          ephemeral: true,
+        })
+        client.logger.info(res)
+        return interaction.reply({
+          content: "Welcome plugin disabled!",
+          ephemeral: true,
+        });
+      });
     } else if (interaction.options.getSubcommand() === "enable") {
       await WelcomePluginMongoModel.findOneAndUpdate(
-        { GuildId: interaction.guildId },
+        { GuildId: interaction.guild.id },
         {
           $set: {
             Enabled: true,
           },
         }
-      ).then((res) => {
-        let c = client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
-          GuildId: res!.GuildId,
-          GuildName: res!.GuildName ?? undefined,
-          GuildOwnerId: res!.GuildOwnerId ?? undefined,
-          Enabled: true,
-          CreatedAt: res!.CreatedAt ?? new Date(),
-          GuildWelcomeChannelId: res!.GuildWelcomeChannelId ?? undefined,
-          GuildGoodbyeChannelId: res!.GuildGoodbyeChannelId ?? undefined,
-          GuildWelcomeMessage: res!.GuildWelcomeMessage ?? undefined,
-          GuildGoodbyeMessage: res!.GuildGoodbyeMessage ?? undefined,
-          GuildWelcomeTheme: res!.GuildWelcomeTheme ?? undefined,
-        });
-        client.logger.info(c);
-        client.logger.info(res);
-      }).catch((err) => client.logger.error(err));
-      await interaction.reply("Welcome plugin enabled!");
+      )
+        .then((res) => {
+          if(!res) {
+            return interaction.reply({
+              content: "Welcome plugin is not setup! Please use `welcome setup` to setup the plugin.",
+              ephemeral: true,
+            });
+          }
+          client.logger.info(res);
+          client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
+            GuildId: res!.GuildId,
+            GuildName: res!.GuildName ?? undefined,
+            GuildOwnerId: res!.GuildOwnerId ?? undefined,
+            Enabled: true,
+            CreatedAt: res!.CreatedAt ?? new Date(),
+            GuildWelcomeChannelId: res!.GuildWelcomeChannelId ?? undefined,
+            GuildGoodbyeChannelId: res!.GuildGoodbyeChannelId ?? undefined,
+            GuildWelcomeMessage: res!.GuildWelcomeMessage ?? undefined,
+            GuildGoodbyeMessage: res!.GuildGoodbyeMessage ?? undefined,
+            GuildWelcomeTheme: res!.GuildWelcomeTheme ?? undefined,
+          });
+          return interaction.reply({
+            content: "Welcome plugin enabled!",
+            ephemeral: true,
+          });
+        })
+        .catch((err) => client.logger.error(err));
     } else if (interaction.options.getSubcommand() === "delete") {
       client.LocalCacheStore.memory.plugins.welcome.delete(interaction.guild!);
       await WelcomePluginMongoModel.deleteOne({ GuildId: interaction.guildId }).then((res) => client.logger.info(res));
-      await interaction.reply("Welcome plugin deleted!");
+      await interaction.reply({
+        content: "Welcome plugin deleted!",
+        ephemeral: true,
+      });
     } else if (interaction.options.getSubcommand() === "simulate") {
+
+      let checkIfData = client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild!)
+
+      if (!checkIfData || !checkIfData.Enabled) {
+       return await interaction.reply("Welcome plugin is not enabled!");
+      }
+
       await interaction.reply({
         embeds: [
-          new BaseEmbed().interactionEmbed({
-            description: "Running welcome plugin simulation...",
-          }, interaction)
-        ]
-      })
+          new BaseEmbed().interactionEmbed(
+            {
+              description: "Running welcome plugin simulation...",
+            },
+            interaction
+          ),
+        ],
+        ephemeral: true,
+      });
 
-      client.emit(Events.GuildMemberAdd, interaction.member as GuildMember)
+      this.container.client.emit(Events.GuildMemberAdd, interaction.member as GuildMember)
 
       await interaction.editReply({
         embeds: [
-          new BaseEmbed().interactionEmbed({
-            description: "Simulation complete!",
-          }, interaction)
-        ]
-      })
+          new BaseEmbed().interactionEmbed(
+            {
+              description: `Simulation complete! You can find the result in ${channelMention(checkIfData.GuildWelcomeChannelId!)}`,
+            },
+            interaction
+          ),
+        ],
+      });
     }
   }
   // slash command registry

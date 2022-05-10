@@ -103,7 +103,11 @@ You can run help <command> to get more information about a command.
               [Examples] = ${commandFound.extendedDescription?.examples?.join(", ") || "None"}
               [Command type] = ${commandFound.extendedDescription?.command_type}
               [Subcommands] = ${commandFound.extendedDescription?.subcommands?.map((name) => name).join(", ") || "None"}
-              ${commandFound.extendedDescription?.subcommands?.length! > 0 ? `[Note] = Subcommands can be used with slash commands. There syntax is as follows: ${commandFound.name} <subcommand> ` : ""}
+              ${
+                commandFound.extendedDescription?.subcommands?.length! > 0
+                  ? `[Note] = Subcommands can be used with slash commands. There syntax is as follows: ${commandFound.name} <subcommand> `
+                  : ""
+              }
             `
           ),
         });
@@ -178,6 +182,12 @@ You can run help <command> to get more information about a command.
               [Usage] = ${commandFound.extendedDescription?.usage || "None"}
               [Examples] = ${commandFound.extendedDescription?.examples?.join(", ") || "None"}
               [Command type] = ${commandFound.extendedDescription?.command_type}
+              [Subcommands] = ${commandFound.extendedDescription?.subcommands?.map((name) => name).join(", ") || "None"}
+              ${
+                commandFound.extendedDescription?.subcommands?.length! > 0
+                  ? `[Note] = Subcommands can be used with slash commands. There syntax is as follows: ${commandFound.name} <subcommand> `
+                  : ""
+              }
             `
           ),
         });

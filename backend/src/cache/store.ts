@@ -132,27 +132,32 @@ export class LocalCacheStore {
     // Add the data to the memory
     for (const g of guild) {
       this.memory.guild.cache.set(g.GuildId, g);
-      if(!container.client.environment.production) container.logger.debug(`Added guild ${g.GuildId} to the cache.\n ${g}`);
+      if (!container.client.environment.production)
+        container.logger.debug(`Added guild ${g.GuildId} to the cache.\n ${g}`);
     }
 
     for (const u of user) {
       this.memory.user.cache.set(u.UserId, u);
-      if(!container.client.environment.production) container.logger.debug(`Added user ${u.UserId} to the cache.\n ${u}`);
+      if (!container.client.environment.production)
+        container.logger.debug(`Added user ${u.UserId} to the cache.\n ${u}`);
     }
 
     for (const w of welcome) {
       this.memory.plugins.welcome.cache.set(w.GuildId, w);
-      if(!container.client.environment.production) container.logger.debug(`Added welcome plugin ${w.GuildId} to the cache.\n ${w}`);
+      if (!container.client.environment.production)
+        container.logger.debug(`Added welcome plugin ${w.GuildId} to the cache.\n ${w}`);
     }
 
     // Log the amount of data
-    container.logger.info(`Loaded ${guild.length} guilds, ${user.length} users, and ${welcome.length} welcome plugins.`);
+    container.logger.info(
+      `Loaded ${guild.length} guilds, ${user.length} users, and ${welcome.length} welcome plugins.`
+    );
   }
 
   /**
    * @returns {number} The total size of the cache.
    */
   public get size(): number {
-    return this.memory.guild.cache.size + this.memory.user.cache.size;
+    return this.memory.guild.cache.size + this.memory.user.cache.size + this.memory.plugins.welcome.cache.size
   }
 }

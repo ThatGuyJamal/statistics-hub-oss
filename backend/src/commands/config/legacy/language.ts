@@ -107,8 +107,10 @@ export class UserCommand extends ICommand {
               {
                 fields: [
                   {
-                    name: "supported_languages",
-                    value: langsWeCanUse.map((lang) => `\`Name:${lang.name} Code: (${lang.code})\``).join("\n"),
+                    name: "Supported Languages",
+                    value: `Use the code value for the command.\n\n${langsWeCanUse
+                      .map((lang) => `\`Name: ${lang.name} Code: (${lang.code})\``)
+                      .join("\n")}`,
                   },
                 ],
               },
