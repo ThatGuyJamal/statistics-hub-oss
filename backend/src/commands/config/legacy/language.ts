@@ -64,12 +64,10 @@ export class UserCommand extends ICommand {
         } else if (newLang === "reset") {
             // Removing the language from the cache and setting it to undefined
             let oldCache = client.LocalCacheStore.memory.guild.get(ctx.guild!);
-            if (oldCache?.GuildLanguage) {
                 client.LocalCacheStore.memory.guild.set(ctx.guild!, {
                     ...oldCache!,
                     GuildLanguage: undefined,
                 });
-            }
             await GuildsMongoModel.updateOne({ GuildId: ctx.guildId }, { $set: { GuildLanguage: "en-US" } });
             return await ctx.reply({
                 content: await this.translate(ctx.channel as TextChannel, "commands/config:language_command.reset_success", {
@@ -101,12 +99,10 @@ export class UserCommand extends ICommand {
             }
             // Setting the language in the cache
             let oldCache = client.LocalCacheStore.memory.guild.get(ctx.guild!);
-            if (oldCache?.GuildLanguage) {
                 client.LocalCacheStore.memory.guild.set(ctx.guild!, {
                     ...oldCache!,
                     GuildLanguage: newLang,
                 });
-            }
             await GuildsMongoModel.updateOne({ GuildId: ctx.guildId }, { $set: { GuildLanguage: newLang } });
             return await ctx.reply({
                 content: await this.translate(ctx.channel as TextChannel, "commands/config:language_command.success", {

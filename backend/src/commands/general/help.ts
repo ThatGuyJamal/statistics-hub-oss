@@ -3,7 +3,7 @@ import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCom
 import { Message, TextChannel } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
-import { codeBlock } from "../../internal/functions/formatting";
+import { capitalizeFirstLetter, codeBlock } from "../../internal/functions/formatting";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
 
@@ -32,9 +32,13 @@ export class UserCommand extends ICommand {
       const result = codeBlock(
         "css",
         `
-          === Command list ===
-          Coming soon...
-          `
+=== Command list ===
+${[...this.container.stores.get("commands").values()]
+          .filter((c) => c.category !== "developer")
+          .map((c) => `[Command] = ${c.name}`).join("\n")}
+
+You can run help <command> to get more information about a command.
+      `
       );
       return await ctx.reply({
         content: result,
@@ -46,10 +50,18 @@ export class UserCommand extends ICommand {
           content: await this.translate(ctx.channel as TextChannel, "commands/general:command_not_found"),
         });
       } else {
+
+        // Make sure only dev's get info on this command.
+        if (commandFound.category === "developer" && !client.BotDevelopers.has(ctx.author.id)) {
+          return await ctx.reply({
+            content: await this.translate(ctx.channel as TextChannel, "commands/config:help_command.developer_command_only"),
+          });
+        }
+
         return await ctx.reply({
-          content: codeBlock("css", 
+          content: codeBlock("css",
             `
-              === ${commandFound.name} ===
+              === ${capitalizeFirstLetter(commandFound.name)} Command ===
               [Description] = ${commandFound.description || "No description provided."}
               [Aliases] = ${commandFound.aliases.join(", ") || "None"}
               [Category] = ${commandFound.category || "None"}
@@ -61,7 +73,7 @@ export class UserCommand extends ICommand {
       }
     }
   }
-  
+
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
     interaction.reply("soon");
   }

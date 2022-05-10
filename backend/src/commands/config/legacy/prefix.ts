@@ -60,12 +60,10 @@ export class UserCommand extends ICommand {
     } else if (newPrefix === "reset") {
       // Removing the prefix from the cache and setting it to undefined
       let oldCache = client.LocalCacheStore.memory.guild.get(ctx.guild!);
-      if (oldCache?.GuildPrefix) {
         client.LocalCacheStore.memory.guild.set(ctx.guild!, {
           ...oldCache!,
           GuildPrefix: undefined,
         });
-      }
       await GuildsMongoModel.updateOne({ GuildId: ctx.guildId }, { $set: { GuildPrefix: null } });
       return await ctx.reply({
         content: await this.translate(ctx.channel as TextChannel, "commands/config:prefix_command.reset_success", {
@@ -85,12 +83,10 @@ export class UserCommand extends ICommand {
       } else {
         // Make sure the old values are not overwritten
         let oldCache = client.LocalCacheStore.memory.guild.get(ctx.guild!);
-        if (oldCache?.GuildPrefix) {
           client.LocalCacheStore.memory.guild.set(ctx.guild!, {
             ...oldCache!,
             GuildPrefix: newPrefix,
           });
-        }
         // Update the database
         await GuildsMongoModel.updateOne({ GuildId: ctx.guildId }, { $set: { GuildPrefix: newPrefix } }).then((res) =>
           client.logger.info(res)

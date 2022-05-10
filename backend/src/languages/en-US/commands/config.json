@@ -13,5 +13,12 @@
     "reset_success": "Your language has been reset to: **{{language}}**",
     "reset_language_info": "You can reset your language by typing `{{prefix}}language reset`",
     "invalid_language": "The language you gave is not valid. Please try again."
+  },
+  "help_command": {
+    "developer_command_only": "This command is only available for developers."
+  },
+  "view_config_command": {
+    "no_settings": "There are no settings for this guild.",
+    "success": "Prefix: **{{prefix}}**\nLanguage: **{{language}}**"
   }
 }
