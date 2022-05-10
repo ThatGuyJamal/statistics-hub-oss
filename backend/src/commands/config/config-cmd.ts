@@ -23,10 +23,10 @@ import { getTestGuilds } from "../../internal/load-test-guilds";
 })
 export class UserCommand extends ICommand {
     public async messageRun(ctx: Message) { 
-        ctx.reply("no")
+        ctx.reply("soon")
     }
     public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) { 
-        interaction.reply("no")
+        interaction.reply("soon")
     }
     public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
         registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {

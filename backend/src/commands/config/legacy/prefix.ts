@@ -1,6 +1,6 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { Args, BucketScope } from "@sapphire/framework";
-import { Message } from "discord.js";
+import { Message, TextChannel } from "discord.js";
 import { ICommandOptions, ICommand } from "../../../Command";
 import { GuildsMongoModel } from "../../../database/models/guild";
 import { seconds } from "../../../internal/functions/time";
@@ -30,10 +30,12 @@ export class UserCommand extends ICommand {
         if (!newPrefix) {
             let currentPrefix = client.LocalCacheStore.memory.guild.get(ctx.guild!)?.GuildPrefix
             return ctx.reply({
-                content: `You did not give an argument for a new prefix...`,
+                content: await this.translate(ctx.channel as TextChannel, "commands/config:prefix_command.missing_args"),
                 embeds: [
                     {
-                        description: `Current prefix is: **${currentPrefix ?? client.environment.bot.bot_prefix}**`,
+                        description: await this.translate(ctx.channel as TextChannel, "commands/config:prefix_command.current_prefix", {
+                            prefix: currentPrefix ?? client.environment.bot.bot_prefix
+                        })
                     }
                 ]
             })
@@ -61,7 +63,9 @@ export class UserCommand extends ICommand {
             }
     
             return await ctx.reply({
-                content: `Prefix set to: **${newPrefix}**`,
+                content: await this.translate(ctx.channel as TextChannel, "commands/config:prefix_command.new_prefix", {
+                    prefix: newPrefix
+                }),
                 embeds: []
             })
         }

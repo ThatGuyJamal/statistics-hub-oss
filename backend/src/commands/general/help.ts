@@ -3,6 +3,7 @@ import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCom
 import { Message } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
+import { codeBlock } from "../../internal/functions/formatting";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
 
@@ -23,7 +24,18 @@ import { getTestGuilds } from "../../internal/load-test-guilds";
 })
 export class UserCommand extends ICommand {
     public async messageRun(ctx: Message) { 
-        ctx.reply("soon")
+
+        const { client } = this.container;
+
+        const result = codeBlock("css", 
+        `
+        === Command list ===
+        Coming soon...
+        `)
+
+        return await ctx.reply({
+            content: result
+        })
     }
     public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
         interaction.reply("soon");

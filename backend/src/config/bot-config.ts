@@ -17,7 +17,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
   fetchPrefix: async (ctx: Message) => {
     if (!isGuildMessage(ctx)) return environment.bot.bot_prefix;
     else {
-      let findPrefix = container.client.LocalCacheStore.memory.guild.get(ctx.guild!)?.GuildPrefix;
+      let findPrefix = container.client.LocalCacheStore.memory.guild.get(ctx.guild)?.GuildPrefix;
       if (!findPrefix) {
         return environment.bot.bot_prefix;
       } else {

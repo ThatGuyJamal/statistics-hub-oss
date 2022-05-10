@@ -48,7 +48,6 @@ export class UserEvent extends Listener {
   private async initializeFunctions() {
     this.clearApplicationCommands();
     this.container.client.StatCordHandler.init();
-    this.container.client.LocalCacheStore.init();
     UserEvent.printBanner();
     this.printStoreDebugInformation();
   }

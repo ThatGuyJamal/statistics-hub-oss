@@ -93,13 +93,13 @@ export class LocalCacheStore {
 
     // Add the data to the memory
     for (const g of guild) {
-      this.memory.guild.set(g.id, g);
-      container.logger.debug(`Added guild ${g.GuildId} to the cache.`);
+      this.memory.guild.cache.set(g.GuildId, g);
+      container.logger.debug(`Added guild ${g.GuildId} to the cache.\n ${g}`);
     }
 
     for (const u of user) {
-      this.memory.user.set(u.id, u);
-      container.logger.debug(`Added user ${u.UserId} to the cache.`);
+      this.memory.user.cache.set(u.UserId, u);
+      container.logger.debug(`Added user ${u.UserId} to the cache.\n${u}`);
     }
 
     container.logger.info(

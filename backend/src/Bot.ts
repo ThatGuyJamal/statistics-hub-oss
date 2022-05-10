@@ -45,6 +45,7 @@ class ExtendedClient extends SapphireClient {
 
   /** Starts our bot and all our private methods. Then authenticates into the discord api. */
   public async startClient() {
+    
     await this.startDatabase(environment.db.enabled).then(() => super.login(environment.bot.token));
   }
 
@@ -61,6 +62,7 @@ class ExtendedClient extends SapphireClient {
    * @returns
    */
   private async startDatabase(on: boolean) {
+    this.LocalCacheStore.init();
     if (on) {
       await ConnectToMongoose(environment.db.mongo.url);
     } else {
