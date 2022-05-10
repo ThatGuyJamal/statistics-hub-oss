@@ -18,17 +18,17 @@ import { Guild } from "discord.js";
 import { guildEventLevel } from "../../internal/EventLogger";
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.GuildDelete,
+  event: Events.GuildDelete,
 })
 export class UserEvent extends Listener {
-    public async run(guild: Guild): Promise<void> {
-        const { client } = this.container;
+  public async run(guild: Guild): Promise<void> {
+    const { client } = this.container;
 
-        try {
-            let msg = `❌ ${this.container.client.environment.bot.bot_name} has been removed from \`${guild.name} | id:(${guild.id})\` **Now in** \`${client.guilds.cache.size} servers.\``;
-            await this.container.client.EventLogger.joinLogs(guild, guildEventLevel.leave, msg);
-        } catch (error) {
-            this.container.client.logger.error(error);
-        }
+    try {
+      let msg = `❌ ${this.container.client.environment.bot.bot_name} has been removed from \`${guild.name} | id:(${guild.id})\` **Now in** \`${client.guilds.cache.size} servers.\``;
+      await this.container.client.EventLogger.joinLogs(guild, guildEventLevel.leave, msg);
+    } catch (error) {
+      this.container.client.logger.error(error);
     }
+  }
 }

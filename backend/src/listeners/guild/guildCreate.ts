@@ -19,28 +19,28 @@ import { GuildsMongoModel } from "../../database/models/guild";
 import { guildEventLevel } from "../../internal/EventLogger";
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.GuildCreate,
+  event: Events.GuildCreate,
 })
 export class UserEvent extends Listener {
-    public async run(guild: Guild): Promise<void> {
-        const { client } = this.container;
+  public async run(guild: Guild): Promise<void> {
+    const { client } = this.container;
 
-        try {
-            let msg = `✅ ${this.container.client.environment.bot.bot_name} has been added to \`${guild.name} | id:(${guild.id})\` **Now in** \`${client.guilds.cache.size} servers.\``;
+    try {
+      let msg = `✅ ${this.container.client.environment.bot.bot_name} has been added to \`${guild.name} | id:(${guild.id})\` **Now in** \`${client.guilds.cache.size} servers.\``;
 
-            const result = await GuildsMongoModel.findOne({ GuildId: guild.id })
+      const result = await GuildsMongoModel.findOne({ GuildId: guild.id });
 
-            if(!result) {
-                await GuildsMongoModel.create({
-                    GuildId: guild.id,
-                    GuildName: guild.name,
-                    GuildOwner: guild.ownerId,
-                })
-            }
+      if (!result) {
+        await GuildsMongoModel.create({
+          GuildId: guild.id,
+          GuildName: guild.name,
+          GuildOwner: guild.ownerId,
+        });
+      }
 
-            await this.container.client.EventLogger.joinLogs(guild, guildEventLevel.join, msg);
-        } catch (error) {
-            this.container.client.logger.error(error);
-        }
+      await this.container.client.EventLogger.joinLogs(guild, guildEventLevel.join, msg);
+    } catch (error) {
+      this.container.client.logger.error(error);
     }
+  }
 }

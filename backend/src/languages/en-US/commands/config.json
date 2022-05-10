@@ -1,7 +1,17 @@
 {
-    "prefix_command": {
-        "missing_args": "You did not give an argument for a new prefix...",
-        "current_prefix": "Your current prefix is: **{{prefix}}**",
-        "new_prefix": "Your new prefix is: **{{prefix}}**"
-    }
+  "prefix_command": {
+    "missing_args": "You did not give an argument for a new prefix...",
+    "current_prefix": "Your current prefix is: **{{prefix}}**",
+    "new_prefix": "Your new prefix is: **{{prefix}}**",
+    "reset_success": "Your prefix has been reset to: **{{prefix}}**",
+    "reset_prefix_info": "You can reset your prefix by typing `{{prefix}}prefix reset`"
+  },
+  "language_command": {
+    "missing_args": "You did not give an argument for a new language...",
+    "current_language": "Your current language is: **{{language}}**",
+    "new_language": "Your new language is: **{{language}}**",
+    "reset_success": "Your language has been reset to: **{{language}}**",
+    "reset_language_info": "You can reset your language by typing `{{prefix}}language reset`",
+    "invalid_language": "The language you gave is not valid. Please try again."
+  }
 }

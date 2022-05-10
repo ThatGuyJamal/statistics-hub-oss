@@ -69,4 +69,18 @@ export interface GuildModelStructure {
   CreatedAt: Date;
 }
 
+/**
+ * Languages that can be used for the bot for translations.
+ */
+export const supportedLanguagesArray = [
+  {
+    name: "English",
+    code: "en-US",
+  },
+  {
+    name: "Spanish",
+    code: "es-ES",
+  },
+];
+
 export { GuildsMongoModel };

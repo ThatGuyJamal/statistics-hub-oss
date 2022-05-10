@@ -17,10 +17,10 @@ import { Events, Listener, ListenerOptions } from "@sapphire/framework";
 import { GuildMember } from "discord.js";
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.GuildMemberAdd,
+  event: Events.GuildMemberAdd,
 })
 export class UserEvent extends Listener {
-    public async run(member: GuildMember): Promise<void> {
-        console.log(member);
-    }
+  public async run(member: GuildMember): Promise<void> {
+    console.log(member);
+  }
 }

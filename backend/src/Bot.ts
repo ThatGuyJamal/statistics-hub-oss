@@ -32,7 +32,7 @@ class ExtendedClient extends SapphireClient {
 
     this.LocalCacheStore = new LocalCacheStore();
     this.IntervalController = new IntervalController(this);
-    this.EventLogger = new IEventLogger()
+    this.EventLogger = new IEventLogger();
     this.RedisController = RedisController;
     this.StatCordHandler = new StatCordHandler();
 
@@ -45,7 +45,6 @@ class ExtendedClient extends SapphireClient {
 
   /** Starts our bot and all our private methods. Then authenticates into the discord api. */
   public async startClient() {
-    
     await this.startDatabase(environment.db.enabled).then(() => super.login(environment.bot.token));
   }
 

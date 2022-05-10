@@ -1,6 +1,6 @@
 {
-    "prefix_mention": {
-        "reply_guild": "My current prefix is `{{prefix}}`. You can change it by running `{{prefix}}prefix <new prefix>`.\n Run `{{prefix}}help` for a list of commands.",
-        "reply_dm": "My prefix in the DM's is always `{{default_prefix}}`. Run `{{default_prefix}}help` for a list of commands."
-    }
+  "prefix_mention": {
+    "reply_guild": "My current prefix is `{{prefix}}`. You can change it by running `{{prefix}}prefix <new prefix>`.\n Run `{{prefix}}help` for a list of commands.",
+    "reply_dm": "My prefix in the DM's is always `{{default_prefix}}`. Run `{{default_prefix}}help` for a list of commands."
+  }
 }

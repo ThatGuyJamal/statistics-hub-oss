@@ -20,31 +20,31 @@ import { isPrivateMessage } from "../../internal/functions/guards";
 import { translate } from "../../internal/il8n";
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.MentionPrefixOnly,
+  event: Events.MentionPrefixOnly,
 })
 export class UserEvent extends Listener {
-    public async run(ctx: Message) {
-        let _prefix = this.container.client.LocalCacheStore.memory.guild.get(ctx.guild!)?.GuildPrefix;
-        if (!_prefix) _prefix = environment.bot.bot_prefix
+  public async run(ctx: Message) {
+    let _prefix = this.container.client.LocalCacheStore.memory.guild.get(ctx.guild!)?.GuildPrefix;
+    if (!_prefix) _prefix = environment.bot.bot_prefix;
 
-        if (!isPrivateMessage(ctx)) {
-            await ctx.reply({
-                content: await translate(ctx.channel as DMChannel, "events/message:prefix_mention.reply_guild", {
-                    prefix: _prefix ,
-                }),
-                allowedMentions: {
-                    users: [ctx.author.id],
-                }
-            });
-        } else {
-            await ctx.reply({
-                content: await translate(ctx.channel, "events/message:prefix_mention.reply_dm", {
-                    default_prefix: environment.bot.bot_prefix,
-                }),
-                allowedMentions: {
-                    users: [ctx.author.id],
-                }
-            });
-        }
+    if (!isPrivateMessage(ctx)) {
+      await ctx.reply({
+        content: await translate(ctx.channel as DMChannel, "events/message:prefix_mention.reply_guild", {
+          prefix: _prefix,
+        }),
+        allowedMentions: {
+          users: [ctx.author.id],
+        },
+      });
+    } else {
+      await ctx.reply({
+        content: await translate(ctx.channel, "events/message:prefix_mention.reply_dm", {
+          default_prefix: environment.bot.bot_prefix,
+        }),
+        allowedMentions: {
+          users: [ctx.author.id],
+        },
+      });
     }
+  }
 }

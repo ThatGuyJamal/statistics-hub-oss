@@ -19,7 +19,6 @@ const errorTracked = [];
     hidden: true,
   },
 })
-
 export class UserCommand extends ICommand {
   public async messageRun(ctx: Message, args: Args) {
     await ctx.channel.send({ content: `Starting test...` });
@@ -48,17 +47,16 @@ export class UserCommand extends ICommand {
 
   /**
    * The test code to run
-   * @param ctx 
+   * @param ctx
    */
   private async testCode(ctx: Message, args: Args) {
-    ctx.channel.send("Working on it...")
+    ctx.channel.send("Working on it...");
     const text = await args.pick("string").catch(() => null);
-    if(!text) {
+    if (!text) {
       return ctx.reply("No prefix was given as an argument!");
-    } 
+    }
 
     return ctx.reply(`Prefix is: **${text}**`);
-
   }
   // public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) { }
   // public override registerApplicationCommands(registry: ApplicationCommandRegistry) {

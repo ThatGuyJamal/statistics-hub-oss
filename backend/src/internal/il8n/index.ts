@@ -31,7 +31,7 @@ export function parseInternationalizationOptions(): InternationalizationOptions 
     fetchLanguage: async (context: InternationalizationContext) => {
       if (!context.guild) return "en-US";
       else {
-        let findLang = container.client.LocalCacheStore.memory.guild.get(context.guild)?.GuildLanguage
+        let findLang = container.client.LocalCacheStore.memory.guild.get(context.guild)?.GuildLanguage;
         if (!findLang) {
           return "en-US";
         } else {
