@@ -102,4 +102,12 @@ interface WelcomeEmbedFieldObject {
 
 export type WelcomeCardOptions = CardOptions;
 
-export const validWelcomePluginTextSyntax = ["{{user.mention}}", "{{user.username}}", "{{user.id}}", "{{user.tag}}"];
+export const validWelcomePluginTextSyntax = [
+  "{{user.mention}}",
+  "{{user.username}}",
+  "{{user.id}}",
+  "{{user.tag}}",
+  "{{server.memberCount}}",
+  "{{server.name}}",
+  "{{server.id}}",
+];

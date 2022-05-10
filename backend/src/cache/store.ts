@@ -158,6 +158,6 @@ export class LocalCacheStore {
    * @returns {number} The total size of the cache.
    */
   public get size(): number {
-    return this.memory.guild.cache.size + this.memory.user.cache.size + this.memory.plugins.welcome.cache.size
+    return this.memory.guild.cache.size + this.memory.user.cache.size + this.memory.plugins.welcome.cache.size;
   }
 }

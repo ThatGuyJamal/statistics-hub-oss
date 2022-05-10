@@ -24,7 +24,7 @@ import { GuildMember } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
 import { WelcomePluginMongoModel } from "../../database/models/plugins/welcome/welcome";
-import { channelMention } from "../../internal/functions/formatting";
+import { channelMention, codeBlock } from "../../internal/functions/formatting";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
 import { BaseEmbed } from "../../internal/structures/Embed";
@@ -48,7 +48,7 @@ import { BaseEmbed } from "../../internal/structures/Embed";
 export class UserCommand extends ICommand {
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
     const { client } = this.container;
-    if(!interaction.guild) return;
+    if (!interaction.guild) return;
 
     if (interaction.options.getSubcommand() === "setup") {
       const themeOptions = interaction.options.getString("theme-type", true);
@@ -66,6 +66,38 @@ export class UserCommand extends ICommand {
 
       // If no document found, we create a new one.
       if (!document) {
+        await interaction.channel?.send({
+          content: `It seams you dont have the welcome plugin enabled. Here are a few tips:`,
+          embeds: [
+            new BaseEmbed({}).interactionEmbed(
+              {
+                description: codeBlock(
+                  "css",
+                  `
+              === Formatting ===
+              You can use the shortcuts below to format your message and meta data within it.
+
+              All command shortcuts are case-sensitive and need to be wrapped in "{{" and "}}" brackets.
+
+              Example: "{{user.mention}}" will be replaced with the user's mention.
+
+              === Available shortcuts ===
+              [user.mention] - Mentions the user that triggered the command.
+              [user.username] - Replaces with the user's username.
+              [user.id] - Replaces with the user's ID.
+              [user.tag] - Replaces with the user's tag.
+              [server.memberCount] - Replaces with the server's member count.
+              [server.name] - Replaces with the server's name.
+              [server.id] - Replaces with the server's ID.
+
+              `
+                ),
+              },
+              interaction
+            ),
+          ],
+        });
+
         let oldData = client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild!);
         if (!oldData) {
           client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
@@ -79,7 +111,7 @@ export class UserCommand extends ICommand {
             GuildWelcomeMessage: welcomeMessage,
             GuildGoodbyeChannelId: goodbyeChannel?.id,
             GuildGoodbyeMessage: goodbyeMessage,
-            GuildWelcomeEmbed: {}
+            GuildWelcomeEmbed: {},
           });
         }
         await WelcomePluginMongoModel.create({
@@ -93,7 +125,7 @@ export class UserCommand extends ICommand {
           GuildWelcomeMessage: welcomeMessage,
           GuildGoodbyeChannelId: goodbyeChannel?.id,
           GuildGoodbyeMessage: goodbyeMessage,
-          GuildWelcomeEmbed: {}
+          GuildWelcomeEmbed: {},
         }).then((res) => client.logger.info(res));
       }
       // If a document is found, we update it.
@@ -129,11 +161,12 @@ export class UserCommand extends ICommand {
           },
         }
       ).then((res) => {
-        if(!res) return interaction.reply({
-          content: "Welcome plugin is already disabled!",
-          ephemeral: true,
-        })
-        client.logger.info(res)
+        if (!res)
+          return interaction.reply({
+            content: "Welcome plugin is already disabled!",
+            ephemeral: true,
+          });
+        client.logger.info(res);
         return interaction.reply({
           content: "Welcome plugin disabled!",
           ephemeral: true,
@@ -149,7 +182,7 @@ export class UserCommand extends ICommand {
         }
       )
         .then((res) => {
-          if(!res) {
+          if (!res) {
             return interaction.reply({
               content: "Welcome plugin is not setup! Please use `welcome setup` to setup the plugin.",
               ephemeral: true,
@@ -182,11 +215,10 @@ export class UserCommand extends ICommand {
         ephemeral: true,
       });
     } else if (interaction.options.getSubcommand() === "simulate") {
-
-      let checkIfData = client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild!)
+      let checkIfData = client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild!);
 
       if (!checkIfData || !checkIfData.Enabled) {
-       return await interaction.reply("Welcome plugin is not enabled!");
+        return await interaction.reply("Welcome plugin is not enabled!");
       }
 
       await interaction.reply({
@@ -201,13 +233,16 @@ export class UserCommand extends ICommand {
         ephemeral: true,
       });
 
-      this.container.client.emit(Events.GuildMemberAdd, interaction.member as GuildMember)
+      this.container.client.emit(Events.GuildMemberAdd, interaction.member as GuildMember);
+      this.container.client.emit(Events.GuildMemberRemove, interaction.member as GuildMember);
 
       await interaction.editReply({
         embeds: [
           new BaseEmbed().interactionEmbed(
             {
-              description: `Simulation complete! You can find the result in ${channelMention(checkIfData.GuildWelcomeChannelId!)}`,
+              description: `Simulation complete! You can find the result in ${channelMention(
+                checkIfData.GuildWelcomeChannelId!
+              )}`,
             },
             interaction
           ),

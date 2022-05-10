@@ -18,7 +18,7 @@ import { GuildMember, TextChannel } from "discord.js";
 import { memberMention } from "../../internal/functions/formatting";
 
 @ApplyOptions<ListenerOptions>({
-  name: "welcome-event",
+  name: "welcome-plugin-add",
   event: Events.GuildMemberAdd,
 })
 export class UserEvent extends Listener {
@@ -39,7 +39,10 @@ export class UserEvent extends Listener {
               .GuildWelcomeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
               .replaceAll("{{user.username}}", member.user.username)
               .replaceAll("{{user.id}}", member.id)
-              .replaceAll("{{user.tag}}", member.user.tag)}`,
+              .replaceAll("{{user.tag}}", member.user.tag)
+              .replaceAll("{{server.memberCount}}", member.guild.memberCount.toString())
+              .replaceAll("{{server.name}}", member.guild.name)
+              .replaceAll("{{server.id}}", member.guild.id)}`,
           });
           break;
         case "card":
@@ -55,7 +58,58 @@ export class UserEvent extends Listener {
               .GuildWelcomeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
               .replaceAll("{{user.username}}", member.user.username)
               .replaceAll("{{user.id}}", member.id)
-              .replaceAll("{{user.tag}}", member.user.tag)}`,
+              .replaceAll("{{user.tag}}", member.user.tag)
+              .replaceAll("{{server.id}}", member.guild.id)}`,
+          });
+          break;
+      }
+    }
+  }
+}
+
+@ApplyOptions<ListenerOptions>({
+  name: "welcome-plugin-remove",
+  event: Events.GuildMemberRemove,
+})
+export class UserEvent2 extends Listener {
+  public async run(member: GuildMember): Promise<void> {
+    const { client } = this.container;
+
+    const data = client.LocalCacheStore.memory.plugins.welcome.get(member.guild);
+
+    if (!data || data.Enabled === false) return;
+
+    if (data.GuildGoodbyeChannelId) {
+      const goodbyeChannel = client.channels.cache.get(data.GuildGoodbyeChannelId) as TextChannel;
+      if (!goodbyeChannel) return;
+      switch (data.GuildWelcomeTheme) {
+        case "text":
+          goodbyeChannel.send({
+            content: `${data
+              .GuildGoodbyeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
+              .replaceAll("{{user.username}}", member.user.username)
+              .replaceAll("{{user.id}}", member.id)
+              .replaceAll("{{user.tag}}", member.user.tag)
+              .replaceAll("{{server.memberCount}}", member.guild.memberCount.toString())
+              .replaceAll("{{server.name}}", member.guild.name)
+              .replaceAll("{{server.id}}", member.guild.id)}`,
+          });
+          break;
+        case "card":
+          // TODO: Add card theme
+          break;
+        case "embed":
+          // TODO: Add embed theme
+          break;
+        default:
+          // If no theme is set, use the text theme
+          goodbyeChannel.send({
+            content: `${data
+              .GuildWelcomeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
+              .replaceAll("{{user.username}}", member.user.username)
+              .replaceAll("{{user.id}}", member.id)
+              .replaceAll("{{user.tag}}", member.user.tag)
+              .replaceAll("{{server.id}}", member.guild.id)}`,
           });
           break;
       }
