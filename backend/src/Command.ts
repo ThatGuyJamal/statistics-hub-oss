@@ -104,6 +104,7 @@ export interface ICommandExtendedDescription {
   examples?: string[];
   command_type?: command_type;
   hidden?: boolean;
+  subcommands?: string[]
 }
 
 /**

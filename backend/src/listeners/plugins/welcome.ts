@@ -14,13 +14,47 @@
 
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener, ListenerOptions } from "@sapphire/framework";
-import { GuildMember } from "discord.js";
+import { GuildMember, TextChannel } from "discord.js";
+import { WelcomePluginMongoModel } from "../../database/models/plugins/welcome/welcome";
+import { memberMention } from "../../internal/functions/formatting";
 
 @ApplyOptions<ListenerOptions>({
   event: Events.GuildMemberAdd,
 })
 export class UserEvent extends Listener {
   public async run(member: GuildMember): Promise<void> {
-    console.log(member);
+    const { client } = this.container;
+
+    client.logger.trace(`[USER] ${member.user.tag} joined ${member.guild.name}`);
+
+    const data = await WelcomePluginMongoModel.findOne({ GuildId: member.guild.id });
+
+    if (!data || data.Enabled === false) return;
+
+    client.logger.trace(`Found data!`)
+
+    if (data.GuildWelcomeChannelId) {
+      const welcomeChannel = client.channels.cache.get(data.GuildWelcomeChannelId) as TextChannel;
+      if (!welcomeChannel) return;
+      switch (data.GuildWelcomeTheme) {
+        case "text":
+          welcomeChannel.send({
+            content: `${data
+              .GuildWelcomeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
+              .replaceAll("{{user.username}}", member.user.username)
+              .replaceAll("{{user.id}}", member.id)
+              .replaceAll("{{user.tag}}", member.user.tag)}`,
+          });
+          break;
+        case "card":
+          // TODO: Add card theme
+          break;
+        case "embed":
+          // TODO: Add embed theme
+          break;
+        default:
+          return;
+      }
+    }
   }
 }

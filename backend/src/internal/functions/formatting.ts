@@ -268,3 +268,11 @@ export function channelMention(id: string | null): string {
     return "".replaceAll("<#>", "No Channel Found");
   }
 }
+
+export function memberMention(id: string | null): string {
+  if (id) {
+    return `<@${id}>`;
+  } else {
+    return "".replaceAll("<#>", "No Member Found");
+  }
+}
