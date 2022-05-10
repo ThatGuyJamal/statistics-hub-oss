@@ -29,20 +29,37 @@ export class UserCommand extends ICommand {
     const commandName = await args.pick("string").catch(() => null);
 
     if (!commandName) {
-      const result = codeBlock(
-        "css",
-        `
+
+      if (client.BotDevelopers.has(ctx.author.id)) {
+        let result = codeBlock(
+          "css",
+          `
 === Command list ===
 ${[...this.container.stores.get("commands").values()]
-          .filter((c) => c.category !== "developer")
-          .map((c) => `[Command] = ${c.name}`).join("\n")}
+            .map((c) => `[${c.category}] = ${c.name}`).join("\n")}
 
 You can run help <command> to get more information about a command.
       `
-      );
-      return await ctx.reply({
-        content: result,
-      });
+        );
+        return await ctx.reply({
+          content: result,
+        });
+      } else {
+        let result = codeBlock(
+          "css",
+          `
+=== Command list ===
+${[...this.container.stores.get("commands").values()]
+            .filter((c) => c.category !== "developer")
+            .map((c) => `[${c.category}] = ${c.name}`).join("\n")}
+
+You can run help <command> to get more information about a command.
+      `
+        );
+        return await ctx.reply({
+          content: result,
+        });
+      }
     } else {
       const commandFound = await this.__resolveCommand(commandName);
       if (!commandFound) {
