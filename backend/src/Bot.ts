@@ -22,6 +22,7 @@ import { IntervalController } from "./controllers/interval";
 import { RedisController } from "./cache/redis";
 import { StatCordHandler } from "./api/statcord";
 import { LocalCacheStore } from "./cache/store";
+import { IEventLogger } from "./internal/EventLogger";
 
 class ExtendedClient extends SapphireClient {
   public constructor() {
@@ -31,6 +32,7 @@ class ExtendedClient extends SapphireClient {
 
     this.LocalCacheStore = new LocalCacheStore();
     this.IntervalController = new IntervalController(this);
+    this.EventLogger = new IEventLogger()
     this.RedisController = RedisController;
     this.StatCordHandler = new StatCordHandler();
 

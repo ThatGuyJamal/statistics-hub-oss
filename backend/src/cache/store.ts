@@ -13,7 +13,7 @@
  */
 
 import { container } from "@sapphire/framework";
-import { Collection } from "discord.js";
+import { Collection, Guild, GuildMember } from "discord.js";
 import { type GuildModelStructure, GuildsMongoModel } from "../database/models/guild";
 import { type UserModelStructure, UsersMongoModel } from "../database/models/user";
 
@@ -30,8 +30,8 @@ export class LocalCacheStore {
        * @param id The id of the guild.
        * @returns {GuildModelStructure | undefined} The guild or undefined if not found.
        */
-      get: (id: string): GuildModelStructure | undefined => {
-        return this.memory.guild.cache.get(id);
+      get: (guild: Guild): GuildModelStructure | undefined => {
+        return this.memory.guild.cache.get(guild.id);
       },
       /**
        * Sets a value in the cache.
@@ -39,15 +39,15 @@ export class LocalCacheStore {
        * @param value The guild to set.
        * @returns {GuildModelStructure | undefined} The guild or undefined if not found.
        */
-      set: (id: string, value: GuildModelStructure) => {
-        return this.memory.guild.cache.set(id, value);
+      set: (guild: Guild, value: GuildModelStructure) => {
+        return this.memory.guild.cache.set(guild.id, value);
       },
       /**
        * Removes a value from the cache.
        * @param id The id of the guild.
        */
-      delete: (id: string) => {
-        return this.memory.guild.cache.delete(id);
+      delete: (guild: Guild) => {
+        return this.memory.guild.cache.delete(guild.id);
       },
     },
     user: {
@@ -57,8 +57,8 @@ export class LocalCacheStore {
        * @param id The id of the user.
        * @returns {UserModelStructure | undefined} The user or undefined if not found.
        */
-      get: (id: string): UserModelStructure | undefined => {
-        return this.memory.user.cache.get(id);
+      get: (user: GuildMember): UserModelStructure | undefined => {
+        return this.memory.user.cache.get(user.id);
       },
       /**
        * Sets a value in the cache.
@@ -66,15 +66,15 @@ export class LocalCacheStore {
        * @param value The user to set.
        * @returns {UserModelStructure | undefined} The user or undefined if not found.
        */
-      set: (id: string, value: UserModelStructure) => {
-        return this.memory.user.cache.set(id, value);
+      set: (user: GuildMember, value: UserModelStructure) => {
+        return this.memory.user.cache.set(user.id, value);
       },
       /**
        * Removes a value from the cache.
        * @param id The id of the user.
        */
-      delete: (id: string) => {
-        return this.memory.user.cache.delete(id);
+      delete: (user: GuildMember) => {
+        return this.memory.user.cache.delete(user.id);
       },
     },
   };
@@ -93,12 +93,12 @@ export class LocalCacheStore {
 
     // Add the data to the memory
     for (const g of guild) {
-      this.memory.guild.set(g.GuildId, g);
+      this.memory.guild.set(g.id, g);
       container.logger.debug(`Added guild ${g.GuildId} to the cache.`);
     }
 
     for (const u of user) {
-      this.memory.user.set(u.UserId, u);
+      this.memory.user.set(u.id, u);
       container.logger.debug(`Added user ${u.UserId} to the cache.`);
     }
 

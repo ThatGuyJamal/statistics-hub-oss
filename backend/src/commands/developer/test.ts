@@ -1,9 +1,11 @@
 import { ApplyOptions } from "@sapphire/decorators";
-import { BucketScope } from "@sapphire/framework";
+import { Args, BucketScope } from "@sapphire/framework";
 import { Message } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { pauseThread } from "../../internal/functions/promises";
 import { seconds } from "../../internal/functions/time";
+
+const errorTracked = [];
 
 @ApplyOptions<ICommandOptions>({
   description: "Test command for some stuff :/",
@@ -17,41 +19,13 @@ import { seconds } from "../../internal/functions/time";
     hidden: true,
   },
 })
+
 export class UserCommand extends ICommand {
-  public async messageRun(ctx: Message) {
+  public async messageRun(ctx: Message, args: Args) {
     await ctx.channel.send({ content: `Starting test...` });
-
-    const errorTracked = [];
-
     const { client } = this.container;
-
     try {
-      await ctx.channel.send({ content: "Creating test data for redis..." });
-
-      await client.RedisController.hset("test-command-21903218", "name", "Bob")
-        .then((res) => {
-          ctx.channel.send({ content: `...created status \`${res}\`` });
-        })
-        .catch((e) => {
-          errorTracked.push(e);
-          this.container.logger.error(e);
-        });
-
-      await ctx.channel.send({ content: "Fetching created data..." });
-
-      pauseThread(3);
-
-      let result2 = await client.RedisController.hget("test-command-21903218", "name");
-
-      await ctx.channel.send({
-        embeds: [
-          {
-            description: `Redis Result: ${result2 || "Not found..."}`,
-          },
-        ],
-      });
-
-      // await client.RedisController.del("test-command-21903218");
+      await this.testCode(ctx, args);
     } catch (e) {
       errorTracked.push(1);
       client.logger.error(e);
@@ -63,7 +37,6 @@ export class UserCommand extends ICommand {
         ],
       });
     }
-
     await ctx.channel.send({
       content: `Test finished! ${
         errorTracked.length > 0
@@ -71,6 +44,21 @@ export class UserCommand extends ICommand {
           : ""
       }`,
     });
+  }
+
+  /**
+   * The test code to run
+   * @param ctx 
+   */
+  private async testCode(ctx: Message, args: Args) {
+    ctx.channel.send("Working on it...")
+    const text = await args.pick("string").catch(() => null);
+    if(!text) {
+      return ctx.reply("No prefix was given as an argument!");
+    } 
+
+    return ctx.reply(`Prefix is: **${text}**`);
+
   }
   // public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) { }
   // public override registerApplicationCommands(registry: ApplicationCommandRegistry) {

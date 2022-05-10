@@ -17,6 +17,7 @@ import { RedisController } from "../cache/redis";
 import { LocalCacheStore } from "../cache/store";
 import { environment } from "../config";
 import { IntervalController } from "../controllers/interval";
+import { IEventLogger } from "../internal/EventLogger";
 import { CacheKeysEnum } from "./enum";
 
 /** Type over-writes, so we get typings in our client extensions. */
@@ -35,6 +36,7 @@ declare module "discord.js" {
     BotStaff: Set<string>;
 
     IntervalController: IntervalController;
+    EventLogger: IEventLogger;
   }
 }
 

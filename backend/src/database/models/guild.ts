@@ -13,7 +13,6 @@
  */
 
 import mongo from "mongoose";
-import { GuildSchemaPremiumTier } from "./user";
 
 const GuildsMongoModel = mongo.model(
   "guilds",
@@ -48,11 +47,6 @@ const GuildsMongoModel = mongo.model(
       required: false,
       default: false,
     },
-    Data: {
-      type: Object,
-      required: false,
-      default: null,
-    },
     CreatedAt: {
       type: Date,
       required: true,
@@ -71,56 +65,8 @@ export interface GuildModelStructure {
   GuildPrefix?: string;
   GuildLanguage?: string;
   BlackListed: boolean;
-  Data?: GuildSchema;
+  Premium: boolean;
   CreatedAt: Date;
-}
-
-/** Typings for guild schema */
-export interface GuildSchema {
-  /** Tracks the guild member message activity */
-  message?: number;
-  /** Tracks the member information*/
-  member?: GuildSchemaMemberType;
-  /** Tracks voice channel information */
-  voice?: number;
-  /** Tracks Channel information. */
-  channel?: GuildSchemaChannelType;
-  /**
-   * Tracks the guild's premium status
-   * This will require a guild owner to set this up. They will active the premium status for there
-   * account and then can enable the guild.
-   */
-  premium?: {
-    status: boolean;
-    tier: GuildSchemaPremiumTier;
-    /** Id of the guild owner who enabled this guild. */
-    enabled_by: string;
-  };
-  disabled_commands?: string[];
-}
-
-/**
- * Typings for member data structure
- */
-export interface GuildSchemaMemberType {
-  guildJoins?: number;
-  guildLeaves?: number;
-  /** The last time a member joined the server. */
-  lastJoin?: Date;
-  guildBans?: number;
-}
-
-/**
- * Typings for guild channel data structure
- */
-export interface GuildSchemaChannelType {
-  created: number;
-  deleted: number;
-}
-
-interface GuildBlackListSchema {
-  isBlacklisted: boolean;
-  reason?: string;
 }
 
 export { GuildsMongoModel };

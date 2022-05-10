@@ -12,6 +12,7 @@
     GNU Affero General Public License for more details.
  */
 
+import { container } from "@sapphire/framework";
 import {
   editLocalized,
   fetchLanguage,
@@ -30,7 +31,12 @@ export function parseInternationalizationOptions(): InternationalizationOptions 
     fetchLanguage: async (context: InternationalizationContext) => {
       if (!context.guild) return "en-US";
       else {
-        return "en-US";
+        let findLang = container.client.LocalCacheStore.memory.guild.get(context.guild)?.GuildLanguage
+        if (!findLang) {
+          return "en-US";
+        } else {
+          return findLang;
+        }
       }
     },
     i18next: (_: string[], languages: string[]) => ({

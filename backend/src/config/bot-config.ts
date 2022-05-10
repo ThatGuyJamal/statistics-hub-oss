@@ -1,4 +1,4 @@
-import { LogLevel } from "@sapphire/framework";
+import { container, LogLevel } from "@sapphire/framework";
 import { ClientOptions, Message, Options, Sweepers } from "discord.js";
 import { environment } from "../config";
 import { isGuildMessage } from "../internal/functions/guards";
@@ -17,7 +17,12 @@ export const CLIENT_OPTIONS: ClientOptions = {
   fetchPrefix: async (ctx: Message) => {
     if (!isGuildMessage(ctx)) return environment.bot.bot_prefix;
     else {
-      return environment.bot.bot_prefix;
+      let findPrefix = container.client.LocalCacheStore.memory.guild.get(ctx.guild!)?.GuildPrefix;
+      if (!findPrefix) {
+        return environment.bot.bot_prefix;
+      } else {
+        return findPrefix;
+      }
     }
   },
   regexPrefix: /^(hey +)?sho[,! ]/i,

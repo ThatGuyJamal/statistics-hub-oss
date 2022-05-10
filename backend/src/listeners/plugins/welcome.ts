@@ -12,11 +12,15 @@
     GNU Affero General Public License for more details.
  */
 
-import { Tedis } from "tedis";
+import { ApplyOptions } from "@sapphire/decorators";
+import { Events, Listener, ListenerOptions } from "@sapphire/framework";
+import { GuildMember } from "discord.js";
 
-/**
- * @export
- * @class RedisController
- * @extends {Redis}
- */
-export const RedisController = new Tedis();
+@ApplyOptions<ListenerOptions>({
+    event: Events.GuildMemberAdd,
+})
+export class UserEvent extends Listener {
+    public async run(member: GuildMember): Promise<void> {
+        console.log(member);
+    }
+}
