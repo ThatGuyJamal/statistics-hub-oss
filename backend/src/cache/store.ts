@@ -14,7 +14,7 @@
 
 import { container } from "@sapphire/framework";
 import { Collection, Guild, GuildMember } from "discord.js";
-import { CommandModelStructure } from "../database/models/command";
+import { CommandModelStructure, CommandPluginMongoModel } from "../database/models/command";
 import { type GuildModelStructure, GuildsMongoModel } from "../database/models/guild";
 import { WelcomePluginModelStructure, WelcomePluginMongoModel } from "../database/models/plugins/welcome/welcome";
 import { type UserModelStructure, UsersMongoModel } from "../database/models/user";
@@ -156,10 +156,12 @@ export class LocalCacheStore {
     const guild = await GuildsMongoModel.find({});
     const user = await UsersMongoModel.find({});
     const welcome = await WelcomePluginMongoModel.find({});
+    const commands = await CommandPluginMongoModel.find({});
 
     if (!guild.length) container.logger.warn("No guilds found in the database.");
     if (!user.length) container.logger.warn("No users found in the database.");
     if (!welcome.length) container.logger.warn("No welcome plugins found in the database.");
+    if (!commands.length) container.logger.warn("No command plugins found in the database.");
 
     // Add the data to the memory
     for (const g of guild) {
@@ -178,6 +180,12 @@ export class LocalCacheStore {
       this.memory.plugins.welcome.cache.set(w.GuildId, w);
       if (!container.client.environment.production)
         container.logger.debug(`Added welcome plugin ${w.GuildId} to the cache.\n ${w}`);
+    }
+
+    for (const c of commands) {
+      this.memory.plugins.commands.cache.set(c.GuildId, c);
+      if (!container.client.environment.production)
+        container.logger.debug(`Added command plugin ${c.GuildId} to the cache.\n ${c}`);
     }
 
     // Log the amount of data

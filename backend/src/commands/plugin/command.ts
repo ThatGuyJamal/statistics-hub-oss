@@ -1,10 +1,11 @@
 import { ApplyOptions } from "@sapphire/decorators";
-import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand, Args } from "@sapphire/framework";
+import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand, Args, container } from "@sapphire/framework";
 import { codeBlock } from "@sapphire/utilities";
-import { Message } from "discord.js";
+import { Message, TextChannel } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
 import { CommandPluginMongoModel } from "../../database/models/command";
+import stripIndent, { channelMention } from "../../internal/functions/formatting";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
 import { BaseEmbed } from "../../internal/structures/Embed";
@@ -23,7 +24,7 @@ const subCommandList = [
 ]
 
 const messageCommandNoSubCommandReply = codeBlock("css", `
-=== Syntax ===
+=== Command Plugin Syntax ===
 [subcommand] [type] [value] (value)
 
 === Subcommands ===
@@ -42,9 +43,11 @@ l: list
 === Examples ===
 command e ping => Enables the ping command.
 command d ping => Disables the ping command.
-command ec ping #general => Enables the ping command in the #general channel.
-command dc ping #general => Disables the ping command in the #general channel.
+command ec ping #general => Enables commands to be ran in the #general channel.
+command dc ping #general => Disables commands to be ran in the #general channel.
 `)
+
+const allValidCommands = [...container.stores.get("commands").values()].map(c => c.name);
 
 @ApplyOptions<ICommandOptions>({
     aliases: ["cmd"],
@@ -56,10 +59,10 @@ command dc ping #general => Disables the ping command in the #general channel.
     nsfw: false,
     enabled: true,
     extendedDescription: {
-        usage: "command [enable/disable] [command-name]",
-        examples: ["command d <command>", "command e <command>", "command dc <command> <channel>", "command ec <command> <channel>"],
+        usage: "command [enable/disable] [command/channel]",
+        examples: ["command d <command>", "command e <command>", "command dc <channel>", "command ec <channel>"],
         command_type: "both",
-        subcommands: ["enable", "disable", "delete", "list"]
+        subcommands: ["enable", "disable", "delete", "list", "enable-channel", "disable-channel"],
     },
     requiredUserPermissions: ["MANAGE_GUILD"],
 })
@@ -72,24 +75,21 @@ export class UserCommand extends ICommand {
         const subCommand = await args.pick("string").catch(() => null);
 
         // Check if the subcommand is valid
-        if(!subCommand) {
-            return ctx.reply({
-                embeds: [
-                    new BaseEmbed().contextEmbed({
-                        description: messageCommandNoSubCommandReply
-                    }, ctx)
-                ]
+        if (!subCommand) {
+            return await ctx.reply({
+                content: messageCommandNoSubCommandReply
             })
         }
 
         //Check if the first argument was a valid subcommand
         if (!subCommandList.includes(subCommand)) {
-            return ctx.reply({
-                embeds: [
-                    new BaseEmbed().contextEmbed({
-                        description: messageCommandNoSubCommandReply
-                    }, ctx)
-                ]
+            return await ctx.reply({
+                content: messageCommandNoSubCommandReply
+                // embeds: [
+                //     new BaseEmbed().contextEmbed({
+                //         description: messageCommandNoSubCommandReply
+                //     }, ctx)
+                // ]
             })
         }
 
@@ -126,13 +126,211 @@ export class UserCommand extends ICommand {
             })
         }
 
-        if(subCommand === "enable" || subCommand === "e") {
-            const command = await args.pick("string")
+        if (subCommand === "enable" || subCommand === "e") {
+            const commandEnabledArgument = await args.pick("string").catch(() => null);
+
+            if (!commandEnabledArgument) {
+                return ctx.reply({
+                    content: `You must provide a command to enable.\n Syntax: \`command enable <name>\``,
+                })
+            }
+
+            if (!allValidCommands.includes(commandEnabledArgument)) {
+                return ctx.reply({
+                    content: `The command \`${commandEnabledArgument}\` does not exist.`,
+                })
+            }
+
+            if (!commandCache?.GuildDisabledCommands?.includes(commandEnabledArgument)) {
+                return ctx.reply({
+                    content: `The command \`${commandEnabledArgument}\` is not disabled.`
+                })
+            }
+
+            const disabledCommands = commandCache.GuildDisabledCommands;
+            // Remove the command from the disabled list
+            disabledCommands.splice(disabledCommands.indexOf(commandEnabledArgument), 1);
+            // Set the disabled commands in the cache
+            client.LocalCacheStore.memory.plugins.commands.set(ctx.guild, {
+                ...commandCache,
+                GuildDisabledCommands: disabledCommands
+            });
+            // Set the disabled commands in the database
+            await document?.updateOne({
+                $set: {
+                    GuildDisabledCommands: disabledCommands
+                }
+            })
+
+            return await ctx.reply({
+                content: `The command \`${commandEnabledArgument}\` has been enabled.`
+            })
         }
 
-        return
+        if (subCommand === "disable" || subCommand === "d") {
+            const commandDisabledArgument = await args.pick("string").catch(() => null);
+
+            if (!commandDisabledArgument || !allValidCommands.includes(commandDisabledArgument)) {
+                return await ctx.reply({
+                    content: `You must provide a command to disable.\n Syntax: \`command disable <name>\``,
+                })
+            }
+
+            if (!allValidCommands.includes(commandDisabledArgument)) {
+                return ctx.reply({
+                    content: `The command \`${commandDisabledArgument}\` does not exist.`,
+                })
+            }
+
+            if (commandCache?.GuildDisabledCommands?.includes(commandDisabledArgument)) {
+                return await ctx.reply({
+                    content: `The command \`${commandDisabledArgument}\` is already disabled.`
+                })
+            }
+
+            let disabledCommands = commandCache?.GuildDisabledCommands;
+
+            if (!disabledCommands) disabledCommands = [];
+
+            // Add the command to the disabled list
+            disabledCommands.push(commandDisabledArgument);
+            // Set the disabled commands in the cache
+            client.LocalCacheStore.memory.plugins.commands.set(ctx.guild, {
+                ...commandCache,
+                GuildId: ctx.guild.id,
+                CreatedAt: new Date(),
+                GuildDisabledCommands: disabledCommands || []
+            });
+            // Set the disabled commands in the database
+            await document?.updateOne({
+                $set: {
+                    GuildDisabledCommands: disabledCommands
+                }
+            })
+
+            return await ctx.reply({
+                content: `The command \`${commandDisabledArgument}\` has been disabled.`
+            })
+        } else if (subCommand === "disable-channel" || subCommand === "dc") {
+            const commandChannelArgument = await args.pick("channel").catch(() => null) as TextChannel | null
+
+            if (!commandChannelArgument) {
+                return await ctx.reply({
+                    content: `You must provide a channel to enable.\n Syntax: \`command disable-channel <channel>\``,
+                })
+            }
+
+            if (commandCache?.GuildDisabledCommandChannels?.includes(commandChannelArgument.id)) {
+                return await ctx.reply({
+                    content: `The channel ${channelMention(commandChannelArgument.id)} is already disabled.`
+                })
+            }
+
+            let disabledCommandChannels = commandCache?.GuildDisabledCommandChannels;
+
+            if (!disabledCommandChannels) disabledCommandChannels = [];
+
+            // Add the channel to the disabled list
+            disabledCommandChannels.push(commandChannelArgument.id);
+            // Set the disabled channels in the cache
+            client.LocalCacheStore.memory.plugins.commands.set(ctx.guild, {
+                ...commandCache,
+                GuildId: ctx.guild.id,
+                CreatedAt: new Date(),
+                GuildDisabledCommandChannels: disabledCommandChannels || []
+            });
+
+            // Set the disabled channels in the database
+            await document?.updateOne({
+                $set: {
+                    GuildDisabledCommandChannels: disabledCommandChannels
+                }
+            })
+
+            return await ctx.reply({
+                content: `The channel ${channelMention(commandChannelArgument.id)} has been disabled.`
+            })
+
+        } else if (subCommand === "enable-channel" || subCommand === "ec") {
+            const commandChannelArgument = await args.pick("channel").catch(() => null) as TextChannel | null
+
+            if (!commandChannelArgument) {
+                return await ctx.reply({
+                    content: `You must provide a channel to enable.\n Syntax: \`command enable-channel <channel>\``,
+                })
+            }
+
+            if (!commandCache?.GuildDisabledCommandChannels?.includes(commandChannelArgument.id)) {
+                return await ctx.reply({
+                    content: `The channel ${channelMention(commandChannelArgument.id)} is not disabled.`
+                })
+            }
+
+            const disabledCommandChannels = commandCache.GuildDisabledCommandChannels;
+            // Remove the channel from the disabled list
+            disabledCommandChannels.splice(disabledCommandChannels.indexOf(commandChannelArgument.id), 1);
+            // Set the disabled channels in the cache
+            client.LocalCacheStore.memory.plugins.commands.set(ctx.guild, {
+                ...commandCache,
+                GuildId: ctx.guild.id,
+                CreatedAt: new Date(),
+                GuildDisabledCommandChannels: disabledCommandChannels
+            });
+
+            // Set the disabled channels in the database
+            await document?.updateOne({
+                $set: {
+                    GuildDisabledCommandChannels: disabledCommandChannels
+                }
+            })
+
+            return await ctx.reply({
+                content: `The channel ${channelMention(commandChannelArgument.id)} has been enabled.`
+            })
+        } else if (subCommand === "list" || subCommand === "l") {
+            const disabledCommands = commandCache?.GuildDisabledCommands
+            const disabledChannels = commandCache?.GuildDisabledCommandChannels
+
+            if (!disabledCommands && !disabledChannels) {
+                await ctx.channel.send({
+                    content: `No commands or channels are disabled.`
+                })
+                return await ctx.reply({
+                    content: messageCommandNoSubCommandReply
+                })
+
+            }
+
+            return await ctx.reply({
+                embeds: [
+                    new BaseEmbed().contextEmbed({
+                        description: stripIndent(
+                            `
+=== Disabled Commands ===
+${disabledCommands?.join(", ") || "No commands are disabled."}
+
+=== Disabled Channels ===
+${disabledChannels?.map((id) => channelMention(id)).join(", ") || "No channels are disabled."}
+
+__**Notes**__
+
+> 1. If you dont see a command or channel, it means it is not disabled.
+> 2. To disable a command, use \`command disable <name>\`.
+> 3. To disable a channel, use \`command disable-channel <channel>\`.
+`
+                        )
+                    }, ctx)
+                ]
+            })
+        }
+
+        return await ctx.reply({
+            content: `Invalid subcommand.\nSyntax: \`command <subcommand>\``
+        })
     }
-    // public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) { }
+    public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
+        return interaction.reply("Coming soon...")
+    }
     public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
         registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
             guildIds: getTestGuilds(),

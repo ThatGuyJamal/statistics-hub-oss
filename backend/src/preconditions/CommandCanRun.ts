@@ -33,12 +33,12 @@ export class UserPrecondition extends Precondition {
 
         // Make sure the command is not disabled.
         if (disabledCommand && disabledCommand.includes(command.name)) {
-            return this.error({ message: `The command \`${command.name}\` is disabled on this server.` });
+            return this.error({ message: `The command ${command.name} is disabled on this server.` });
         }
 
         // Make sure the command is not disabled in a channel.
         if (disabledChannelCommand && disabledChannelCommand.includes(interaction.channel!.id)) {
-            return this.error({ message: `The command \`${interaction.command!.name}\` is disabled on this channel.` });
+            return this.error({ message: `The command ${interaction.command!.name} is disabled on this channel.` });
         }
 
         // return the success result.
@@ -58,12 +58,12 @@ export class UserPrecondition extends Precondition {
 
         // Make sure the command is not disabled.
         if (disabledCommand && disabledCommand.includes(command.name)) {
-            return this.error({ message: `The command \`${command.name}\` is disabled on this server.` });
+            return this.error({ message: `The command ${command.name} is disabled on this server.` });
         }
 
         // Make sure the command is not disabled in a channel.
         if (disabledChannelCommand && disabledChannelCommand.includes(ctx.channel.id)) {
-            return this.error({ message: `The command \`${command.name}\` is disabled on this channel.` });
+            return this.error({ message: `The command ${command.name} is disabled on this channel.` });
         }
 
         return this.ok();

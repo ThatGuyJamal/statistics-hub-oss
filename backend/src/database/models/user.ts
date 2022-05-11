@@ -63,11 +63,11 @@ export interface GuildSchemaPremiumType {
   /**
    * How many guilds they can have premium in total
    */
-  total_guilds_enabled: number;
+  totalGuildsEnabled: number;
   /**
    * Id of the guild they have active premium in
    */
-  guilds_enabled_ids: string[];
+  guildIdsEnabled: string[];
 
   /**
    * When the user's premium expires

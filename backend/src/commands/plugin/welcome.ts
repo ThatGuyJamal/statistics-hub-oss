@@ -561,12 +561,6 @@ export class UserCommand extends ICommand {
                     // ["Embed", "embed"],
                   ])
               )
-              .addStringOption((options) =>
-                options
-                  .setName("new-background-image")
-                  .setDescription("The new background image for the card theme.")
-                  .setRequired(false)
-              )
               .addChannelOption((options) =>
                 options.setName("welcome-channel").setDescription("The new welcome channel.").setRequired(false)
               )
