@@ -43,8 +43,7 @@ export class UserCommand extends ICommand {
         {
           description: codeBlock(
             "css",
-            `===== Cache ====
-                    
+            `===== Server Cache ====
 _ Bot _
 [Guilds]   = ${client.guilds.cache.size}
 [Users]    = ${client.users.cache.size}
@@ -80,7 +79,7 @@ _ Database _
         {
           description: codeBlock(
             "css",
-            `===== Cache ====
+            `===== Server Cache ====
                     
 _ Bot _
 [Guilds]   = ${client.guilds.cache.size}

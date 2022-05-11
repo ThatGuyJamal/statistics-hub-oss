@@ -49,6 +49,26 @@ export const WelcomePluginMongoModel = mongo.model(
       required: false,
       default: "text",
     },
+    GuildWelcomeEmbed: {
+      type: Object,
+      required: false,
+      default: null,
+    },
+    GuildWelcomePingOnJoin: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    GuildWelcomeThemeUrl: {
+      type: String,
+      required: false,
+      default: "https://cdn.discordapp.com/attachments/937124004492365874/968539236087234580/unknown.png"
+    },
+    CreatedById: {
+      type: String,
+      required: false,
+      default: null,
+    },
     CreatedAt: {
       type: Date,
       required: false,
@@ -71,7 +91,10 @@ export interface WelcomePluginModelStructure {
    * card, text, embed
    */
   GuildWelcomeTheme?: string;
+  GuildWelcomeThemeUrl?: string;
+  GuildWelcomePingOnJoin?: boolean;
   GuildWelcomeEmbed?: WelcomeEmbedObject;
+  CreatedById?: string;
   CreatedAt: Date;
 }
 

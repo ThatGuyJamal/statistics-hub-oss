@@ -14,7 +14,9 @@
 
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener, ListenerOptions } from "@sapphire/framework";
+import { drawCard, LinearGradient } from "discord-welcome-card";
 import { GuildMember, TextChannel } from "discord.js";
+import { Colors, colorToStyle } from "../../internal/constants/colors";
 import { memberMention } from "../../internal/functions/formatting";
 
 @ApplyOptions<ListenerOptions>({
@@ -34,33 +36,64 @@ export class UserEvent extends Listener {
       if (!welcomeChannel) return;
       switch (data.GuildWelcomeTheme) {
         case "text":
-          welcomeChannel.send({
-            content: `${data
-              .GuildWelcomeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
-              .replaceAll("{{user.username}}", member.user.username)
-              .replaceAll("{{user.id}}", member.id)
-              .replaceAll("{{user.tag}}", member.user.tag)
-              .replaceAll("{{server.memberCount}}", member.guild.memberCount.toString())
-              .replaceAll("{{server.name}}", member.guild.name)
-              .replaceAll("{{server.id}}", member.guild.id)}`,
-          });
+          welcomeChannel
+            .send({
+              content: `${data
+                .GuildWelcomeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
+                .replaceAll("{{user.username}}", member.user.username)
+                .replaceAll("{{user.id}}", member.id)
+                .replaceAll("{{user.tag}}", member.user.tag)
+                .replaceAll("{{server.memberCount}}", member.guild.memberCount.toString())
+                .replaceAll("{{server.name}}", member.guild.name)
+                .replaceAll("{{server.id}}", member.guild.id)}`,
+            })
+            .catch(() => {});
           break;
         case "card":
-          // TODO: Add card theme
+          const image = await drawCard({
+            theme: 'circuit',
+            text: {
+              title: 'Welcome',
+              text: member.user.tag,
+              subtitle: `We now have {{server.memberCount}} members!`.replaceAll("{{server.memberCount}}", member.guild.memberCount.toString()),
+              color: `#DDDDDD`,
+              font: "Panton Black Caps"
+            },
+            avatar: {
+              image: member.user.displayAvatarURL({ format: 'png' }),
+              outlineWidth: 5,
+              outlineColor: colorToStyle(Colors.Amber),
+              borderRadius: 1,
+            },
+            card: {
+              background: data.GuildWelcomeThemeUrl,
+              blur: 1,
+              border: true,
+              rounded: true,
+            },
+          });
+          welcomeChannel
+            .send({
+              content: data.GuildWelcomePingOnJoin ? `${memberMention(member.id)}` : null,
+              files: [image],
+            })
+            .catch(() => {});
           break;
         case "embed":
           // TODO: Add embed theme
           break;
         default:
           // If no theme is set, use the text theme
-          welcomeChannel.send({
-            content: `${data
-              .GuildWelcomeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
-              .replaceAll("{{user.username}}", member.user.username)
-              .replaceAll("{{user.id}}", member.id)
-              .replaceAll("{{user.tag}}", member.user.tag)
-              .replaceAll("{{server.id}}", member.guild.id)}`,
-          });
+          welcomeChannel
+            .send({
+              content: `${data
+                .GuildWelcomeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
+                .replaceAll("{{user.username}}", member.user.username)
+                .replaceAll("{{user.id}}", member.id)
+                .replaceAll("{{user.tag}}", member.user.tag)
+                .replaceAll("{{server.id}}", member.guild.id)}`,
+            })
+            .catch(() => {});
           break;
       }
     }
@@ -96,7 +129,34 @@ export class UserEvent2 extends Listener {
           });
           break;
         case "card":
-          // TODO: Add card theme
+          const image = await drawCard({
+            theme: 'circuit',
+            text: {
+              title: 'Goodbye',
+              text: member.user.tag,
+              subtitle: `We now have {{server.memberCount}} members!`.replaceAll("{{server.memberCount}}", member.guild.memberCount.toString()),
+              color: `#DDDDDD`,
+              font: "Panton Black Caps"
+            },
+            avatar: {
+              image: member.user.displayAvatarURL({ format: 'png' }),
+              outlineWidth: 5,
+              outlineColor: colorToStyle(Colors.Amber),
+              borderRadius: 1,
+            },
+            card: {
+              background: data.GuildWelcomeThemeUrl,
+              blur: 1,
+              border: true,
+              rounded: true,
+            },
+          });
+          goodbyeChannel
+            .send({
+              content: data.GuildWelcomePingOnJoin ? `${memberMention(member.id)}` : null,
+              files: [image],
+            })
+            .catch(() => { });
           break;
         case "embed":
           // TODO: Add embed theme

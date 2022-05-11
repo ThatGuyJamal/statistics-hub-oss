@@ -265,7 +265,7 @@ export function channelMention(id: string | null): string {
   if (id) {
     return `<#${id}>`;
   } else {
-    return "".replaceAll("<#>", "No Channel Found");
+    return "".replaceAll("<#>", "Channel Not Found");
   }
 }
 
@@ -273,6 +273,6 @@ export function memberMention(id: string | null): string {
   if (id) {
     return `<@${id}>`;
   } else {
-    return "".replaceAll("<#>", "No Member Found");
+    return "".replaceAll("<#>", "Member Not Found");
   }
 }

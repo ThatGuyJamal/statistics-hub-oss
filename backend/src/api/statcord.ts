@@ -22,14 +22,6 @@ export class StatCordHandler {
   public client = container;
 
   public init(): void {
-    container.client.IntervalController.start(
-      "statcord-post-interval",
-      async () => {
-        await this.statcordPost();
-      },
-      hours(1)
-    );
-
     this.client.statcord.on("autopost-start", () => {
       // Emitted when statcord autopost starts
       container.logger.info("Statcord autopost started!");
@@ -41,6 +33,17 @@ export class StatCordHandler {
       if (!status) this.client.logger.info("Successful post");
       else this.client.logger.error(status);
     });
+  }
+
+  public autopost() {
+    container.client.IntervalController.start(
+      "statcord-post-interval",
+      async () => {
+        await this.statcordPost();
+      },
+      hours(1)
+    );
+
   }
 
   /** Post the current collected stats to the api */

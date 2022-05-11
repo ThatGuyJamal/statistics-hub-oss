@@ -13,6 +13,7 @@
  */
 
 import mongo from "mongoose";
+import { GuildSchemaPremiumTier } from "./user";
 
 const GuildsMongoModel = mongo.model(
   "guilds",
@@ -48,9 +49,9 @@ const GuildsMongoModel = mongo.model(
       default: false,
     },
     Premium: {
-       type: Object, 
-       required: false,
-       default: null
+      type: Object,
+      required: false,
+      default: null,
     },
     CreatedAt: {
       type: Date,
@@ -69,18 +70,18 @@ export interface GuildModelStructure {
   GuildOwnerId?: string;
   GuildPrefix?: string;
   GuildLanguage?: string;
-  BlackListed: boolean;
-  Premium: GuildPremiumStruct;
+  BlackListed?: boolean;
+  Premium?: GuildPremiumStruct;
   CreatedAt: Date;
 }
 
 export interface GuildPremiumStruct {
- enabled: boolean
- tier: todo,
- /**
+  enabled: boolean;
+  tier: GuildSchemaPremiumTier;
+  /**
  The ID of the user who activated the guild premium.
  */
- activatorId: string
+  activatorId: string;
 }
 
 /**

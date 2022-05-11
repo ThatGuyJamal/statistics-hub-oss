@@ -32,8 +32,8 @@ export const StatsMongoModel = mongo.model(
       type: Object,
       required: false,
       default: {
-       data: [],
-        limit: 5
+        data: [],
+        limit: 5,
       },
     },
     CreatedAt: {
