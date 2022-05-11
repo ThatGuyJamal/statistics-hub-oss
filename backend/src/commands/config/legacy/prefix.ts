@@ -97,18 +97,20 @@ export class UserCommand extends ICommand {
           GuildOwnerId: ctx.guild!.ownerId,
           GuildPrefix: newPrefix,
         });
-      } else {
-        // Make sure the old values are not overwritten
-        let oldCache = client.LocalCacheStore.memory.guild.get(ctx.guild!);
-        client.LocalCacheStore.memory.guild.set(ctx.guild!, {
-          ...oldCache!,
-          GuildPrefix: newPrefix,
-        });
-        // Update the database
-        await GuildsMongoModel.updateOne({ GuildId: ctx.guildId }, { $set: { GuildPrefix: newPrefix } }).then((res) =>
-          client.logger.info(res)
-        );
       }
+
+      // Make sure the old values are not overwritten
+      let oldCache = client.LocalCacheStore.memory.guild.get(ctx.guild!);
+      client.LocalCacheStore.memory.guild.set(ctx.guild!, {
+        ...oldCache,
+        GuildPrefix: newPrefix,
+        GuildId: ctx.guild!.id,
+        CreatedAt: new Date(),
+      });
+      // Update the database
+      await GuildsMongoModel.updateOne({ GuildId: ctx.guildId }, { $set: { GuildPrefix: newPrefix } }).then((res) =>
+        client.logger.info(res)
+      );
 
       return await ctx.reply({
         content: await this.translate(ctx.channel as TextChannel, "commands/config:prefix_command.new_prefix", {
