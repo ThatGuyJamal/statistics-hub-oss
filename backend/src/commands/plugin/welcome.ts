@@ -25,6 +25,7 @@ import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
 import { WelcomePluginMongoModel } from "../../database/models/plugins/welcome/welcome";
 import { channelMention, codeBlock } from "../../internal/functions/formatting";
+import { pauseThread } from "../../internal/functions/promises";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
 import { BaseEmbed } from "../../internal/structures/Embed";
@@ -42,7 +43,7 @@ import { BaseEmbed } from "../../internal/structures/Embed";
     usage: "welcome [command] <arguments | or non>",
     examples: ["welcome setup <welcome channel> <welcome message>"],
     command_type: "slash",
-    subcommands: ["delete", "enable", "disable", "setup", "simulate"],
+    subcommands: ["delete", "enable", "disable", "setup", "simulate", "update"],
   },
 })
 export class UserCommand extends ICommand {
@@ -146,7 +147,7 @@ export class UserCommand extends ICommand {
           }
         ).then((res) => client.logger.info(res));
       }
-      await interaction.reply({
+      return await interaction.reply({
         content: "Welcome plugin setup complete!",
         ephemeral: true,
       });
@@ -210,7 +211,7 @@ export class UserCommand extends ICommand {
     } else if (interaction.options.getSubcommand() === "delete") {
       client.LocalCacheStore.memory.plugins.welcome.delete(interaction.guild!);
       await WelcomePluginMongoModel.deleteOne({ GuildId: interaction.guildId }).then((res) => client.logger.info(res));
-      await interaction.reply({
+      return await interaction.reply({
         content: "Welcome plugin deleted!",
         ephemeral: true,
       });
@@ -218,7 +219,10 @@ export class UserCommand extends ICommand {
       let checkIfData = client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild!);
 
       if (!checkIfData || !checkIfData.Enabled) {
-        return await interaction.reply("Welcome plugin is not enabled!");
+        return await interaction.reply({
+          content: "Please enable the welcome plugin first!",
+          ephemeral: true,
+        });
       }
 
       await interaction.reply({
@@ -234,9 +238,36 @@ export class UserCommand extends ICommand {
       });
 
       this.container.client.emit(Events.GuildMemberAdd, interaction.member as GuildMember);
+
+      await interaction.editReply({
+        embeds: [
+          new BaseEmbed().interactionEmbed(
+            {
+              description: "first event fired...",
+            },
+            interaction
+          ),
+        ],
+      });
+
+      await pauseThread(6, "seconds", "welcome plugin simulation");
+
       this.container.client.emit(Events.GuildMemberRemove, interaction.member as GuildMember);
 
       await interaction.editReply({
+        embeds: [
+          new BaseEmbed().interactionEmbed(
+            {
+              description: "second event fired...",
+            },
+            interaction
+          ),
+        ],
+      });
+
+      await pauseThread(6, "seconds", "welcome plugin simulation");
+
+      return await interaction.editReply({
         embeds: [
           new BaseEmbed().interactionEmbed(
             {
@@ -248,6 +279,27 @@ export class UserCommand extends ICommand {
           ),
         ],
       });
+    } else if (interaction.options.getSubcommand() === "update") {
+      let newGreetMessage = interaction.options.getString("greet-message");
+      let newGoodbyeMessage = interaction.options.getString("goodbye-message");
+      let newTheme = interaction.options.getString("theme");
+      let newWelcomeChannel = interaction.options.getString("welcome-channel");
+      let newGoodbyeChannel = interaction.options.getString("goodbye-channel");
+
+      if (!newGreetMessage && !newGoodbyeMessage && !newTheme && !newWelcomeChannel && !newGoodbyeChannel) {
+        return await interaction.reply({
+          content: "You did not select any options to update! ",
+          ephemeral: true,
+        });
+      }
+
+      let checkIfData = client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild!);
+
+      if (!checkIfData) {
+        return await interaction.reply(
+          "You have no welcome plugin data... Please use `welcome setup` to setup the plugin."
+        );
+      }
     }
   }
   // slash command registry
@@ -297,7 +349,36 @@ export class UserCommand extends ICommand {
           .addSubcommand((options) => options.setName("simulate").setDescription("Simulate a member join and leave."))
           .addSubcommand((options) => options.setName("enable").setDescription("Enable the welcome system."))
           .addSubcommand((options) => options.setName("disable").setDescription("Disable the welcome system."))
-          .addSubcommand((options) => options.setName("delete").setDescription("Delete the welcome system.")),
+          .addSubcommand((options) =>
+            options
+              .setName("update")
+              .setDescription("Update a value in the welcome system.")
+              .addStringOption((options) =>
+                options.setName("greet-message").setDescription("The new welcome message.").setRequired(false)
+              )
+              .addStringOption((options) =>
+                options.setName("goodbye-message").setDescription("The new goodbye message.").setRequired(false)
+              )
+              .addStringOption((options) =>
+                options
+                  .setName("theme")
+                  .setDescription("The new theme.")
+                  .setRequired(false)
+                  .addChoices([
+                    ["Card", "card"],
+                    ["Text", "text"],
+                    // ["Embed", "embed"],
+                  ])
+              )
+              .addChannelOption((options) =>
+                options.setName("welcome-channel").setDescription("The new welcome channel.").setRequired(false)
+              )
+              .addChannelOption((options) =>
+                options.setName("goodbye-channel").setDescription("The new goodbye channel.").setRequired(false)
+              )
+          )
+          .addSubcommand((options) => options.setName("delete").setDescription("Delete the welcome system."))
+          .addSubcommand((options) => options.setName("view").setDescription("View the welcome systems settings.")),
       {
         guildIds: getTestGuilds(),
         registerCommandIfMissing: environment.bot.register_commands,
