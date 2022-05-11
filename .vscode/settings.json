@@ -15,6 +15,7 @@
     "discordjs",
     "discordx",
     "fuzzer",
+    "hmset",
     "importx",
     "kaname",
     "Kodo",
@@ -22,9 +23,12 @@
     "nocheck",
     "ratelimit",
     "ratelimits",
+    "setlang",
     "statcord",
     "statshub",
     "Tedis",
+    "thatguyjamal",
+    "threadchannel",
     "typegoose",
     "upsert"
   ]

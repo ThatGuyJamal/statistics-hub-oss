@@ -11,9 +11,10 @@ _This project is in rapid development and any information is subject to change a
 ## `Tech Stack Used`
 
 - [MongoDB](https://www.mongodb.com/) is the main database for the project.
-- [Next-js](https://nextjs.org/) is the client side website for the project
-- [Discord.js](https://discord.js.org/) is the discord api library used for the project.
-- [Sapphire.js](https://www.sapphirejs.dev/) is the discord plugin framework for the project.
+- [Redis](https://redis.io/) is the cache for the project.
+- [Next-js](https://nextjs.org/) is the dashboard for the project
+- [Discord.js](https://discord.js.org/) is the  api library used for the project.
+- [Sapphire.js](https://www.sapphirejs.dev/) is the command/event framework for the project.
 
 ### Directory's
 
@@ -26,15 +27,6 @@ _This project is in rapid development and any information is subject to change a
 | Name       | Description                                          | Access Level  | Command Type    | Scope      |
 | :--------- | :--------------------------------------------------- | :------------ | :-------------- | :--------- |
 | ping       | Shows the bot latency.                               | everyone      | slash & message | Global     |
-| invite     | Sends a url to invite the bot in discord.            | everyone      | slash & message | Global     |
-| commands   | Shows detailed information about the bot commands.   | everyone      | slash           | Global     |
-| info       | Shows detailed statistics on the bots host computer. | everyone      | slash & message | Global     |
-| statistics | Manages or views guild information                   | Administrator | slash           | Global     |
-| configure  | Enables a admin to change bot property's.            | Administrator | slash           | Global     |
-| cache      | Shows the current active cache values collected.     | Developer     | slash           | Guild Only |
-| djs        | Allows the developer&#x20;                           | Developer     | slash           | Guild Only |
-| eval       | Executes js code                                     | Developer     | slash           | Guild Only |
-| reload     | Reloads a piece of the bot                           | Developer     | slash           | Guild Only |
 
 ## `Languages`
 
@@ -43,7 +35,8 @@ the language [folder](./backend/src/languages/) and submit a pull request.
 
 - English (default)
 - Spanish
-- Portuguese
+
+*make a pr to add more languages*
 
 ---
 

@@ -1,0 +1,9 @@
+{
+  "ping_command": {
+    "reply_one": "Fetching current latency...",
+    "reply_two": "Pong! Bot Latency {{wsLatency}}. Discord API Latency {{APILatency}}"
+  },
+  "help_command": {
+    "command_not_found": "The command you gave is not valid. Please try again."
+  }
+}

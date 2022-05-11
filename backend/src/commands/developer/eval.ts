@@ -2,12 +2,10 @@
  *  Statistics Hub OSS - A data analytics discord bot.
     
     Copyright (C) 2022, ThatGuyJamal and contributors
-
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -17,17 +15,17 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { BucketScope, RegisterBehavior, ChatInputCommand, ApplicationCommandRegistry } from "@sapphire/framework";
 import { CommandInteraction, Message } from "discord.js";
-import { ENV } from "../../config";
 import { Stopwatch } from "@sapphire/stopwatch";
 import { inspect } from "node:util";
 import { Type } from "@sapphire/type";
 import { isThenable } from "@sapphire/utilities";
-import { ICommandOptions, ICommand } from "../../lib/client/command";
-import { BrandingColors } from "../../lib/utils/colors";
-import { codeBlock } from "../../lib/utils/format";
-import { createEmbed } from "../../lib/utils/responses";
-import { seconds } from "../../lib/utils/time";
-import { getTestGuilds } from "../../lib/utils/utils";
+import { ICommandOptions, ICommand } from "../../Command";
+import { BrandingColors } from "../../internal/constants/colors";
+import { codeBlock } from "../../internal/functions/formatting";
+import { seconds } from "../../internal/functions/time";
+import { getTestGuilds } from "../../internal/load-test-guilds";
+import { environment } from "../../config";
+import { createEmbed } from "../../internal/interactions/responses";
 
 @ApplyOptions<ICommandOptions>({
   description: "Evaluates arbitrary JavaScript code.",
@@ -41,14 +39,15 @@ import { getTestGuilds } from "../../lib/utils/utils";
     usage: "<some code>",
     command_type: "slash",
     examples: ["eval this.container.client.ws.ping"],
+    hidden: true,
   },
   chatInputCommand: {
-    register: ENV.bot.register_commands,
-    guildIds: ENV.bot.test_guild_id,
+    register: environment.bot.register_commands,
+    guildIds: getTestGuilds(),
     behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
     idHints: ["964166784661983232"],
   },
-  preconditions: ["OwnerOnly"],
+  preconditions: ["OwnerOnlyCommand"],
 })
 export class UserCommand extends ICommand {
   // Slash Based Command
@@ -158,9 +157,9 @@ export class UserCommand extends ICommand {
           ),
       {
         guildIds: getTestGuilds(),
-        registerCommandIfMissing: ENV.bot.register_commands,
+        registerCommandIfMissing: environment.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
-        idHints: ["964166784661983232"],
+        idHints: ["973001079941906442"],
       }
     );
   }

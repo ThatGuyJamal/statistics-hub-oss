@@ -18,9 +18,10 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand } from "@sapphire/framework";
 import { Message } from "discord.js";
-import { ENV } from "../../config";
-import { ICommandOptions, ICommand } from "../../lib/client/command";
-import { seconds } from "../../lib/utils/time";
+import { ICommandOptions, ICommand } from "../../Command";
+import { environment } from "../../config";
+import { seconds } from "../../internal/functions/time";
+import { getTestGuilds } from "../../internal/load-test-guilds";
 
 @ApplyOptions<ICommandOptions>({
   description: "",
@@ -33,19 +34,16 @@ import { seconds } from "../../lib/utils/time";
   extendedDescription: {
     usage: "",
     examples: [""],
-    command_type: ""
+    command_type: "",
   },
 })
 export class UserCommand extends ICommand {
-  // Message Based Command
   public async messageRun(ctx: Message) {}
-  // Slash Based Command
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {}
-  // slash command registry
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
     registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
-      guildIds: ENV.bot.test_guild_id,
-      registerCommandIfMissing: ENV.bot.register_commands,
+      guildIds: getTestGuilds(),
+      registerCommandIfMissing: environment.bot.register_commands,
       behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
       idHints: [],
     });
