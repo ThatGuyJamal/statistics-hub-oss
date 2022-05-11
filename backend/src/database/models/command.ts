@@ -1,7 +1,7 @@
 import mongo from "mongoose";
 
-export const StatsMongoModel = mongo.model(
-  "commands",
+export const CommandPluginMongoModel = mongo.model(
+  "commands-plugin",
   new mongo.Schema<CommandModelStructure>({
     GuildId: {
       type: String,

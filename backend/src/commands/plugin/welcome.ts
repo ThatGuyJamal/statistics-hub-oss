@@ -305,7 +305,15 @@ export class UserCommand extends ICommand {
       const welcomePingOnJoin = interaction.options.getBoolean("welcome-ping-on-join", false);
       let CardURl = interaction.options.getString("card-url", false);
 
-      if (!newGreetMessage && !newGoodbyeMessage && !newTheme && !newWelcomeChannel && !newGoodbyeChannel && !welcomePingOnJoin && !CardURl) {
+      if (
+        !newGreetMessage &&
+        !newGoodbyeMessage &&
+        !newTheme &&
+        !newWelcomeChannel &&
+        !newGoodbyeChannel &&
+        !welcomePingOnJoin &&
+        !CardURl
+      ) {
         return await interaction.editReply({
           content: "You did not select any options to update! ",
         });
@@ -523,16 +531,10 @@ export class UserCommand extends ICommand {
                   .setRequired(false)
               )
               .addStringOption((options) =>
-                options
-                  .setName("card-url")
-                  .setDescription("The url for the card theme.")
-                  .setRequired(false)
+                options.setName("card-url").setDescription("The url for the card theme.").setRequired(false)
               )
               .addBooleanOption((options) =>
-                options
-                  .setName("ping-on-join")
-                  .setDescription("Ping the user when they join.")
-                  .setRequired(false)
+                options.setName("ping-on-join").setDescription("Ping the user when they join.").setRequired(false)
               )
           )
           .addSubcommand((options) => options.setName("simulate").setDescription("Simulate a member join and leave."))
@@ -570,12 +572,10 @@ export class UserCommand extends ICommand {
               )
               .addChannelOption((options) =>
                 options.setName("goodbye-channel").setDescription("The new goodbye channel.").setRequired(false)
-            ).addStringOption((options) =>
-              options
-                .setName("card-url")
-                .setDescription("The url for the card theme.")
-                .setRequired(false)
-            )
+              )
+              .addStringOption((options) =>
+                options.setName("card-url").setDescription("The url for the card theme.").setRequired(false)
+              )
               .addBooleanOption((options) =>
                 options
                   .setName("welcome-ping-on-join")

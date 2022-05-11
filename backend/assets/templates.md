@@ -68,7 +68,7 @@ export class UserEvent extends Listener {
 ## Preconditions
 
 ```ts
-import { CommandInteraction, Message, Team } from "discord.js";
+import { CommandInteraction, Message } from "discord.js";
 import { Precondition } from "@sapphire/framework";
 
 export class UserPrecondition extends Precondition {

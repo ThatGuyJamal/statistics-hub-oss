@@ -14,6 +14,7 @@
 
 import { container } from "@sapphire/framework";
 import { Collection, Guild, GuildMember } from "discord.js";
+import { CommandModelStructure } from "../database/models/command";
 import { type GuildModelStructure, GuildsMongoModel } from "../database/models/guild";
 import { WelcomePluginModelStructure, WelcomePluginMongoModel } from "../database/models/plugins/welcome/welcome";
 import { type UserModelStructure, UsersMongoModel } from "../database/models/user";
@@ -110,6 +111,37 @@ export class LocalCacheStore {
          */
         delete: (guild: Guild) => {
           return this.memory.plugins.welcome.cache.delete(guild.id);
+        },
+      },
+      commands: {
+        cache: new Collection<string, CommandModelStructure>(),
+        /**
+         * Gets a value from the cache.
+         * @param id The id of the guild.
+         * @returns {CommandModelStructure | undefined} The guild data or undefined if not found.
+         * @memberof LocalCacheStore
+         */
+        get: (guild: Guild): CommandModelStructure | undefined => {
+          return this.memory.plugins.commands.cache.get(guild.id);
+        },
+        /**
+         * Sets a value in the cache.
+         * @param id The id of the guild.
+         * @param value The guild data to set.
+         * @returns {CommandModelStructure | undefined} The guild data or undefined if not found.
+         * @memberof LocalCacheStore
+         */
+        set: (guild: Guild, value: CommandModelStructure) => {
+          return this.memory.plugins.commands.cache.set(guild.id, value);
+        },
+        /**
+         * Removes a value from the cache.
+         * @param id The id of the guild.
+         * @returns {CommandModelStructure | undefined} The guild data or undefined if not found.
+         * @memberof LocalCacheStore
+         */
+        delete: (guild: Guild) => {
+          return this.memory.plugins.commands.cache.delete(guild.id);
         },
       },
     },

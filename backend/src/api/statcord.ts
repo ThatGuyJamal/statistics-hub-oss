@@ -43,7 +43,6 @@ export class StatCordHandler {
       },
       hours(1)
     );
-
   }
 
   /** Post the current collected stats to the api */

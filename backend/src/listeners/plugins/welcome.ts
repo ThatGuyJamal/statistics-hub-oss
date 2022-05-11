@@ -51,16 +51,19 @@ export class UserEvent extends Listener {
           break;
         case "card":
           const image = await drawCard({
-            theme: 'circuit',
+            theme: "circuit",
             text: {
-              title: new Text('Welcome!', 240, 70).setFontSize(32),
+              title: new Text("Welcome!", 240, 70).setFontSize(32),
               text: new Text(member.user.tag, 240, 150).setFontSize(34),
-              subtitle: `We now have {{server.memberCount}} members!`.replaceAll("{{server.memberCount}}", member.guild.memberCount.toString()),
+              subtitle: `We now have {{server.memberCount}} members!`.replaceAll(
+                "{{server.memberCount}}",
+                member.guild.memberCount.toString()
+              ),
               color: `#DDDDDD`,
-              font: "Panton Black Caps"
+              font: "Panton Black Caps",
             },
             avatar: {
-              image: member.user.displayAvatarURL({ format: 'png' }),
+              image: member.user.displayAvatarURL({ format: "png" }),
               outlineWidth: 5,
               outlineColor: colorToStyle(Colors.Amber),
               borderRadius: 1,
@@ -130,16 +133,19 @@ export class UserEvent2 extends Listener {
           break;
         case "card":
           const image = await drawCard({
-            theme: 'circuit',
+            theme: "circuit",
             text: {
-              title: new Text('Goodbye!', 240, 70).setFontSize(32),
+              title: new Text("Goodbye!", 240, 70).setFontSize(32),
               text: new Text(member.user.tag, 240, 150).setFontSize(34),
-              subtitle: `We now have {{server.memberCount}} members!`.replaceAll("{{server.memberCount}}", member.guild.memberCount.toString()),
+              subtitle: `We now have {{server.memberCount}} members!`.replaceAll(
+                "{{server.memberCount}}",
+                member.guild.memberCount.toString()
+              ),
               color: `#DDDDDD`,
-              font: "Panton Black Caps"
+              font: "Panton Black Caps",
             },
             avatar: {
-              image: member.user.displayAvatarURL({ format: 'png' }),
+              image: member.user.displayAvatarURL({ format: "png" }),
               outlineWidth: 5,
               outlineColor: colorToStyle(Colors.Amber),
               borderRadius: 1,
@@ -156,7 +162,7 @@ export class UserEvent2 extends Listener {
               content: data.GuildWelcomePingOnJoin ? `${memberMention(member.id)}` : null,
               files: [image],
             })
-            .catch(() => { });
+            .catch(() => {});
           break;
         case "embed":
           // TODO: Add embed theme

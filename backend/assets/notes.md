@@ -71,3 +71,9 @@ Examples of valid languages codes are:
 - ru-RU for Russian as spoken in Russia
 - sl-SI for Slovenian as spoken in Slovenia
 - tr-TR for Turkish as spoken in Turkey
+
+## Bots list
+
+- https://bots.discordlabs.org/
+- https://top.gg/
+- https://discord.bots.gg/

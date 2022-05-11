@@ -62,7 +62,7 @@ export const WelcomePluginMongoModel = mongo.model(
     GuildWelcomeThemeUrl: {
       type: String,
       required: false,
-      default: "https://cdn.discordapp.com/attachments/937124004492365874/968539236087234580/unknown.png"
+      default: "https://cdn.discordapp.com/attachments/937124004492365874/968539236087234580/unknown.png",
     },
     CreatedById: {
       type: String,
