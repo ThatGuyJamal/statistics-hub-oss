@@ -14,7 +14,7 @@
 
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener, ListenerOptions } from "@sapphire/framework";
-import { drawCard, LinearGradient } from "discord-welcome-card";
+import { drawCard, Text } from "discord-welcome-card";
 import { GuildMember, TextChannel } from "discord.js";
 import { Colors, colorToStyle } from "../../internal/constants/colors";
 import { memberMention } from "../../internal/functions/formatting";
@@ -53,8 +53,8 @@ export class UserEvent extends Listener {
           const image = await drawCard({
             theme: 'circuit',
             text: {
-              title: 'Welcome',
-              text: member.user.tag,
+              title: new Text('Welcome!', 240, 70).setFontSize(32),
+              text: new Text(member.user.tag, 240, 150).setFontSize(34),
               subtitle: `We now have {{server.memberCount}} members!`.replaceAll("{{server.memberCount}}", member.guild.memberCount.toString()),
               color: `#DDDDDD`,
               font: "Panton Black Caps"
@@ -132,8 +132,8 @@ export class UserEvent2 extends Listener {
           const image = await drawCard({
             theme: 'circuit',
             text: {
-              title: 'Goodbye',
-              text: member.user.tag,
+              title: new Text('Goodbye!', 240, 70).setFontSize(32),
+              text: new Text(member.user.tag, 240, 150).setFontSize(34),
               subtitle: `We now have {{server.memberCount}} members!`.replaceAll("{{server.memberCount}}", member.guild.memberCount.toString()),
               color: `#DDDDDD`,
               font: "Panton Black Caps"

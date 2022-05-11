@@ -474,6 +474,7 @@ export class UserCommand extends ICommand {
               interaction
             ),
           ],
+          ephemeral: true,
         });
       }
     }
