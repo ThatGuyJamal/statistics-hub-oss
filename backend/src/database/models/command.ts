@@ -29,9 +29,12 @@ export const StatsMongoModel = mongo.model(
       default: null,
     },
     GuildCustomCommands: {
-      type: Array,
+      type: Object,
       required: false,
-      default: null,
+      default: {
+       data: [],
+        limit: 5
+      },
     },
     CreatedAt: {
       type: Date,
