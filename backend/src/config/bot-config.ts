@@ -96,10 +96,10 @@ export const CLIENT_OPTIONS: ClientOptions = {
   // https://statcord.com/profile
   statcord: {
     client_id: "946398697254703174",
-    key: "statcord.com-nZGoutFIlz4nnVA5XmWm", // (Required) Statcord API key.
+    key: please fix meee, // (Required) Statcord API key.
     autopost: false, // (Optional) Allows automatic posting of statistics.
     debug: environment.bot.enabled ? true : false, // (Optional) Show debug messages.
-    sharding: false, // (Optional) Activate the sharding mode, it is important to read the notes below.
+    sharding: false, // (Optional) Activate the sharding mode.
   },
   // Hot Module Replacement
   // @see https://github.com/sapphiredev/plugins/tree/main/packages/hmr
