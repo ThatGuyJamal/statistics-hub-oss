@@ -47,6 +47,11 @@ const GuildsMongoModel = mongo.model(
       required: false,
       default: false,
     },
+    Premium: {
+       type: Object, 
+       required: false,
+       default: null
+    },
     CreatedAt: {
       type: Date,
       required: true,
@@ -65,8 +70,17 @@ export interface GuildModelStructure {
   GuildPrefix?: string;
   GuildLanguage?: string;
   BlackListed: boolean;
-  Premium: boolean;
+  Premium: GuildPremiumStruct;
   CreatedAt: Date;
+}
+
+export interface GuildPremiumStruct {
+ enabled: boolean
+ tier: todo,
+ /**
+ The ID of the user who activated the guild premium.
+ */
+ activatorId: string
 }
 
 /**
