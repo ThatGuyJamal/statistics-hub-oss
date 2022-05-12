@@ -45,6 +45,7 @@ const validCommandList = [...container.stores.get("commands").values()].map((c) 
     usage: "customcommand create <trigger> <response>",
     examples: ["customcommand create server {{server.name}}"],
     command_type: "both",
+    subcommands: ["create", "delete", "list"]
   },
   requiredUserPermissions: ["MANAGE_GUILD"],
 })

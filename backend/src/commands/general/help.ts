@@ -59,7 +59,7 @@ export class UserCommand extends ICommand {
     const commandName = await args.pick("string").catch(() => null);
 
     if (!commandName) {
-      if (client.BotDevelopers.has(ctx.author.id)) {
+      
         let result = codeBlock(
           "css",
           `
@@ -72,20 +72,6 @@ You can run help <command> to get more information about a command.
         return await ctx.reply({
           content: result,
         });
-      } else {
-        let result = codeBlock(
-          "css",
-          `
-=== Command list ===
-${validCommandList}
-
-You can run help <command> to get more information about a command.
-      `
-        );
-        return await ctx.reply({
-          content: result,
-        });
-      }
     } else {
       const commandFound = await this.__resolveCommand(commandName);
       if (!commandFound) {
@@ -133,7 +119,6 @@ You can run help <command> to get more information about a command.
     const commandName = interaction.options.getString("name", false);
 
     if (!commandName) {
-      if (client.BotDevelopers.has(interaction.user.id)) {
         let result = codeBlock(
           "css",
           `
@@ -146,20 +131,6 @@ You can run help <command> to get more information about a command.
         return await interaction.reply({
           content: result,
         });
-      } else {
-        let result = codeBlock(
-          "css",
-          `
-=== Command list ===
-${validCommandList}
-
-You can run help <command> to get more information about a command.
-      `
-        );
-        return await interaction.reply({
-          content: result,
-        });
-      }
     } else {
       const commandFound = await this.__resolveCommand(commandName);
       if (!commandFound) {

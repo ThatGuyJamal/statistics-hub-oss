@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu May 12 13:17:41 2022
+# Make data base, printed on Thu May 12 18:44:42 2022
 
 # Variables
 
@@ -25,7 +25,7 @@ PULSE_SERVER = unix:/run/flatpak/pulse/native
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-9bfef608-273e-42e4-b406-392a4ee5fd6e.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-7710d3f9-1222-43c5-9300-c3ee8bd8c94f.sock
 # environment
 MANDATORY_PATH = /usr/share/gconf/pop.mandatory.path
 # environment
@@ -215,7 +215,7 @@ MAKE_VERSION := 4.3
 # environment
 MANAGERPID = 2917
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 9235
+GIO_LAUNCHED_DESKTOP_FILE_PID = 64845
 # environment
 _ = /usr/bin/make
 # environment
@@ -331,6 +331,6 @@ GNUmakefile:
 # strcache performance: lookups = 23 / hit rate = 13%
 # hash-table stats:
 # Load=20/8192=0%, Rehash=0, Collisions=0/23=0%
-# Finished Make data base on Thu May 12 13:17:41 2022
+# Finished Make data base on Thu May 12 18:44:42 2022
 
  
