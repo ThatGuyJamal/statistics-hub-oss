@@ -79,7 +79,7 @@ _ Database _
         {
           description: codeBlock(
             "css",
-            `===== Server Cache ====
+            `===== Internal Cache ====
                     
 _ Bot _
 [Guilds]   = ${client.guilds.cache.size}
@@ -87,7 +87,7 @@ _ Bot _
 [Channels] = ${client.channels.cache.size}
 [Emojis]   = ${client.emojis.cache.size}
             
-_ Database _ 
+_ Databases _ 
 [Mongodb] = ${client.LocalCacheStore.size}
 [Redis]   = ${client.RedisController.keys.length}
             `

@@ -303,7 +303,8 @@ export class UserCommand extends ICommand {
       let newWelcomeChannel = interaction.options.getChannel("welcome-channel");
       let newGoodbyeChannel = interaction.options.getChannel("goodbye-channel");
       const welcomePingOnJoin = interaction.options.getBoolean("welcome-ping-on-join", false);
-      let CardURl = interaction.options.getString("card-url", false);
+      let cardBackground = interaction.options.getString("card-background", false);
+      let cardPreBuiltBackground = interaction.options.getString("pre-built-background", false);
 
       if (
         !newGreetMessage &&
@@ -312,10 +313,11 @@ export class UserCommand extends ICommand {
         !newWelcomeChannel &&
         !newGoodbyeChannel &&
         !welcomePingOnJoin &&
-        !CardURl
+        !cardBackground &&
+        !cardPreBuiltBackground
       ) {
         return await interaction.editReply({
-          content: "You did not select any options to update! ",
+          content: "You did not select any options to update! Please try again...",
         });
       }
 
@@ -328,45 +330,47 @@ export class UserCommand extends ICommand {
         );
       }
 
+      // check if Card URL is valid
+      if (cardBackground) {
+        if (!cardBackground.startsWith("https://")) {
+          return await interaction.editReply({
+            content:
+              "Card URL you entered is not valid! Please use a valid URL using `https://`. Make sure the link to the background is public. If you have a picture you want to use, try uploading it to <https://imgur.com/> \n Example: https://i.imgur.com/az1Sx59.jpeg",
+          });
+        }
+      }
+
+      let settingsChanged = [];
+
       // Update the data in the cache
       if (oldData) {
         client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
-          GuildId: interaction.guildId!,
-          GuildName: interaction.guild.name,
-          GuildOwnerId: interaction.guild.ownerId,
+          GuildId: oldData.GuildId,
+          GuildName: oldData.GuildName ?? undefined,
+          GuildOwnerId: oldData.GuildOwnerId ?? undefined,
           Enabled: oldData.Enabled,
-          CreatedAt: new Date(),
-          GuildWelcomeChannelId: newWelcomeChannel ? newWelcomeChannel.id : oldData.GuildWelcomeChannelId,
-          GuildGoodbyeChannelId: newGoodbyeChannel ? newGoodbyeChannel.id : oldData.GuildGoodbyeChannelId,
-          GuildWelcomeMessage: newGreetMessage ? newGreetMessage : oldData.GuildWelcomeMessage,
-          GuildGoodbyeMessage: newGoodbyeMessage ? newGoodbyeMessage : oldData.GuildGoodbyeMessage,
-          GuildWelcomeTheme: newTheme ? newTheme : oldData.GuildWelcomeTheme,
-          GuildWelcomePingOnJoin: welcomePingOnJoin || oldData.GuildWelcomePingOnJoin,
-          GuildWelcomeThemeUrl: CardURl ? CardURl : oldData.GuildWelcomeThemeUrl,
-          CreatedById: interaction.user.id,
-        });
-      } else {
-        client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
-          GuildId: interaction.guildId!,
-          GuildName: interaction.guild.name,
-          GuildOwnerId: interaction.guild.ownerId,
-          Enabled: false,
-          CreatedAt: new Date(),
-          GuildWelcomeChannelId: newWelcomeChannel ? newWelcomeChannel.id : undefined,
-          GuildGoodbyeChannelId: newGoodbyeChannel ? newGoodbyeChannel.id : undefined,
-          GuildWelcomeMessage: newGreetMessage ? newGreetMessage : undefined,
-          GuildGoodbyeMessage: newGoodbyeMessage ? newGoodbyeMessage : undefined,
-          GuildWelcomeTheme: newTheme ? newTheme : undefined,
-          GuildWelcomePingOnJoin: welcomePingOnJoin || false,
-          GuildWelcomeThemeUrl: CardURl ? CardURl : undefined,
-          CreatedById: interaction.user.id,
+          CreatedAt: oldData.CreatedAt ?? new Date(),
+          GuildWelcomeChannelId: oldData.GuildWelcomeChannelId ?? undefined,
+          GuildGoodbyeChannelId: oldData.GuildGoodbyeChannelId ?? undefined,
+          GuildWelcomeMessage: newGreetMessage ?? oldData.GuildWelcomeMessage,
+          GuildGoodbyeMessage: newGoodbyeMessage ?? oldData.GuildGoodbyeMessage,
+          GuildWelcomeTheme: newTheme ?? oldData.GuildWelcomeTheme,
+          GuildWelcomePingOnJoin: welcomePingOnJoin ?? oldData.GuildWelcomePingOnJoin,
+          GuildWelcomeThemeUrl: cardBackground
+            ? cardBackground
+            : cardPreBuiltBackground
+            ? cardPreBuiltBackground
+            : undefined,
+          CreatedById: oldData.CreatedById ?? undefined,
         });
       }
 
       // Update the data in the database
-
       if (newWelcomeChannel) {
-        checkIfData.GuildWelcomeChannelId = newWelcomeChannel.id;
+        client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
+          ...oldData,
+          GuildWelcomeChannelId: newWelcomeChannel.id,
+        });
         await WelcomePluginMongoModel.updateOne(
           { GuildId: interaction.guildId },
           {
@@ -375,10 +379,14 @@ export class UserCommand extends ICommand {
             },
           }
         ).then((res) => client.logger.info(res));
+        settingsChanged.push("welcome channel");
       }
 
       if (newGoodbyeChannel) {
-        checkIfData.GuildGoodbyeChannelId = newGoodbyeChannel.id;
+        client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
+          ...oldData,
+          GuildGoodbyeChannelId: newGoodbyeChannel.id,
+        });
         await WelcomePluginMongoModel.updateOne(
           { GuildId: interaction.guildId },
           {
@@ -387,10 +395,14 @@ export class UserCommand extends ICommand {
             },
           }
         ).then((res) => client.logger.info(res));
+        settingsChanged.push("goodbye channel");
       }
 
       if (newGreetMessage) {
-        checkIfData.GuildWelcomeMessage = newGreetMessage;
+        client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
+          ...oldData,
+          GuildWelcomeMessage: newGreetMessage,
+        });
         await WelcomePluginMongoModel.updateOne(
           { GuildId: interaction.guildId },
           {
@@ -399,10 +411,14 @@ export class UserCommand extends ICommand {
             },
           }
         ).then((res) => client.logger.info(res));
+        settingsChanged.push("welcome message");
       }
 
       if (newGoodbyeMessage) {
-        checkIfData.GuildGoodbyeMessage = newGoodbyeMessage;
+        client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
+          ...oldData,
+          GuildGoodbyeMessage: newGoodbyeMessage,
+        });
         await WelcomePluginMongoModel.updateOne(
           { GuildId: interaction.guildId },
           {
@@ -411,10 +427,14 @@ export class UserCommand extends ICommand {
             },
           }
         ).then((res) => client.logger.info(res));
+        settingsChanged.push("goodbye message");
       }
 
       if (newTheme) {
-        checkIfData.GuildWelcomeTheme = newTheme;
+        client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
+          ...oldData,
+          GuildWelcomeTheme: newTheme,
+        });
         await WelcomePluginMongoModel.updateOne(
           { GuildId: interaction.guildId },
           {
@@ -423,10 +443,14 @@ export class UserCommand extends ICommand {
             },
           }
         ).then((res) => client.logger.info(res));
+        settingsChanged.push("theme");
       }
 
       if (welcomePingOnJoin) {
-        checkIfData.GuildWelcomePingOnJoin = welcomePingOnJoin;
+        client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
+          ...oldData,
+          GuildWelcomePingOnJoin: welcomePingOnJoin,
+        });
         await WelcomePluginMongoModel.updateOne(
           { GuildId: interaction.guildId },
           {
@@ -435,22 +459,45 @@ export class UserCommand extends ICommand {
             },
           }
         ).then((res) => client.logger.info(res));
+        settingsChanged.push("welcome ping on join");
       }
 
-      if (CardURl) {
-        checkIfData.GuildWelcomeThemeUrl = CardURl;
+      if (cardPreBuiltBackground) {
+        client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
+          ...oldData,
+          GuildWelcomeThemeUrl: cardPreBuiltBackground,
+        });
         await WelcomePluginMongoModel.updateOne(
           { GuildId: interaction.guildId },
           {
             $set: {
-              GuildWelcomeThemeUrl: CardURl,
+              GuildWelcomeThemeUrl: cardPreBuiltBackground,
             },
           }
         ).then((res) => client.logger.info(res));
+        settingsChanged.push("theme url (prebuilt)");
+      }
+
+      if (cardBackground) {
+        client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
+          ...oldData,
+          GuildWelcomeThemeUrl: cardBackground,
+        });
+        await WelcomePluginMongoModel.updateOne(
+          { GuildId: interaction.guildId },
+          {
+            $set: {
+              GuildWelcomeThemeUrl: cardBackground,
+            },
+          }
+        ).then((res) => client.logger.info(res));
+        settingsChanged.push("theme url");
       }
 
       return await interaction.editReply({
-        content: "Settings updated!",
+        content: `Successfully updated the following settings: \n${settingsChanged
+          .map((setting) => `\`${setting}\``)
+          .join(", ")}`,
       });
     } else if (interaction.options.getSubcommand() === "view") {
       let getData = await WelcomePluginMongoModel.findOne({ GuildId: interaction.guildId });
@@ -568,7 +615,22 @@ export class UserCommand extends ICommand {
                 options.setName("goodbye-channel").setDescription("The new goodbye channel.").setRequired(false)
               )
               .addStringOption((options) =>
-                options.setName("card-url").setDescription("The url for the card theme.").setRequired(false)
+                options.setName("card-background").setDescription("The url for the card theme.").setRequired(false)
+              )
+              .addStringOption((options) =>
+                options
+                  .setName("pre-built-background")
+                  .setDescription("Pre-built backgrounds for the welcome/goodbye card.")
+                  .addChoices([
+                    ["Sunset forest Banner", "https://i.imgur.com/ea9PB3H.png"],
+                    ["Green Railroad", "https://i.imgur.com/dCS4tQk.jpeg"],
+                    ["Rain Drops", "https://i.imgur.com/ftY0903.jpeg"],
+                    [
+                      "Hidden Lighthouse",
+                      "https://cdn.discordapp.com/attachments/937124004492365874/968196852056997938/EpicBanner.png",
+                    ],
+                  ])
+                  .setRequired(false)
               )
               .addBooleanOption((options) =>
                 options
