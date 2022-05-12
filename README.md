@@ -6,6 +6,8 @@ _This project is in rapid development and any information is subject to change a
 
 # Statistics Hub OSS
 
+![Discord](https://img.shields.io/discord/837830514130812970?style=flat-square) ![GitHub language count](https://img.shields.io/github/languages/count/ThatGuyJamal/statistics-hub-oss?style=flat-square) ![Lines of code](https://img.shields.io/tokei/lines/github/ThatGuyJamal/statistics-hub-oss?style=flat-square) ![GitHub repo size](https://img.shields.io/github/repo-size/ThatGuyJamal/statistics-hub-oss?style=flat-square)
+
 📊 An open source data analytics discord bot dedicated for server owners. Created by [ThatGuyJamal](https://github.com/ThatGuyJamal) and [contributors](./.github/contributors.md)
 
 ## `Tech Stack Used`
