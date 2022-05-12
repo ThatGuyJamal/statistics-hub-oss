@@ -1,7 +1,7 @@
 {
   "name": "@thatguyjamal/statistics-hub-oss",
   "version": "1.1.0",
-  "description": "An open-source statistics bot for server analytics.",
+  "description": "A discord bot for tracking statistics in your server.",
   "main": "out/bootstrap.js",
   "scripts": {
     "pm2": "pm2 start pm2.ecosystem.yml",

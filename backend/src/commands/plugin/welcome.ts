@@ -348,7 +348,7 @@ export class UserCommand extends ICommand {
           GuildId: oldData.GuildId,
           GuildName: oldData.GuildName ?? undefined,
           GuildOwnerId: oldData.GuildOwnerId ?? undefined,
-          Enabled: oldData.Enabled,
+          Enabled: oldData.Enabled ?? true,
           CreatedAt: oldData.CreatedAt ?? new Date(),
           GuildWelcomeChannelId: oldData.GuildWelcomeChannelId ?? undefined,
           GuildGoodbyeChannelId: oldData.GuildGoodbyeChannelId ?? undefined,
