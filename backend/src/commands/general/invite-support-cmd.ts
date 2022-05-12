@@ -44,7 +44,10 @@ export class UserCommand extends ICommand {
           {
             description: stripIndent(`
                     === Invite Link ===
-                    ${createHyperLink("Click Here", environment.bot.support_server_url)} to invite the bot to your server.
+                    ${createHyperLink(
+                      "Click Here",
+                      environment.bot.support_server_url
+                    )} to invite the bot to your server.
                     `),
           },
           ctx
@@ -101,8 +104,14 @@ export class UserCommand2 extends ICommand {
             description: stripIndent(`
                     === Support Information ===
                     ${createHyperLink("Server", environment.bot.support_server_url)} to join the support server.
-                    ${createHyperLink("Documentation", environment.bot.developerMetaData.documentation_link)} to view the documentation.
-                    ${createHyperLink("Dashboard", environment.bot.developerMetaData.dashboard_link)} to view the dashboard.
+                    ${createHyperLink(
+                      "Documentation",
+                      environment.bot.developerMetaData.documentation_link
+                    )} to view the documentation.
+                    ${createHyperLink(
+                      "Dashboard",
+                      environment.bot.developerMetaData.dashboard_link
+                    )} to view the dashboard.
                     `),
           },
           ctx
@@ -118,8 +127,14 @@ export class UserCommand2 extends ICommand {
             description: stripIndent(`
                     === Support Information ===
                     ${createHyperLink("Server", environment.bot.support_server_url)}) to join the support server.
-                    ${createHyperLink("Documentation", environment.bot.developerMetaData.documentation_link)} to view the documentation.
-                    ${createHyperLink("Dashboard", environment.bot.developerMetaData.dashboard_link)} to view the dashboard.
+                    ${createHyperLink(
+                      "Documentation",
+                      environment.bot.developerMetaData.documentation_link
+                    )} to view the documentation.
+                    ${createHyperLink(
+                      "Dashboard",
+                      environment.bot.developerMetaData.dashboard_link
+                    )} to view the dashboard.
                     `),
           },
           interaction

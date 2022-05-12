@@ -246,7 +246,7 @@ export enum Faces {
  * @returns The hyperlink
  */
 export function createHyperLink(name: string, url: string): string {
-  if(url.length < 5 || !url.includes("https://" || "http://")) return `~~${name}~~`;
+  if (url.length < 5 || !url.includes("https://" || "http://")) return `~~${name}~~`;
   return `[${name}](${url})`;
 }
 /**
@@ -264,16 +264,33 @@ export function hideLinkEmbed(url: string): string {
  */
 export function channelMention(id: string | null): string {
   if (id) {
+    if (id.length < 1) {
+      return "No channel";
+    }
     return `<#${id}>`;
   } else {
-    return "".replaceAll("<#>", "Channel Not Found");
+    return "No channel";
   }
 }
 
 export function memberMention(id: string | null): string {
   if (id) {
+    if (id.length < 1) {
+      return "No member";
+    }
     return `<@${id}>`;
   } else {
-    return "".replaceAll("<#>", "Member Not Found");
+    return "No member";
+  }
+}
+
+export function roleMention(id: string | null): string {
+  if (id) {
+    if (id.length < 1) {
+      return "No role";
+    }
+    return `<@&${id}>`;
+  } else {
+    return "No role";
   }
 }
