@@ -74,21 +74,24 @@ export class UserCommand extends ICommand {
     await ctx.channel.send({
       content: `:warning: Warning! This plugin can only be configured with slash commands.`,
     });
+
+    // TODO - Make this work right. For now we will show just the reply for the custom command.
+    // customCommands
+    //   .map(
+    //     (command) =>
+    //       `[${command.trigger}] = Allowed Channels: ${command.allowedChannels
+    //         ?.map((chan) => channelMention(chan) ?? "All")
+    //         .join(", ")} | Allowed Users: ${command.allowedUsers?.map((user) => memberMention(user)).join(", ") ?? "All"
+    //       } | Allows Roles ${command.allowedRoles?.map((role) => roleMention(role) ?? "All").join(", ")}`
+    //   )
+    //   .join("\n\n")
+
     return await ctx.channel.send({
       content: codeBlock(
         "css",
         `
 === Custom Commands ===
-${customCommands
-  .map(
-    (command) =>
-      `[${command.trigger}] = Allowed Channels: ${command.allowedChannels
-        ?.map((chan) => channelMention(chan) ?? "All")
-        .join(", ")} | Allowed Users: ${
-        command.allowedUsers?.map((user) => memberMention(user)).join(", ") ?? "All"
-      } | Allows Roles ${command.allowedRoles?.map((role) => roleMention(role) ?? "All").join(", ")}`
-  )
-  .join("\n\n")}
+${customCommands.map((command) => `[${command.trigger}] = ${command.response}`).join("\n")}
 
 Tip: To run a custom command you must use the bots prefix. Example: ${prefix}mycustomcommand.
 `
@@ -279,16 +282,7 @@ Tip: To run a custom command you must use the bots prefix. Example: ${prefix}myc
           "css",
           `
 === Custom Commands ===
-${customCommands
-  .map(
-    (command) =>
-      `[${command.trigger}] = Allowed Channels: ${command.allowedChannels
-        ?.map((chan) => channelMention(chan) ?? "All")
-        .join(", ")} | Allowed Users: ${
-        command.allowedUsers?.map((user) => memberMention(user)).join(", ") ?? "All"
-      } | Allows Roles ${command.allowedRoles?.map((role) => roleMention(role) ?? "All").join(", ")}`
-  )
-  .join("\n\n")}
+${customCommands.map((command) => `[${command.trigger}] = ${command.response}`).join("\n")}
 
 Tip: To run a custom command you must use the bots prefix. Example: ${prefix}mycustomcommand
 `
