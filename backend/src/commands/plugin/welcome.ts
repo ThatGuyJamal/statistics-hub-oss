@@ -70,7 +70,7 @@ export class UserCommand extends ICommand {
       // If no document found, we create a new one.
       if (!document) {
         await interaction.channel?.send({
-          content: `It seams you dont have the welcome plugin enabled. Here are a few tips:`,
+          content: `Thanks for running the setup! Here are a few tips:`,
           embeds: [
             new BaseEmbed({}).interactionEmbed(
               {
@@ -82,7 +82,7 @@ export class UserCommand extends ICommand {
 
               All command shortcuts are case-sensitive and need to be wrapped in "{{" and "}}" brackets.
 
-              Example: "{{user.mention}}" will be replaced with the user's mention.
+              Example: "{{user.mention}}" will be replaced with ${memberMention(interaction.user.id)}.
 
               === Available shortcuts ===
               [user.mention] - Mentions the user that triggered the command.

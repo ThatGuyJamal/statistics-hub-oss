@@ -50,6 +50,7 @@ export class UserCommand extends ICommand {
             (msg.editedTimestamp || msg.createdTimestamp) - (ctx.editedTimestamp || ctx.createdTimestamp)
           )}`,
           wsLatency: `${ms(Math.round(this.container.client.ws.ping))}`,
+          uptime: `${ms(this.container.client.uptime || 0)}`,
         },
       })}
     `

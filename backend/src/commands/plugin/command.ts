@@ -340,10 +340,9 @@ __**Notes**__
     });
   }
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
+    const { client } = this.container;
 
-    const { client } = this.container
-
-    if(!interaction.guild) return
+    if (!interaction.guild) return;
 
     const cachedData = client.LocalCacheStore.memory.plugins.commands.get(interaction.guild);
     const document = await CommandPluginMongoModel.findOne({ GuildId: interaction.guild.id });
@@ -359,8 +358,8 @@ __**Notes**__
         GuildCustomCommands: {
           data: [],
           limit: 5,
-        }
-      })
+        },
+      });
     }
 
     if (!document) {
@@ -374,16 +373,16 @@ __**Notes**__
         GuildCustomCommands: {
           data: [],
           limit: 5,
-        }
-      })
+        },
+      });
     }
 
     if (interaction.options.getSubcommand() === "disable") {
       await interaction.deferReply({
         ephemeral: true,
-      })
+      });
       let disableCommandArg = interaction.options.getString("disable-command", true);
-      
+
       // Stop the user from disabling this command
       if (disableCommandArg === "command") {
         return interaction.editReply({
@@ -392,14 +391,14 @@ __**Notes**__
       }
 
       // Check if the command exists
-      if(!allValidCommands.includes(disableCommandArg)) {
+      if (!allValidCommands.includes(disableCommandArg)) {
         return interaction.editReply({
           content: `The command \`${disableCommandArg}\` does not exist.`,
         });
       }
 
       // Check if the command is already disabled
-      if(cachedData?.GuildDisabledCommands?.includes(disableCommandArg)) {
+      if (cachedData?.GuildDisabledCommands?.includes(disableCommandArg)) {
         return interaction.editReply({
           content: `The command \`${disableCommandArg}\` is already disabled.`,
         });
@@ -407,7 +406,7 @@ __**Notes**__
 
       // Add the command to the disabled list
       let disabledCommands = cachedData?.GuildDisabledCommands || [];
-      disabledCommands?.push(disableCommandArg)
+      disabledCommands?.push(disableCommandArg);
       // Set the disabled commands in the cache
       client.LocalCacheStore.memory.plugins.commands.set(interaction.guild, {
         ...cachedData,
@@ -429,19 +428,19 @@ __**Notes**__
     } else if (interaction.options.getSubcommand() === "enable") {
       await interaction.deferReply({
         ephemeral: true,
-      })
+      });
 
       let enableCommandArg = interaction.options.getString("enable-command", true);
 
       // Check if the command exists
-      if(!allValidCommands.includes(enableCommandArg)) {
+      if (!allValidCommands.includes(enableCommandArg)) {
         return interaction.editReply({
           content: `The command \`${enableCommandArg}\` does not exist.`,
         });
       }
 
       // Check if the command is already enabled
-      if(!cachedData?.GuildDisabledCommands?.includes(enableCommandArg)) {
+      if (!cachedData?.GuildDisabledCommands?.includes(enableCommandArg)) {
         return interaction.editReply({
           content: `The command \`${enableCommandArg}\` is already enabled.`,
         });
@@ -471,12 +470,12 @@ __**Notes**__
     } else if (interaction.options.getSubcommand() === "disable-channel") {
       await interaction.deferReply({
         ephemeral: true,
-      })
+      });
 
       let disableChannelArg = interaction.options.getChannel("disable-channel", true) as TextChannel;
-      
+
       // Check if the channel is already disabled
-      if(cachedData?.GuildDisabledCommandChannels?.includes(disableChannelArg.id)) {
+      if (cachedData?.GuildDisabledCommandChannels?.includes(disableChannelArg.id)) {
         return interaction.editReply({
           content: `The channel ${channelMention(disableChannelArg.id)} is already disabled.`,
         });
@@ -503,16 +502,15 @@ __**Notes**__
       return interaction.editReply({
         content: `The channel ${channelMention(disableChannelArg.id)} has been disabled.`,
       });
-
     } else if (interaction.options.getSubcommand() === "enable-channel") {
       await interaction.deferReply({
         ephemeral: true,
-      })
+      });
 
       let enableChannelArg = interaction.options.getChannel("enable-channel", true) as TextChannel;
-      
+
       // Check if the channel is already enabled
-      if(!cachedData?.GuildDisabledCommandChannels?.includes(enableChannelArg.id)) {
+      if (!cachedData?.GuildDisabledCommandChannels?.includes(enableChannelArg.id)) {
         return interaction.editReply({
           content: `The channel ${channelMention(enableChannelArg.id)} is already enabled.`,
         });
@@ -534,7 +532,6 @@ __**Notes**__
         $set: {
           GuildDisabledCommandChannels: disabledChannels,
         },
-
       });
 
       return interaction.editReply({
@@ -543,16 +540,15 @@ __**Notes**__
     } else if (interaction.options.getSubcommand() === "list") {
       await interaction.deferReply({
         ephemeral: true,
-      })
+      });
 
       let disabledCommands = cachedData?.GuildDisabledCommands;
       let disabledChannels = cachedData?.GuildDisabledCommandChannels;
 
-      if(!disabledCommands?.length && !disabledChannels?.length) {
+      if (!disabledCommands?.length && !disabledChannels?.length) {
         return interaction.editReply({
           content: `No commands or channels are disabled.`,
         });
-
       } else {
         return await interaction.editReply({
           embeds: [
@@ -581,25 +577,56 @@ __**Notes**__
       }
     }
 
-    return 
+    return;
   }
 
   // ["enable", "disable", "delete", "list", "enable-channel", "disable-channel"]
 
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
-    registry.registerChatInputCommand((builder) => 
-    builder.setName(this.name)
-    .setDescription(this.description)
-        .addSubcommand((options) => options.setName("disable").setDescription("Disable a command.").addStringOption((option) => option.setName("disable-command").setDescription("The command to disable.").setRequired(true)))
-        .addSubcommand((options) => options.setName("enable").setDescription("Enable a command.").addStringOption((option) => option.setName("enable-command").setDescription("The command to enable.").setRequired(true)))
-    .addSubcommand((options) => options.setName("list").setDescription("List all disabled commands."))
-        .addSubcommand((options) => options.setName("enable-channel").setDescription("Enable a channel.").addChannelOption((option) => option.setName("enable-channel").setDescription("The channel to enable.").setRequired(true)))
-        .addSubcommand((options) => options.setName("disable-channel").setDescription("Disable a channel.").addChannelOption((option) => option.setName("disable-channel").setDescription("The channel to disable.").setRequired(true)))
-    , {
-      guildIds: getTestGuilds(),
-      registerCommandIfMissing: environment.bot.register_commands,
-      behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
-      idHints: ["974034185561985076"],
-    });
+    registry.registerChatInputCommand(
+      (builder) =>
+        builder
+          .setName(this.name)
+          .setDescription(this.description)
+          .addSubcommand((options) =>
+            options
+              .setName("disable")
+              .setDescription("Disable a command.")
+              .addStringOption((option) =>
+                option.setName("disable-command").setDescription("The command to disable.").setRequired(true)
+              )
+          )
+          .addSubcommand((options) =>
+            options
+              .setName("enable")
+              .setDescription("Enable a command.")
+              .addStringOption((option) =>
+                option.setName("enable-command").setDescription("The command to enable.").setRequired(true)
+              )
+          )
+          .addSubcommand((options) => options.setName("list").setDescription("List all disabled commands."))
+          .addSubcommand((options) =>
+            options
+              .setName("enable-channel")
+              .setDescription("Enable a channel.")
+              .addChannelOption((option) =>
+                option.setName("enable-channel").setDescription("The channel to enable.").setRequired(true)
+              )
+          )
+          .addSubcommand((options) =>
+            options
+              .setName("disable-channel")
+              .setDescription("Disable a channel.")
+              .addChannelOption((option) =>
+                option.setName("disable-channel").setDescription("The channel to disable.").setRequired(true)
+              )
+          ),
+      {
+        guildIds: getTestGuilds(),
+        registerCommandIfMissing: environment.bot.register_commands,
+        behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
+        idHints: ["974034185561985076"],
+      }
+    );
   }
 }
