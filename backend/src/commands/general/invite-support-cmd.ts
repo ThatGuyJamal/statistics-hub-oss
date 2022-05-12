@@ -17,7 +17,7 @@ import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCom
 import { Message } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
-import stripIndent from "../../internal/functions/formatting";
+import stripIndent, { createHyperLink } from "../../internal/functions/formatting";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
 import { BaseEmbed } from "../../internal/structures/Embed";
@@ -44,7 +44,7 @@ export class UserCommand extends ICommand {
           {
             description: stripIndent(`
                     === Invite Link ===
-                    [Click Here](${environment.bot.bot_oauth_url}) to invite the bot to your server.
+                    ${createHyperLink("Click Here", environment.bot.support_server_url)} to invite the bot to your server.
                     `),
           },
           ctx
@@ -59,7 +59,7 @@ export class UserCommand extends ICommand {
           {
             description: stripIndent(`
                     === Invite Link ===
-                    [Click Here](${environment.bot.bot_oauth_url}) to invite the bot to your server.
+                    ${createHyperLink("Click Here", environment.bot.bot_oauth_url)} to invite the bot to your server.
                     `),
           },
           interaction
@@ -100,9 +100,9 @@ export class UserCommand2 extends ICommand {
           {
             description: stripIndent(`
                     === Support Information ===
-                    [Server](${environment.bot.support_server_url}) to join the support server.
-                    [Documentation](${environment.bot.developerMetaData.documentation_link}) to view the documentation.
-                    [Dashboard](${environment.bot.developerMetaData.dashboard_link}) to view the dashboard.
+                    ${createHyperLink("Server", environment.bot.support_server_url)} to join the support server.
+                    ${createHyperLink("Documentation", environment.bot.developerMetaData.documentation_link)} to view the documentation.
+                    ${createHyperLink("Dashboard", environment.bot.developerMetaData.dashboard_link)} to view the dashboard.
                     `),
           },
           ctx
@@ -117,9 +117,9 @@ export class UserCommand2 extends ICommand {
           {
             description: stripIndent(`
                     === Support Information ===
-                    [Server](${environment.bot.support_server_url}) to join the support server.
-                    [Documentation](${environment.bot.developerMetaData.documentation_link}) to view the documentation.
-                    [Dashboard](${environment.bot.developerMetaData.dashboard_link}) to view the dashboard.
+                    ${createHyperLink("Server", environment.bot.support_server_url)}) to join the support server.
+                    ${createHyperLink("Documentation", environment.bot.developerMetaData.documentation_link)} to view the documentation.
+                    ${createHyperLink("Dashboard", environment.bot.developerMetaData.dashboard_link)} to view the dashboard.
                     `),
           },
           interaction

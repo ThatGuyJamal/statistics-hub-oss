@@ -24,7 +24,7 @@ import { GuildMember } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
 import { WelcomePluginMongoModel } from "../../database/models/plugins/welcome/welcome";
-import stripIndent, { channelMention, codeBlock, memberMention } from "../../internal/functions/formatting";
+import stripIndent, { channelMention, codeBlock, hideLinkEmbed, memberMention } from "../../internal/functions/formatting";
 import { pauseThread } from "../../internal/functions/promises";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
@@ -335,7 +335,8 @@ export class UserCommand extends ICommand {
         if (!cardBackground.startsWith("https://")) {
           return await interaction.editReply({
             content:
-              "Card URL you entered is not valid! Please use a valid URL using `https://`. Make sure the link to the background is public. If you have a picture you want to use, try uploading it to <https://imgur.com/> \n Example: https://i.imgur.com/az1Sx59.jpeg",
+              `Card URL you entered is not valid! Please use a valid URL using \`https://\`. 
+              Make sure the link to the background is public. If you have a picture you want to use, try uploading it to ${hideLinkEmbed("https://imgur.com/")}\n Example: https://i.imgur.com/az1Sx59.jpeg`,
           });
         }
       }

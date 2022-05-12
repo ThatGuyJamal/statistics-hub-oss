@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/thatguyjamal/Code/bots/statistics-hub-oss'
+make: Leaving directory '/home/thatguyjamal/Code/bots/statistics-hub-oss'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+

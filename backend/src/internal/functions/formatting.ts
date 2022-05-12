@@ -243,15 +243,16 @@ export enum Faces {
  * A markdown function to make hyperlinks in an embed message
  * @param name  The name of the link
  * @param url  The url of the link
- * @returns
+ * @returns The hyperlink
  */
 export function createHyperLink(name: string, url: string): string {
+  if(url.length < 5 || !url.includes("https://" || "http://")) return `~~${name}~~`;
   return `[${name}](${url})`;
 }
 /**
  * Wraps a url in <> tags. This prevents it from embedding in a discord channel.
  * @param url The url to wrap
- * @returns
+ * @returns The wrapped url
  */
 export function hideLinkEmbed(url: string): string {
   return `<${url}>`;
