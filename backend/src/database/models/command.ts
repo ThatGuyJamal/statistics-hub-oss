@@ -53,6 +53,9 @@ export interface CommandModelStructure {
   GuildOwnerId?: string;
   GuildDisabledCommands?: string[];
   GuildDisabledCommandChannels?: string[];
+  /**
+   * Custom Command Structure
+   */
   GuildCustomCommands?: {
     /** Command data */
     data: Array<CustomCommandSchema>;
@@ -74,7 +77,7 @@ interface CustomCommandSchema {
   /**
    * The channel to send the message to.
    */
-  channel: string;
+  allowedChannels: string[];
   /**
    * The users who can use this command.
    */
