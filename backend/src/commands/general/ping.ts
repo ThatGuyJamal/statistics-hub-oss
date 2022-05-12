@@ -76,7 +76,7 @@ export class UserCommand extends ICommand {
     const { diff, ping } = this.getPing(msg, interaction);
 
     return interaction.editReply({
-      content: `Pong! (Roundtrip took: ${diff}ms. Heartbeat: ${ms(ping)})`,
+      content: `Pong! (Roundtrip took: ${diff}ms. Heartbeat: ${ms(ping)}. Uptime: ${ms(this.container.client.uptime || 0)}.)`,
     });
   }
 
