@@ -637,6 +637,9 @@ export class UserCommand extends ICommand {
                       "Hidden Lighthouse",
                       "https://cdn.discordapp.com/attachments/937124004492365874/968196852056997938/EpicBanner.png",
                     ],
+                    [
+                      "Warm sunset", "https://cdn.discordapp.com/attachments/937124004492365874/972560334965579886/Banner2.png"
+                    ]
                   ])
                   .setRequired(false)
               )

@@ -13,14 +13,20 @@
  */
 
 import { ApplyOptions } from "@sapphire/decorators";
-import { ListenerOptions, Events, Listener, MessageCommandAcceptedPayload } from "@sapphire/framework";
-import { sendLegacyError } from "../../internal/interactions/responses";
+import { ListenerOptions, Events, Listener, UserError, MessageCommandErrorPayload } from "@sapphire/framework";
+import { send } from "@sapphire/plugin-editable-commands";
 
 @ApplyOptions<ListenerOptions>({
-    event: Events.MessageCommandError,
+  event: Events.MessageCommandError,
 })
-export class UserEvent extends Listener {
-    public async run(payload: MessageCommandAcceptedPayload) {
-        return await sendLegacyError(payload.message, `Something went wrong with the "${payload.command.name}" command`);
+export class UserListener extends Listener<typeof Events.MessageCommandError> {
+  public override async run(error: UserError, { message }: MessageCommandErrorPayload) {
+    if (error instanceof UserError) {
+      if (!Reflect.get(Object(error.context), "silent"))
+        return send(message, {
+          content: error.message,
+        });
     }
+    return undefined;
+  }
 }

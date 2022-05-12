@@ -106,4 +106,4 @@ export const sendLegacyError = async (ctx: Message, description: string) => {
   return await ctx.reply(payload).catch((err) => {
     container.logger.error(err);
   });
-}
+};

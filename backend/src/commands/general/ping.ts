@@ -15,7 +15,7 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand } from "@sapphire/framework";
 import { send } from "@sapphire/plugin-editable-commands";
-import { Message, TextChannel } from "discord.js";
+import { CommandInteraction, Message, TextChannel } from "discord.js";
 import ms from "ms";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
@@ -60,17 +60,41 @@ export class UserCommand extends ICommand {
       content: result,
     });
   }
+
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
     const result = codeBlock(
       "diff",
       `- Pong! My websocket connection took... ${ms(Math.round(this.container.client.ws.ping))} to respond.`
     );
 
-    return await interaction.reply({
-      content: result,
+    const msg = (await interaction.reply({
+      content: `Ping?`,
       ephemeral: true,
+      fetchReply: true,
+    })) as Message;
+
+    const { diff, ping } = this.getPing(msg, interaction);
+
+    return interaction.editReply({
+      content: `Pong! (Roundtrip took: ${diff}ms. Heartbeat: ${ms(ping)})`,
     });
   }
+
+  /**
+   * @param message The message to get the ping from.
+   * @param interaction The interaction that triggered the command.
+   * @returns {diff: number, ping: number} The ping and the roundtrip time.
+   */
+  private getPing(message: Message, interaction: CommandInteraction) {
+    const diff = (message.editedTimestamp || message.createdTimestamp) - interaction.createdTimestamp;
+    const ping = Math.round(this.container.client.ws.ping);
+
+    return { diff, ping };
+  }
+
+  /**
+   * @param registry The registry to register the command to.
+   */
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
     registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
       guildIds: getTestGuilds(),
