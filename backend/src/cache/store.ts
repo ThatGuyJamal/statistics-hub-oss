@@ -14,6 +14,7 @@
 
 import { container } from "@sapphire/framework";
 import { Collection, Guild, GuildMember } from "discord.js";
+import { CommandModelStructure, CommandPluginMongoModel } from "../database/models/command";
 import { type GuildModelStructure, GuildsMongoModel } from "../database/models/guild";
 import { WelcomePluginModelStructure, WelcomePluginMongoModel } from "../database/models/plugins/welcome/welcome";
 import { type UserModelStructure, UsersMongoModel } from "../database/models/user";
@@ -112,6 +113,37 @@ export class LocalCacheStore {
           return this.memory.plugins.welcome.cache.delete(guild.id);
         },
       },
+      commands: {
+        cache: new Collection<string, CommandModelStructure>(),
+        /**
+         * Gets a value from the cache.
+         * @param id The id of the guild.
+         * @returns {CommandModelStructure | undefined} The guild data or undefined if not found.
+         * @memberof LocalCacheStore
+         */
+        get: (guild: Guild): CommandModelStructure | undefined => {
+          return this.memory.plugins.commands.cache.get(guild.id);
+        },
+        /**
+         * Sets a value in the cache.
+         * @param id The id of the guild.
+         * @param value The guild data to set.
+         * @returns {CommandModelStructure | undefined} The guild data or undefined if not found.
+         * @memberof LocalCacheStore
+         */
+        set: (guild: Guild, value: CommandModelStructure) => {
+          return this.memory.plugins.commands.cache.set(guild.id, value);
+        },
+        /**
+         * Removes a value from the cache.
+         * @param id The id of the guild.
+         * @returns {CommandModelStructure | undefined} The guild data or undefined if not found.
+         * @memberof LocalCacheStore
+         */
+        delete: (guild: Guild) => {
+          return this.memory.plugins.commands.cache.delete(guild.id);
+        },
+      },
     },
   };
 
@@ -124,10 +156,12 @@ export class LocalCacheStore {
     const guild = await GuildsMongoModel.find({});
     const user = await UsersMongoModel.find({});
     const welcome = await WelcomePluginMongoModel.find({});
+    const commands = await CommandPluginMongoModel.find({});
 
     if (!guild.length) container.logger.warn("No guilds found in the database.");
     if (!user.length) container.logger.warn("No users found in the database.");
     if (!welcome.length) container.logger.warn("No welcome plugins found in the database.");
+    if (!commands.length) container.logger.warn("No command plugins found in the database.");
 
     // Add the data to the memory
     for (const g of guild) {
@@ -148,6 +182,12 @@ export class LocalCacheStore {
         container.logger.debug(`Added welcome plugin ${w.GuildId} to the cache.\n ${w}`);
     }
 
+    for (const c of commands) {
+      this.memory.plugins.commands.cache.set(c.GuildId, c);
+      if (!container.client.environment.production)
+        container.logger.debug(`Added command plugin ${c.GuildId} to the cache.\n ${c}`);
+    }
+
     // Log the amount of data
     container.logger.info(
       `Loaded ${guild.length} guilds, ${user.length} users, and ${welcome.length} welcome plugins.`
@@ -158,6 +198,11 @@ export class LocalCacheStore {
    * @returns {number} The total size of the cache.
    */
   public get size(): number {
-    return this.memory.guild.cache.size + this.memory.user.cache.size + this.memory.plugins.welcome.cache.size;
+    return (
+      this.memory.guild.cache.size +
+      this.memory.user.cache.size +
+      this.memory.plugins.welcome.cache.size +
+      this.memory.plugins.commands.cache.size
+    );
   }
 }

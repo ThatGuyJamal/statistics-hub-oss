@@ -12,9 +12,21 @@
     GNU Affero General Public License for more details.
  */
 
-export enum CacheKeysEnum {
-  GUILDS = "guilds",
-  USERS = "users",
-  WELCOME_PLUGINS = "welcome_plugins",
-  STATISTICS = "statistics",
+import { container } from "@sapphire/framework";
+import type { GuildMember, User } from "discord.js";
+
+export function isAdmin(member: GuildMember): boolean {
+  return member.permissions.has("ADMINISTRATOR") || member.permissions.has("MANAGE_GUILD");
+}
+
+export function isModerator(member: GuildMember): boolean {
+  return isAdmin(member) || Boolean(member.roles.cache.find((r) => r.name.toLowerCase().includes("moderator")));
+}
+
+export function isGuildOwner(member: GuildMember): boolean {
+  return member.id === member.guild.ownerId;
+}
+
+export function isOwner(user: User): boolean {
+  return container.client.BotDevelopers.has(user.id);
 }

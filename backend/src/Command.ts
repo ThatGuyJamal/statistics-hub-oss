@@ -60,6 +60,9 @@ export abstract class ICommand extends SapphireCommand<Args, ICommandOptions> {
 
       // Automatically enable the OwnerOnly precondition.
       this.preconditions.append("OwnerOnlyCommand");
+    } else {
+      // If the command is not in the developer category, then it needs this precondition.
+      this.preconditions.append("CommandCanRun");
     }
 
     // If this command is disabled:

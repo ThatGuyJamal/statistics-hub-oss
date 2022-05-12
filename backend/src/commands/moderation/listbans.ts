@@ -13,15 +13,16 @@
  */
 
 import { ApplyOptions } from "@sapphire/decorators";
-import { Args, BucketScope } from "@sapphire/framework";
+import { BucketScope } from "@sapphire/framework";
 import { Message } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
+import stripIndent from "../../internal/functions/formatting";
 import { seconds } from "../../internal/functions/time";
-
-const errorTracked = [];
+import { BaseEmbed } from "../../internal/structures/Embed";
 
 @ApplyOptions<ICommandOptions>({
-  description: "Test command for some stuff :/",
+  aliases: ["lb"],
+  description: "Shows the banned users in your server.",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
@@ -29,47 +30,59 @@ const errorTracked = [];
   nsfw: false,
   enabled: true,
   extendedDescription: {
-    hidden: true,
+    usage: "listbans",
+    command_type: "message",
   },
+  requiredUserPermissions: ["BAN_MEMBERS"],
+  requiredClientPermissions: ["VIEW_AUDIT_LOG"],
 })
 export class UserCommand extends ICommand {
-  public async messageRun(ctx: Message, args: Args) {
-    await ctx.channel.send({ content: `Starting test...` });
-    const { client } = this.container;
-    try {
-      await this.testCode(ctx, args);
-    } catch (e) {
-      errorTracked.push(1);
-      client.logger.error(e);
-      await ctx.channel.send({
-        embeds: [
-          {
-            description: `Error: ${e}`,
-          },
-        ],
+  public async messageRun(ctx: Message) {
+    const fetchBans = await ctx.guild?.bans.fetch();
+    let amount = 1;
+
+    if (!fetchBans) {
+      return await ctx.reply({
+        content: `There are no banned users in this server.`,
       });
     }
-    await ctx.channel.send({
-      content: `Test finished! ${
-        errorTracked.length > 0
-          ? `${errorTracked.length} error${errorTracked.length < 1 ? "" : "s"} were tracked. Check the logs...`
-          : ""
-      }`,
-    });
-  }
 
-  /**
-   * The test code to run
-   * @param ctx
-   */
-  private async testCode(ctx: Message, args: Args) {
-    ctx.channel.send("Working on it...");
-    const text = await args.pick("string").catch(() => null);
-    if (!text) {
-      return ctx.reply("No prefix was given as an argument!");
+    const bannedMembers = (await fetchBans)
+      .map(
+        (data) =>
+          `> __${amount++}.__ **${data.user.tag}** | (*${data.user.id}*) | Reason: *${
+            data.reason ?? "No reason provided."
+          }*`
+      )
+      .join("\n\n");
+
+    if (amount === 0) {
+      return await ctx.reply({
+        content: `There are no banned users in this server.`,
+      });
     }
 
-    return ctx.reply(`Prefix is: **${text}**`);
+    // check if we have over 40 bans in the server
+    if (amount > 40) {
+      return await ctx.reply({
+        content: `There are too many banned users in this server to show right now. We are working on a fix.\n Amount: \`${bannedMembers.length}\``,
+      });
+    }
+
+    return await ctx.reply({
+      embeds: [
+        new BaseEmbed().contextEmbed(
+          {
+            title: `Banned Users in ${ctx.guild?.name} | ${amount - 1}`,
+            description: stripIndent(`
+                    === Banned Users ===
+                    ${bannedMembers}
+                    `),
+          },
+          ctx
+        ),
+      ],
+    });
   }
   // public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) { }
   // public override registerApplicationCommands(registry: ApplicationCommandRegistry) {

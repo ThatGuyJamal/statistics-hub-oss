@@ -1,3 +1,17 @@
+/**
+ *  Statistics Hub OSS - A data analytics discord bot.
+    
+    Copyright (C) 2022, ThatGuyJamal and contributors
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU Affero General Public License for more details.
+ */
+
 import type { CardOptions } from "discord-welcome-card/lib/types";
 import mongo from "mongoose";
 
@@ -62,7 +76,7 @@ export const WelcomePluginMongoModel = mongo.model(
     GuildWelcomeThemeUrl: {
       type: String,
       required: false,
-      default: "https://cdn.discordapp.com/attachments/937124004492365874/968539236087234580/unknown.png"
+      default: "https://i.imgur.com/dCS4tQk.jpeg",
     },
     CreatedById: {
       type: String,

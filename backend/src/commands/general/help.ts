@@ -13,7 +13,14 @@
  */
 
 import { ApplyOptions } from "@sapphire/decorators";
-import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand, Args } from "@sapphire/framework";
+import {
+  BucketScope,
+  ApplicationCommandRegistry,
+  RegisterBehavior,
+  ChatInputCommand,
+  Args,
+  container,
+} from "@sapphire/framework";
 import { AutocompleteInteraction, Message, TextChannel } from "discord.js";
 import Fuse from "discord.js-docs/node_modules/fuse.js";
 import { ICommandOptions, ICommand } from "../../Command";
@@ -21,6 +28,14 @@ import { environment } from "../../config";
 import { capitalizeFirstLetter, codeBlock } from "../../internal/functions/formatting";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
+
+const validCommandList = [...container.stores.get("commands").values()]
+  // filter out categories that are hidden
+  .filter((c) => c.category !== "developer")
+  // sort categories alphabetically
+  .sort((a, b) => a.category!.localeCompare(b.category!))
+  .map((c) => `[Category] ${c.category} > [Name] = ${c.name}`)
+  .join("\n");
 
 @ApplyOptions<ICommandOptions>({
   description: "Shows information about the commands and how to use them.",
@@ -49,7 +64,7 @@ export class UserCommand extends ICommand {
           "css",
           `
 === Command list ===
-${[...this.container.stores.get("commands").values()].map((c) => `[${c.category}] = ${c.name}`).join("\n")}
+${validCommandList}
 
 You can run help <command> to get more information about a command.
       `
@@ -62,10 +77,7 @@ You can run help <command> to get more information about a command.
           "css",
           `
 === Command list ===
-${[...this.container.stores.get("commands").values()]
-  .filter((c) => c.category !== "developer")
-  .map((c) => `[${c.category}] = ${c.name}`)
-  .join("\n")}
+${validCommandList}
 
 You can run help <command> to get more information about a command.
       `
@@ -126,7 +138,7 @@ You can run help <command> to get more information about a command.
           "css",
           `
 === Command list ===
-${[...this.container.stores.get("commands").values()].map((c) => `[${c.category}] = ${c.name}`).join("\n")}
+${validCommandList}
 
 You can run help <command> to get more information about a command.
       `
@@ -139,10 +151,7 @@ You can run help <command> to get more information about a command.
           "css",
           `
 === Command list ===
-${[...this.container.stores.get("commands").values()]
-  .filter((c) => c.category !== "developer")
-  .map((c) => `[${c.category}] = ${c.name}`)
-  .join("\n")}
+${validCommandList}
 
 You can run help <command> to get more information about a command.
       `

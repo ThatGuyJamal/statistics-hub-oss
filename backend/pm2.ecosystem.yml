@@ -1,4 +1,4 @@
 apps:
-  - script: "./out/registry.js"
+  - script: "./out/bootstrap.js"
     node_args: "--enable-source-maps"
     env: { "NODE_ENV": "production" }

@@ -75,7 +75,7 @@
     systeminformation "^5.11.14"
     tslib "^2.4.0"
 
-"@mapbox/node-pre-gyp@^1.0.0":
+"@mapbox/node-pre-gyp@^1.0.0", "@mapbox/node-pre-gyp@^1.0.9":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.9.tgz#09a8781a3a036151cdebbe8719d6f8b25d4058bc"
   integrity sha512-aDF3S3rK9Q2gey/WAttUlISduDItz5BU3306M9Eyv6/oS40aMprnopshtlKTykxRNIBEZuRMaZAnbrQ4QtKGyw==
@@ -859,6 +859,11 @@ discord-api-types@^0.26.0:
   resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.26.1.tgz#726f766ddc37d60da95740991d22cb6ef2ed787b"
   integrity sha512-T5PdMQ+Y1MEECYMV5wmyi9VEYPagEDEi4S0amgsszpWY0VB9JJ/hEvM6BgLhbdnKky4gfmZEXtEEtojN8ZKJQQ==
 
+discord-api-types@^0.32.1:
+  version "0.32.1"
+  resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.32.1.tgz#c468ec31a1ac2565673619ba1e0d35f01d339a65"
+  integrity sha512-/ewl0CPYT5xjOC+SJ7wADJKjtpZfiiUaYXOP/Ns54lnBcv4Xqa4iKSqRF/w1fjiUvWTYN9W8UuOiyCHtmu5fJw==
+
 discord-welcome-card@^4.7.0:
   version "4.8.1"
   resolved "https://registry.yarnpkg.com/discord-welcome-card/-/discord-welcome-card-4.8.1.tgz#5836b4b8a5668b523a5d0df63a4d4e27053984fb"
@@ -1563,6 +1568,11 @@ pac-resolver@^5.0.0:
     degenerator "^3.0.1"
     ip "^1.1.5"
     netmask "^2.0.1"
+
+pagination.djs@^3.5.2:
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/pagination.djs/-/pagination.djs-3.5.2.tgz#fba4ea4d356c76ea5e97f4af50b5940da6b692ac"
+  integrity sha512-zJFZmsKdPIFdbt72LtnYIo24arOGD53joBDpL5diTxqpDtcGHEaQ6b9oPCPAQ0iS1HkMHaGIfIi9p1xPLpH6Ew==
 
 pako@^0.2.5:
   version "0.2.9"

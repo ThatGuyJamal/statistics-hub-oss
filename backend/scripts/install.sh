@@ -3,12 +3,9 @@
 # A script to install the backend structure on a fresh Ubuntu installation.
 
 if [[ "$OSTYPE" =~ ^linux ]]; then
-    clear
-
-    sudo su -
 
     echo "Installing Nodejs..."
-    apt update -y && curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash - && apt install -y nodejs
+    sudo apt update -y && curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash - && apt install -y nodejs
 
     echo "Checking Nodejs installation..."
     node -v

@@ -17,7 +17,7 @@ import { Events, Listener, ListenerOptions } from "@sapphire/framework";
 import { drawCard, Text } from "discord-welcome-card";
 import { GuildMember, TextChannel } from "discord.js";
 import { Colors, colorToStyle } from "../../internal/constants/colors";
-import { memberMention } from "../../internal/functions/formatting";
+import { codeBlock, memberMention } from "../../internal/functions/formatting";
 
 @ApplyOptions<ListenerOptions>({
   name: "welcome-plugin-add",
@@ -25,77 +25,110 @@ import { memberMention } from "../../internal/functions/formatting";
 })
 export class UserEvent extends Listener {
   public async run(member: GuildMember): Promise<void> {
-    const { client } = this.container;
+    try {
+      const { client } = this.container;
 
-    const data = client.LocalCacheStore.memory.plugins.welcome.get(member.guild);
+      const data = client.LocalCacheStore.memory.plugins.welcome.get(member.guild);
 
-    if (!data || data.Enabled === false) return;
+      if (!data || data.Enabled === false) return;
 
-    if (data.GuildWelcomeChannelId) {
-      const welcomeChannel = client.channels.cache.get(data.GuildWelcomeChannelId) as TextChannel;
-      if (!welcomeChannel) return;
-      switch (data.GuildWelcomeTheme) {
-        case "text":
-          welcomeChannel
-            .send({
-              content: `${data
-                .GuildWelcomeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
-                .replaceAll("{{user.username}}", member.user.username)
-                .replaceAll("{{user.id}}", member.id)
-                .replaceAll("{{user.tag}}", member.user.tag)
-                .replaceAll("{{server.memberCount}}", member.guild.memberCount.toString())
-                .replaceAll("{{server.name}}", member.guild.name)
-                .replaceAll("{{server.id}}", member.guild.id)}`,
-            })
-            .catch(() => {});
-          break;
-        case "card":
-          const image = await drawCard({
-            theme: 'circuit',
-            text: {
-              title: new Text('Welcome!', 240, 70).setFontSize(32),
-              text: new Text(member.user.tag, 240, 150).setFontSize(34),
-              subtitle: `We now have {{server.memberCount}} members!`.replaceAll("{{server.memberCount}}", member.guild.memberCount.toString()),
-              color: `#DDDDDD`,
-              font: "Panton Black Caps"
-            },
-            avatar: {
-              image: member.user.displayAvatarURL({ format: 'png' }),
-              outlineWidth: 5,
-              outlineColor: colorToStyle(Colors.Amber),
-              borderRadius: 1,
-            },
-            card: {
-              background: data.GuildWelcomeThemeUrl,
-              blur: 1,
-              border: true,
-              rounded: true,
-            },
-          });
-          welcomeChannel
-            .send({
-              content: data.GuildWelcomePingOnJoin ? `${memberMention(member.id)}` : null,
-              files: [image],
-            })
-            .catch(() => {});
-          break;
-        case "embed":
-          // TODO: Add embed theme
-          break;
-        default:
-          // If no theme is set, use the text theme
-          welcomeChannel
-            .send({
-              content: `${data
-                .GuildWelcomeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
-                .replaceAll("{{user.username}}", member.user.username)
-                .replaceAll("{{user.id}}", member.id)
-                .replaceAll("{{user.tag}}", member.user.tag)
-                .replaceAll("{{server.id}}", member.guild.id)}`,
-            })
-            .catch(() => {});
-          break;
+      if (data.GuildWelcomeChannelId) {
+        const welcomeChannel = client.channels.cache.get(data.GuildWelcomeChannelId) as TextChannel;
+        if (!welcomeChannel || !(welcomeChannel instanceof TextChannel)) return;
+        switch (data.GuildWelcomeTheme) {
+          case "text":
+            await welcomeChannel
+              .send({
+                content: `${data
+                  .GuildWelcomeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
+                  .replaceAll("{{user.username}}", member.user.username)
+                  .replaceAll("{{user.id}}", member.id)
+                  .replaceAll("{{user.tag}}", member.user.tag)
+                  .replaceAll("{{server.memberCount}}", member.guild.memberCount.toString())
+                  .replaceAll("{{server.name}}", member.guild.name)
+                  .replaceAll("{{server.id}}", member.guild.id)}`,
+              })
+              .catch(() => {});
+            break;
+          case "card":
+            if (
+              !data.GuildWelcomeThemeUrl ||
+              !data.GuildWelcomeThemeUrl.length ||
+              !data.GuildWelcomeThemeUrl.includes("https://" || "http://")
+            ) {
+              await member
+                .send({
+                  content: codeBlock(
+                    "css",
+                    `
+=== Welcome Plugin Warning ===
+
+[${member.user.username}] You are seeing this message because you have ran the simulate command. 
+However, I noticed that you have an invalid custom image  url for your welcome card. 
+If this is not set, the welcome card will not be generated at all.
+
+[Your URl] = ${data.GuildWelcomeThemeUrl}
+
+This message was automatically generated by the ${client.environment.bot.bot_full_name}
+`
+                  ),
+                })
+                .catch(() => {});
+            }
+            return await drawCard({
+              theme: "circuit",
+              text: {
+                title: new Text("Welcome!", 240, 70).setFontSize(32),
+                text: new Text(member.user.tag, 240, 150).setFontSize(34),
+                subtitle: `We now have {{server.memberCount}} members!`.replaceAll(
+                  "{{server.memberCount}}",
+                  member.guild.memberCount.toString()
+                ),
+                color: `#DDDDDD`,
+                font: "Panton Black Caps",
+              },
+              avatar: {
+                image: member.user.displayAvatarURL({ format: "png" }),
+                outlineWidth: 5,
+                outlineColor: colorToStyle(Colors.Amber),
+                borderRadius: 1,
+              },
+              card: {
+                background: data.GuildWelcomeThemeUrl,
+                blur: 1,
+                border: true,
+                rounded: true,
+              },
+            }).then((image) => {
+              welcomeChannel
+                .send({
+                  content: data.GuildWelcomePingOnJoin ? `${memberMention(member.id)}` : null,
+                  files: [image],
+                })
+                .catch(() => {});
+            });
+          case "embed":
+            // TODO: Add embed theme
+            break;
+          default:
+            // If no theme is set, use the text theme
+            await welcomeChannel
+              .send({
+                content: `${data
+                  .GuildWelcomeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
+                  .replaceAll("{{user.username}}", member.user.username)
+                  .replaceAll("{{user.id}}", member.id)
+                  .replaceAll("{{user.tag}}", member.user.tag)
+                  .replaceAll("{{server.id}}", member.guild.id)}`,
+              })
+              .catch(() => {});
+            break;
+        }
+      } else {
+        client.logger.warn(`[WELCOME] No welcome channel found for ${member.guild.name}`);
       }
+    } catch (e) {
+      // this.container.logger.error(e);
     }
   }
 }
@@ -106,73 +139,109 @@ export class UserEvent extends Listener {
 })
 export class UserEvent2 extends Listener {
   public async run(member: GuildMember): Promise<void> {
-    const { client } = this.container;
+    try {
+      const { client } = this.container;
 
-    const data = client.LocalCacheStore.memory.plugins.welcome.get(member.guild);
+      const data = client.LocalCacheStore.memory.plugins.welcome.get(member.guild);
 
-    if (!data || data.Enabled === false) return;
+      if (!data || data.Enabled === false) return;
 
-    if (data.GuildGoodbyeChannelId) {
-      const goodbyeChannel = client.channels.cache.get(data.GuildGoodbyeChannelId) as TextChannel;
-      if (!goodbyeChannel) return;
-      switch (data.GuildWelcomeTheme) {
-        case "text":
-          goodbyeChannel.send({
-            content: `${data
-              .GuildGoodbyeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
-              .replaceAll("{{user.username}}", member.user.username)
-              .replaceAll("{{user.id}}", member.id)
-              .replaceAll("{{user.tag}}", member.user.tag)
-              .replaceAll("{{server.memberCount}}", member.guild.memberCount.toString())
-              .replaceAll("{{server.name}}", member.guild.name)
-              .replaceAll("{{server.id}}", member.guild.id)}`,
-          });
-          break;
-        case "card":
-          const image = await drawCard({
-            theme: 'circuit',
-            text: {
-              title: new Text('Goodbye!', 240, 70).setFontSize(32),
-              text: new Text(member.user.tag, 240, 150).setFontSize(34),
-              subtitle: `We now have {{server.memberCount}} members!`.replaceAll("{{server.memberCount}}", member.guild.memberCount.toString()),
-              color: `#DDDDDD`,
-              font: "Panton Black Caps"
-            },
-            avatar: {
-              image: member.user.displayAvatarURL({ format: 'png' }),
-              outlineWidth: 5,
-              outlineColor: colorToStyle(Colors.Amber),
-              borderRadius: 1,
-            },
-            card: {
-              background: data.GuildWelcomeThemeUrl,
-              blur: 1,
-              border: true,
-              rounded: true,
-            },
-          });
-          goodbyeChannel
-            .send({
-              content: data.GuildWelcomePingOnJoin ? `${memberMention(member.id)}` : null,
-              files: [image],
-            })
-            .catch(() => { });
-          break;
-        case "embed":
-          // TODO: Add embed theme
-          break;
-        default:
-          // If no theme is set, use the text theme
-          goodbyeChannel.send({
-            content: `${data
-              .GuildWelcomeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
-              .replaceAll("{{user.username}}", member.user.username)
-              .replaceAll("{{user.id}}", member.id)
-              .replaceAll("{{user.tag}}", member.user.tag)
-              .replaceAll("{{server.id}}", member.guild.id)}`,
-          });
-          break;
+      if (data.GuildGoodbyeChannelId) {
+        const goodbyeChannel = client.channels.cache.get(data.GuildGoodbyeChannelId) as TextChannel;
+        // checks if goodbye channel type is TextChannel
+        if (!goodbyeChannel || !(goodbyeChannel instanceof TextChannel)) return;
+        switch (data.GuildWelcomeTheme) {
+          case "text":
+            await goodbyeChannel.send({
+              content: `${data
+                .GuildGoodbyeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
+                .replaceAll("{{user.username}}", member.user.username)
+                .replaceAll("{{user.id}}", member.id)
+                .replaceAll("{{user.tag}}", member.user.tag)
+                .replaceAll("{{server.memberCount}}", member.guild.memberCount.toString())
+                .replaceAll("{{server.name}}", member.guild.name)
+                .replaceAll("{{server.id}}", member.guild.id)}`,
+            });
+            break;
+          case "card":
+            //             if (
+            //               !data.GuildWelcomeThemeUrl ||
+            //               !data.GuildWelcomeThemeUrl.length ||
+            //               !data.GuildWelcomeThemeUrl.includes("https://" || "http://")
+            //             ) {
+            //               await member
+            //                 .send({
+            //                   content: codeBlock(
+            //                     "css",
+            //                     `
+            // === Welcome Plugin Warning ===
+
+            // [${member.user.username}] You are seeing this message because you have ran the simulate command.
+            // However, I noticed that you have an invalid custom image  url for your welcome card.
+            // If this is not set, the welcome card will not be generated at all.
+
+            // [Your URl] = ${data.GuildWelcomeThemeUrl}
+
+            // This message was automatically generated by the ${client.environment.bot.bot_full_name}
+            // `
+            //                   ),
+            //                 })
+            //                 .catch(() => {});
+            //             }
+
+            await drawCard({
+              theme: "circuit",
+              text: {
+                title: new Text("Goodbye!", 240, 70).setFontSize(32),
+                text: new Text(member.user.tag, 240, 150).setFontSize(34),
+                subtitle: `We now have {{server.memberCount}} members!`.replaceAll(
+                  "{{server.memberCount}}",
+                  member.guild.memberCount.toString()
+                ),
+                color: `#DDDDDD`,
+                font: "Panton Black Caps",
+              },
+              avatar: {
+                image: member.user.displayAvatarURL({ format: "png" }),
+                outlineWidth: 5,
+                outlineColor: colorToStyle(Colors.Amber),
+                borderRadius: 1,
+              },
+              card: {
+                background: data.GuildWelcomeThemeUrl,
+                blur: 1,
+                border: true,
+                rounded: true,
+              },
+            }).then((image) => {
+              goodbyeChannel
+                .send({
+                  content: data.GuildWelcomePingOnJoin ? `${memberMention(member.id)}` : null,
+                  files: [image],
+                })
+                .catch(() => {});
+            });
+            break;
+          case "embed":
+            // TODO: Add embed theme
+            break;
+          default:
+            // If no theme is set, use the text theme
+            await goodbyeChannel.send({
+              content: `${data
+                .GuildWelcomeMessage!.replaceAll("{{user.mention}}", memberMention(member.id))
+                .replaceAll("{{user.username}}", member.user.username)
+                .replaceAll("{{user.id}}", member.id)
+                .replaceAll("{{user.tag}}", member.user.tag)
+                .replaceAll("{{server.id}}", member.guild.id)}`,
+            });
+            break;
+        }
+      } else {
+        client.logger.warn(`[GOODBYE] No goodbye channel found for ${member.guild.name}`);
       }
+    } catch (e) {
+      // this.container.logger.error(e);
     }
   }
 }

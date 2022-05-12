@@ -1,20 +1,17 @@
-    <!-- Statistics Hub OSS - A data analytics discord bot.
-
+/**
+ *  Statistics Hub OSS - A data analytics discord bot.
+    
     Copyright (C) 2022, ThatGuyJamal and contributors
-
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-    GNU Affero General Public License for more details. -->
+    GNU Affero General Public License for more details.
+ */
 
-## Commands
-
-```ts
 import { ApplyOptions } from "@sapphire/decorators";
 import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand } from "@sapphire/framework";
 import { Message } from "discord.js";
@@ -24,7 +21,8 @@ import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
 
 @ApplyOptions<ICommandOptions>({
-  description: "",
+  name: "customcommand",
+  description: "A simple way to create custom commands.",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
@@ -32,14 +30,19 @@ import { getTestGuilds } from "../../internal/load-test-guilds";
   nsfw: false,
   enabled: true,
   extendedDescription: {
-    usage: "",
+    usage: "customcommand create <trigger> <response>",
     examples: [""],
-    command_type: "",
+    command_type: "slash",
   },
+  requiredUserPermissions: ["MANAGE_GUILD"],
 })
 export class UserCommand extends ICommand {
-  public async messageRun(ctx: Message) {}
-  public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {}
+  public async messageRun(ctx: Message) {
+    return ctx.reply("Work in progress...");
+  }
+  public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
+    return interaction.reply("Work in progress...");
+  }
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
     registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
       guildIds: getTestGuilds(),
@@ -49,31 +52,3 @@ export class UserCommand extends ICommand {
     });
   }
 }
-```
-
-## Events
-
-```ts
-import { ApplyOptions } from "@sapphire/decorators";
-import { Events, Listener, ListenerOptions } from "@sapphire/framework";
-
-@ApplyOptions<ListenerOptions>({
-  event: Events,
-})
-export class UserEvent extends Listener {
-  public async run(): Promise<void> {}
-}
-```
-
-## Preconditions
-
-```ts
-import { CommandInteraction, Message } from "discord.js";
-import { Precondition } from "@sapphire/framework";
-
-export class UserPrecondition extends Precondition {
-  public override async chatInputRun(interaction: CommandInteraction) {}
-
-  public override async messageRun(ctx: Message) {}
-}
-```

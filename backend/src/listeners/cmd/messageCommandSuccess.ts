@@ -12,9 +12,15 @@
     GNU Affero General Public License for more details.
  */
 
-export enum CacheKeysEnum {
-  GUILDS = "guilds",
-  USERS = "users",
-  WELCOME_PLUGINS = "welcome_plugins",
-  STATISTICS = "statistics",
+import { Listener, Events, MessageCommandAcceptedPayload } from "@sapphire/framework";
+import { bold, cyan } from "colorette";
+
+export class UserListener extends Listener<typeof Events.MessageCommandSuccess> {
+  public override run({ message, command }: MessageCommandAcceptedPayload) {
+    const msg = `${cyan(bold(`[/${command.name}]`))} - Command executed by ${message.author.tag} (${
+      message.author.id
+    })`;
+
+    this.container.logger.debug(msg);
+  }
 }

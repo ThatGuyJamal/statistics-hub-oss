@@ -12,7 +12,8 @@
     GNU Affero General Public License for more details.
  */
 
-import { ColorResolvable, CommandInteraction, MessageActionRow, MessageButton } from "discord.js";
+import { container } from "@sapphire/framework";
+import { ColorResolvable, CommandInteraction, Message, MessageActionRow, MessageButton } from "discord.js";
 import { environment } from "../../config";
 import { BrandingColors } from "../constants/colors";
 import { codeBlock } from "../functions/formatting";
@@ -68,4 +69,41 @@ export const sendError = (interaction: CommandInteraction, description: string, 
     ? interaction.editReply
     : interaction.reply;
   return replyFn.call(interaction, payload);
+};
+
+export const sendLegacyError = async (ctx: Message, description: string) => {
+  // Core sapphire errors end in ".", so that needs to be accounted for.
+  const parsedDescription = `❌ ${description.endsWith(".") ? description.slice(0, -1) : description}!`;
+
+  const payload = {
+    content: codeBlock(
+      "css",
+      `
+     [Notice] - ${parsedDescription}
+    `
+    ),
+    // embeds: [createEmbed(parsedDescription, BrandingColors.Error)],
+    components: [
+      new MessageActionRow()
+        .addComponents(
+          new MessageButton()
+            .setLabel("Need help")
+            .setEmoji("❓")
+            .setStyle("LINK")
+            .setURL(`${environment.bot.support_server_url}`)
+        )
+        .addComponents(
+          new MessageButton()
+            .setLabel("Report Bug")
+            .setEmoji("🪲")
+            .setStyle("LINK")
+            .setURL(`${environment.bot.developerMetaData.bug_report_form}`)
+        ),
+    ],
+    allowedMentions: { users: [ctx.author.id], roles: [] },
+  };
+
+  return await ctx.reply(payload).catch((err) => {
+    container.logger.error(err);
+  });
 };

@@ -45,6 +45,7 @@ declare module "@sapphire/framework" {
   interface Preconditions {
     DevelopmentCommand: never;
     OwnerOnlyCommand: never;
+    CommandCanRun: never;
   }
 }
 
