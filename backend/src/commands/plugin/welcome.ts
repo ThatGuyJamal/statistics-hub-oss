@@ -54,7 +54,7 @@ export class UserCommand extends ICommand {
     if (interaction.options.getSubcommand() === "setup") {
       const themeOptions = interaction.options.getString("theme-type", true);
       const welcomeChannel = interaction.options.getChannel("welcome-channel", true);
-      const goodbyeChannel = interaction.options.getChannel("goodbye-channel", true);
+      const goodbyeChannel = interaction.options.getChannel("goodbye-channel", false);
       let welcomeMessage = interaction.options.getString("welcome-message", false);
       const welcomePingOnJoin = interaction.options.getBoolean("welcome-ping-on-join", false);
       let CardURl = interaction.options.getString("card-url", false);
@@ -110,7 +110,7 @@ export class UserCommand extends ICommand {
             GuildWelcomeTheme: themeOptions,
             GuildWelcomeChannelId: welcomeChannel?.id,
             GuildWelcomeMessage: welcomeMessage,
-            GuildGoodbyeChannelId: goodbyeChannel?.id,
+            GuildGoodbyeChannelId: goodbyeChannel?.id ?? undefined,
             GuildGoodbyeMessage: goodbyeMessage,
             GuildWelcomeEmbed: {},
             GuildWelcomePingOnJoin: welcomePingOnJoin || false,
@@ -128,7 +128,7 @@ export class UserCommand extends ICommand {
           GuildWelcomeTheme: themeOptions,
           GuildWelcomeChannelId: welcomeChannel?.id,
           GuildWelcomeMessage: welcomeMessage,
-          GuildGoodbyeChannelId: goodbyeChannel?.id,
+          GuildGoodbyeChannelId: goodbyeChannel?.id ?? undefined,
           GuildGoodbyeMessage: goodbyeMessage,
           GuildWelcomePingOnJoin: welcomePingOnJoin || false,
           GuildWelcomeThemeUrl: undefined,
@@ -146,7 +146,7 @@ export class UserCommand extends ICommand {
               GuildOwnerId: interaction.guild?.ownerId,
               Enabled: true,
               GuildWelcomeChannelId: welcomeChannel?.id,
-              GuildGoodbyeChannelId: goodbyeChannel?.id,
+              GuildGoodbyeChannelId: goodbyeChannel?.id ?? undefined,
               GuildWelcomeMessage: welcomeMessage,
               GuildGoodbyeMessage: goodbyeMessage,
               GuildWelcomeTheme: themeOptions,
@@ -348,7 +348,7 @@ export class UserCommand extends ICommand {
           GuildId: oldData.GuildId,
           GuildName: oldData.GuildName ?? undefined,
           GuildOwnerId: oldData.GuildOwnerId ?? undefined,
-          Enabled: oldData.Enabled ?? true,
+          Enabled: oldData.Enabled ?? false,
           CreatedAt: oldData.CreatedAt ?? new Date(),
           GuildWelcomeChannelId: oldData.GuildWelcomeChannelId ?? undefined,
           GuildGoodbyeChannelId: oldData.GuildGoodbyeChannelId ?? undefined,
@@ -362,6 +362,14 @@ export class UserCommand extends ICommand {
             ? cardPreBuiltBackground
             : undefined,
           CreatedById: oldData.CreatedById ?? undefined,
+        });
+      } else {
+        client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
+          GuildId: interaction.guildId!,
+          GuildName: interaction.guild!.name,
+          GuildOwnerId: interaction.guild!.ownerId,
+          Enabled: false,
+          CreatedAt: new Date(),
         });
       }
 
@@ -563,7 +571,7 @@ export class UserCommand extends ICommand {
                 options.setName("welcome-channel").setDescription("The welcome channel.").setRequired(true)
               )
               .addChannelOption((options) =>
-                options.setName("goodbye-channel").setDescription("The good-bye channel.").setRequired(true)
+                options.setName("goodbye-channel").setDescription("The good-bye channel.").setRequired(false)
               )
               .addStringOption((options) =>
                 options

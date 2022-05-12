@@ -75,7 +75,7 @@
     systeminformation "^5.11.14"
     tslib "^2.4.0"
 
-"@mapbox/node-pre-gyp@^1.0.0":
+"@mapbox/node-pre-gyp@^1.0.0", "@mapbox/node-pre-gyp@^1.0.9":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.9.tgz#09a8781a3a036151cdebbe8719d6f8b25d4058bc"
   integrity sha512-aDF3S3rK9Q2gey/WAttUlISduDItz5BU3306M9Eyv6/oS40aMprnopshtlKTykxRNIBEZuRMaZAnbrQ4QtKGyw==
@@ -1563,6 +1563,11 @@ pac-resolver@^5.0.0:
     degenerator "^3.0.1"
     ip "^1.1.5"
     netmask "^2.0.1"
+
+pagination.djs@^3.5.2:
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/pagination.djs/-/pagination.djs-3.5.2.tgz#fba4ea4d356c76ea5e97f4af50b5940da6b692ac"
+  integrity sha512-zJFZmsKdPIFdbt72LtnYIo24arOGD53joBDpL5diTxqpDtcGHEaQ6b9oPCPAQ0iS1HkMHaGIfIi9p1xPLpH6Ew==
 
 pako@^0.2.5:
   version "0.2.9"

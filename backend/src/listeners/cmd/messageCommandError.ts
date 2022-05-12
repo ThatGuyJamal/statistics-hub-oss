@@ -14,13 +14,13 @@
 
 import { ApplyOptions } from "@sapphire/decorators";
 import { ListenerOptions, Events, Listener, MessageCommandAcceptedPayload } from "@sapphire/framework";
+import { sendLegacyError } from "../../internal/interactions/responses";
 
 @ApplyOptions<ListenerOptions>({
-  event: Events.MessageCommandAccepted,
+    event: Events.MessageCommandError,
 })
 export class UserEvent extends Listener {
-  public async run(payload: MessageCommandAcceptedPayload) {
-    let author = payload.message.author;
-    this.container.statcord.postCommand(payload.command.name, author.id);
-  }
+    public async run(payload: MessageCommandAcceptedPayload) {
+        return await sendLegacyError(payload.message, `Something went wrong with the "${payload.command.name}" command`);
+    }
 }
