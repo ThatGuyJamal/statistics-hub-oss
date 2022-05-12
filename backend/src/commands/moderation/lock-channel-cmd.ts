@@ -22,7 +22,7 @@ import { seconds } from "../../internal/functions/time";
 @ApplyOptions<ICommandOptions>({
   name: "lockchannel",
   aliases: ["lockc", "lc"],
-  description: "Locks a channels message send permission.",
+  description: "Locks a channel and stops members from chatting in it.",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
@@ -34,14 +34,22 @@ import { seconds } from "../../internal/functions/time";
     examples: ["lockchannel #off-topic", "lockchannel"],
     command_type: "message",
   },
+  requiredClientPermissions: ["MANAGE_CHANNELS", "ADD_REACTIONS"],
+  requiredUserPermissions: ["MANAGE_CHANNELS"],
 })
 export class UserCommand extends ICommand {
   public async messageRun(ctx: Message, args: Args) {
     if (!ctx.guild) return;
     let channelArg = (await args.pick("channel").catch(() => null)) as TextChannel | null;
+    const anotherResponse = new Set<string>();
 
     // If no channel is given, we will lock the channel the command is ran in.
-    if (!channelArg) channelArg = ctx.channel as TextChannel;
+    if (!channelArg) {
+      channelArg = ctx.channel as TextChannel;
+    } else {
+      // We add the channel to the set so we can message that channel as well.
+      anotherResponse.add(channelArg.id);
+    }
 
     // lock the channel
     return await channelArg.permissionOverwrites
@@ -49,15 +57,31 @@ export class UserCommand extends ICommand {
         SEND_MESSAGES: false,
       })
       .then((res) => {
-        return ctx.channel.send({
-          embeds: [
-            {
-              title: "Channel Locked :lock:",
-              description: `${memberMention(ctx.author.id)} locked ${channelMention(res.id)}.`,
-              color: "YELLOW",
-            },
-          ],
-        });
+        // If the ID exist it means the user provided a channel, so we need to send the unlock message to that channel as well.
+        if (anotherResponse.has(res.id)) {
+          channelArg
+            ?.send({
+              embeds: [
+                {
+                  title: "Channel Locked :lock:",
+                  description: `${memberMention(ctx.author.id)} locked ${channelMention(res.id)}.`,
+                  color: "YELLOW",
+                },
+              ],
+            })
+            .then((res) => res.react("🔒"));
+        }
+        return ctx.channel
+          .send({
+            embeds: [
+              {
+                title: "Channel Locked :lock:",
+                description: `${memberMention(ctx.author.id)} locked ${channelMention(res.id)}.`,
+                color: "YELLOW",
+              },
+            ],
+          })
+          .then((res) => res.react("🔒"));
       })
       .catch(() => {
         return ctx.reply({
@@ -70,7 +94,7 @@ export class UserCommand extends ICommand {
 @ApplyOptions<ICommandOptions>({
   name: "unlockchannel",
   aliases: ["unlockc", "ulc"],
-  description: "Unlocks a channels message send permission.",
+  description: "Unlocks a channel for members to chat in.",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
@@ -86,11 +110,17 @@ export class UserCommand extends ICommand {
 export class UserCommand2 extends ICommand {
   public async messageRun(ctx: Message, args: Args) {
     if (!ctx.guild) return;
+    const anotherResponse = new Set<string>();
 
     let channelArg = (await args.pick("channel").catch(() => null)) as TextChannel | null;
 
     // If no channel is given, we will lock the channel the command is ran in.
-    if (!channelArg) channelArg = ctx.channel as TextChannel;
+    if (!channelArg) {
+      channelArg = ctx.channel as TextChannel;
+    } else {
+      // We add the channel to the set so we can message that channel as well.
+      anotherResponse.add(channelArg.id);
+    }
 
     // unlock the channel
     return await channelArg.permissionOverwrites
@@ -98,15 +128,31 @@ export class UserCommand2 extends ICommand {
         SEND_MESSAGES: true,
       })
       .then((res) => {
-        return ctx.channel.send({
-          embeds: [
-            {
-              title: "Channel Unlocked :unlock:",
-              description: `${memberMention(ctx.author.id)} unlocked ${channelMention(res.id)}.`,
-              color: "YELLOW",
-            },
-          ],
-        });
+        // If the ID exist it means the user provided a channel, so we need to send the unlock message to that channel as well.
+        if (anotherResponse.has(res.id)) {
+          channelArg
+            ?.send({
+              embeds: [
+                {
+                  title: "Channel Unlocked :unlock:",
+                  description: `${memberMention(ctx.author.id)} unlocked ${channelMention(res.id)}.`,
+                  color: "GREEN",
+                },
+              ],
+            })
+            .then((res) => res.react("🔓"));
+        }
+        return ctx.channel
+          .send({
+            embeds: [
+              {
+                title: "Channel Unlocked :unlock:",
+                description: `${memberMention(ctx.author.id)} unlocked ${channelMention(res.id)}.`,
+                color: "GREEN",
+              },
+            ],
+          })
+          .then((res) => res.react("🔓"));
       })
       .catch(() => {
         return ctx.reply({

@@ -19,6 +19,8 @@ import { seconds } from "../../internal/functions/time";
     examples: ["purge 10 #off-topic", "purge 5"],
     command_type: "message",
   },
+  requiredClientPermissions: ["MANAGE_MESSAGES"],
+  requiredUserPermissions: ["MANAGE_MESSAGES"],
 })
 export class UserCommand extends ICommand {
   public async messageRun(ctx: Message, args: Args) {
