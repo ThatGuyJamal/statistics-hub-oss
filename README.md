@@ -56,7 +56,7 @@ started with the bot.
 
 3.  Go to mongodb.com and create a database, then save the connection url.
 
-4.  Clone this repository, and rename the [example.config.ts](./backend/src/example.config.ts) file to config.ts and fill it out.
+4.  Clone this repository, and rename the [example.config.ts](./backend/src) file to config.ts and fill it out.
 
 5.  Install the dependency's and then compile the code using `yarn compile`.
 
@@ -73,6 +73,6 @@ started with the bot.
 
 ---
 
-Join my support server [here](https://discord.com/invite/N79DZsm3m2). You can find planned features [here](./planned.md).
+Join my support server [here](https://discord.com/invite/N79DZsm3m2). You can find planned features [here](https://github.com/ThatGuyJamal/statistics-hub-oss/projects/2).
 
 You can invite the production version of the bot [here](https://discord.com/api/oauth2/authorize?client_id=946398697254703174&permissions=415001496704&scope=bot%20applications.commands).
