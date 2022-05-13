@@ -52,6 +52,7 @@ const DEFAULT_CARD_URL = "https://i.imgur.com/dCS4tQk.jpeg"
     command_type: "slash",
     subcommands: ["delete", "enable", "disable", "setup", "simulate", "update", "view"],
   },
+  requiredClientPermissions: ["ATTACH_FILES"],
 })
 export class UserCommand extends ICommand {
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
@@ -582,8 +583,8 @@ export class UserCommand extends ICommand {
         ephemeral: true,
       })
 
-      let getData = await WelcomePluginMongoModel.findOne({ GuildId: interaction.guildId });
-      // let getData = await client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild!);
+      // let getData = await WelcomePluginMongoModel.findOne({ GuildId: interaction.guildId });
+      let getData = await client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild!);
 
       if (!getData) {
         return await interaction.editReply({
