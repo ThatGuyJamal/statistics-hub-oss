@@ -69,7 +69,11 @@ You can run help <command> to get more information about a command.
       `
       );
       return await ctx.reply({
-        content: result,
+        embeds: [
+          {
+            description: result,
+          }
+        ]
       });
     } else {
       const commandFound = await this.__resolveCommand(commandName);
@@ -128,7 +132,11 @@ You can run help <command> to get more information about a command.
       `
       );
       return await interaction.reply({
-        content: result,
+        embeds: [
+          {
+            description: result,
+          }
+        ]
       });
     } else {
       const commandFound = await this.__resolveCommand(commandName);
@@ -150,10 +158,9 @@ You can run help <command> to get more information about a command.
           });
         }
 
-        return await interaction.reply({
-          content: codeBlock(
-            "css",
-            `
+        const result = codeBlock(
+          "css",
+          `
               === ${capitalizeFirstLetter(commandFound.name)} Command ===
               [Description] = ${commandFound.description || "No description provided."}
               [Aliases] = ${commandFound.aliases.join(", ") || "None"}
@@ -162,13 +169,26 @@ You can run help <command> to get more information about a command.
               [Examples] = ${commandFound.extendedDescription?.examples?.join(", ") || "None"}
               [Command type] = ${commandFound.extendedDescription?.command_type}
               [Subcommands] = ${commandFound.extendedDescription?.subcommands?.map((name) => name).join(", ") || "None"}
-              ${
-                commandFound.extendedDescription?.subcommands?.length! > 0
-                  ? `[Note] = Subcommands can be used with slash commands. There syntax is as follows: ${commandFound.name} <subcommand> `
-                  : ""
-              }
+              ${commandFound.extendedDescription?.subcommands?.length! > 0
+            ? `[Note] = Subcommands can be used with slash commands. There syntax is as follows: ${commandFound.name} <subcommand> `
+            : ""
+          }
             `
-          ),
+        )
+        
+        return await interaction.reply({
+          embeds: [
+            {
+              description: result,
+              footer: {
+                text: "Use `help <command>` to get more information about a command.",
+                iconURL: interaction.user.displayAvatarURL({
+                  dynamic: true,
+                  format: "png",
+                }),
+              }
+            }
+          ]
         });
       }
     }
