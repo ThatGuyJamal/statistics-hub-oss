@@ -15,7 +15,7 @@
 /**
 * If set to true the bot will use all development settings. It is required to set this to false for production.
 */
-const canaryMode = false
+export const canaryMode = false
 
 /**
  * The Object used for the bot's configuration and settings.
@@ -29,6 +29,10 @@ export const environment = {
      * The database settings.
      */
     db: {
+        /**
+      * If the database is enabled.
+      */
+        enabled: true,
         /**
          * Redis configuration.
          */
