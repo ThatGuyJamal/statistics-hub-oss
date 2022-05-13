@@ -90,9 +90,9 @@ export class UserCommand extends ICommand {
         "css",
         `
 === Custom Commands ===
-${customCommands.map((command) => `[${command.trigger}] = ${command.response}`).join("\n")}
+${customCommands.map((command) => `[${command.trigger}] = ${command.response}`).join("\n\n")}
 
-Tip: To run a custom command you must use the bots prefix. Example: ${prefix}mycustomcommand.
+Tip: To run a custom command you must use the bots prefix. Example: ${prefix}mycustomcommand
 `
       ),
     });
@@ -281,7 +281,7 @@ Tip: To run a custom command you must use the bots prefix. Example: ${prefix}myc
           "css",
           `
 === Custom Commands ===
-${customCommands.map((command) => `[${command.trigger}] = ${command.response}`).join("\n")}
+${customCommands.map((command) => `[${command.trigger}] = ${command.response}`).join("\n\n")}
 
 Tip: To run a custom command you must use the bots prefix. Example: ${prefix}mycustomcommand
 `
