@@ -24,11 +24,18 @@ import { GuildMember } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
 import { WelcomePluginMongoModel } from "../../database/models/plugins/welcome/welcome";
-import stripIndent, { channelMention, codeBlock, memberMention } from "../../internal/functions/formatting";
+import stripIndent, {
+  channelMention,
+  codeBlock,
+  hideLinkEmbed,
+  memberMention,
+} from "../../internal/functions/formatting";
 import { pauseThread } from "../../internal/functions/promises";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
 import { BaseEmbed } from "../../internal/structures/Embed";
+
+const DEFAULT_CARD_URL = "https://i.imgur.com/dCS4tQk.jpeg"
 
 @ApplyOptions<ICommandOptions>({
   name: "welcome",
@@ -100,40 +107,38 @@ export class UserCommand extends ICommand {
           ],
         });
 
-        let oldData = client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild!);
-        if (!oldData) {
-          client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
-            GuildId: interaction.guildId as string,
-            GuildName: interaction.guild!.name,
-            GuildOwnerId: interaction.guild!.ownerId,
-            Enabled: true,
-            GuildWelcomeTheme: themeOptions,
-            GuildWelcomeChannelId: welcomeChannel?.id,
-            GuildWelcomeMessage: welcomeMessage,
-            GuildGoodbyeChannelId: goodbyeChannel?.id ?? undefined,
-            GuildGoodbyeMessage: goodbyeMessage,
-            GuildWelcomeEmbed: {},
-            GuildWelcomePingOnJoin: welcomePingOnJoin || false,
-            GuildWelcomeThemeUrl: CardURl || undefined,
-            CreatedById: interaction.user.id,
-            CreatedAt: new Date(),
-          });
-        }
-        await WelcomePluginMongoModel.create({
-          GuildId: interaction.guildId as string,
-          GuildName: interaction.guild!.name,
-          GuildOwnerId: interaction.guild!.ownerId,
+        client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
+          GuildId: interaction.guild.id,
+          GuildName: interaction.guild.name,
+          GuildOwnerId: interaction.guild.ownerId,
           Enabled: true,
-          CreatedAt: new Date(),
           GuildWelcomeTheme: themeOptions,
           GuildWelcomeChannelId: welcomeChannel?.id,
           GuildWelcomeMessage: welcomeMessage,
           GuildGoodbyeChannelId: goodbyeChannel?.id ?? undefined,
           GuildGoodbyeMessage: goodbyeMessage,
-          GuildWelcomePingOnJoin: welcomePingOnJoin || false,
-          GuildWelcomeThemeUrl: undefined,
           GuildWelcomeEmbed: {},
+          GuildWelcomePingOnJoin: welcomePingOnJoin ?? false,
+          GuildWelcomeThemeUrl: CardURl ?? DEFAULT_CARD_URL,
           CreatedById: interaction.user.id,
+          CreatedAt: new Date(),
+        });
+
+        await WelcomePluginMongoModel.create({
+          GuildId: interaction.guild.id,
+          GuildName: interaction.guild.name,
+          GuildOwnerId: interaction.guild.ownerId,
+          Enabled: true,
+          GuildWelcomeTheme: themeOptions,
+          GuildWelcomeChannelId: welcomeChannel?.id,
+          GuildWelcomeMessage: welcomeMessage,
+          GuildGoodbyeChannelId: goodbyeChannel?.id ?? undefined,
+          GuildGoodbyeMessage: goodbyeMessage,
+          GuildWelcomeEmbed: {},
+          GuildWelcomePingOnJoin: welcomePingOnJoin ?? false,
+          GuildWelcomeThemeUrl: CardURl ?? DEFAULT_CARD_URL,
+          CreatedById: interaction.user.id,
+          CreatedAt: new Date(),
         }).then((res) => client.logger.info(res));
       }
       // If a document is found, we update it.
@@ -142,17 +147,19 @@ export class UserCommand extends ICommand {
           { GuildId: interaction.guildId },
           {
             $set: {
+              GuildId: interaction.guild.id,
               GuildName: interaction.guild?.name,
               GuildOwnerId: interaction.guild?.ownerId,
               Enabled: true,
-              GuildWelcomeChannelId: welcomeChannel?.id,
-              GuildGoodbyeChannelId: goodbyeChannel?.id ?? undefined,
+              GuildWelcomeChannelId: welcomeChannel?.id ?? null,
+              GuildGoodbyeChannelId: goodbyeChannel?.id ?? null,
               GuildWelcomeMessage: welcomeMessage,
               GuildGoodbyeMessage: goodbyeMessage,
               GuildWelcomeTheme: themeOptions,
-              GuildWelcomePingOnJoin: welcomePingOnJoin || false,
-              GuildWelcomeThemeUrl: CardURl || undefined,
+              GuildWelcomePingOnJoin: welcomePingOnJoin ?? false,
+              GuildWelcomeThemeUrl: CardURl ?? DEFAULT_CARD_URL,
               CreatedById: interaction.user.id,
+              CreatedAt: new Date(),
             },
           }
         ).then((res) => client.logger.info(res));
@@ -164,6 +171,7 @@ export class UserCommand extends ICommand {
     } else if (interaction.options.getSubcommand() === "disable") {
       // When the command is disabled, we will clear up some cache. but it will not delete the document from the database.
       client.LocalCacheStore.memory.plugins.welcome.delete(interaction.guild!);
+      // Next we will simply disable the document from the db.
       await WelcomePluginMongoModel.findOneAndUpdate(
         { GuildId: interaction.guildId },
         {
@@ -172,16 +180,18 @@ export class UserCommand extends ICommand {
           },
         }
       ).then((res) => {
-        if (!res)
+        if (!res) {
           return interaction.reply({
-            content: "Welcome plugin is already disabled!",
+            content: "You dont have a welcome plugin setup, so I can't disable it.",
+            ephemeral: true,
+          })
+        } else {
+          client.logger.info(res);
+          return interaction.reply({
+            content: "Welcome plugin disabled successfully!",
             ephemeral: true,
           });
-        client.logger.info(res);
-        return interaction.reply({
-          content: "Welcome plugin disabled!",
-          ephemeral: true,
-        });
+        }
       });
     } else if (interaction.options.getSubcommand() === "enable") {
       await WelcomePluginMongoModel.findOneAndUpdate(
@@ -212,7 +222,7 @@ export class UserCommand extends ICommand {
             GuildGoodbyeMessage: res!.GuildGoodbyeMessage ?? undefined,
             GuildWelcomeTheme: res!.GuildWelcomeTheme ?? undefined,
             GuildWelcomePingOnJoin: res.GuildWelcomePingOnJoin || false,
-            GuildWelcomeThemeUrl: res.GuildWelcomeThemeUrl || undefined,
+            GuildWelcomeThemeUrl: res.GuildWelcomeThemeUrl ?? DEFAULT_CARD_URL,
             CreatedById: interaction.user.id,
           });
           return interaction.reply({
@@ -222,23 +232,26 @@ export class UserCommand extends ICommand {
         })
         .catch((err) => client.logger.error(err));
     } else if (interaction.options.getSubcommand() === "delete") {
-      client.LocalCacheStore.memory.plugins.welcome.delete(interaction.guild!);
-      await WelcomePluginMongoModel.deleteOne({ GuildId: interaction.guildId }).then((res) => client.logger.info(res));
+      client.LocalCacheStore.memory.plugins.welcome.delete(interaction.guild);
+      await WelcomePluginMongoModel.deleteOne({ GuildId: interaction.guild.id }).then((res) => client.logger.info(res));
       return await interaction.reply({
-        content: "Welcome plugin deleted!",
+        content: `Welcome plugin deleted successfully from ${interaction.guild.name}!`,
         ephemeral: true,
       });
     } else if (interaction.options.getSubcommand() === "simulate") {
       let checkIfData = client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild!);
 
+      await interaction.deferReply({
+        ephemeral: true,
+      })
+
       if (!checkIfData || !checkIfData.Enabled) {
-        return await interaction.reply({
+        return await interaction.editReply({
           content: "Please enable the welcome plugin first!",
-          ephemeral: true,
         });
       }
 
-      await interaction.reply({
+      await interaction.editReply({
         embeds: [
           new BaseEmbed().interactionEmbed(
             {
@@ -247,36 +260,47 @@ export class UserCommand extends ICommand {
             interaction
           ),
         ],
-        ephemeral: true,
       });
 
-      this.container.client.emit(Events.GuildMemberAdd, interaction.member as GuildMember);
-
-      await interaction.editReply({
-        embeds: [
-          new BaseEmbed().interactionEmbed(
-            {
-              description: "first event fired...",
-            },
-            interaction
-          ),
-        ],
-      });
+      if (!checkIfData.GuildWelcomeChannelId) {
+        client.logger.debug("[WelcomePlugin] Simulation was ran but no greet channel was found.");
+        await interaction.editReply({
+          content: "No welcome channel setup skipping...",
+        });
+      } else {
+        this.container.client.emit(Events.GuildMemberAdd, interaction.member as GuildMember);
+        await interaction.editReply({
+          embeds: [
+            new BaseEmbed().interactionEmbed(
+              {
+                description: "greet event fired...",
+              },
+              interaction
+            ),
+          ],
+        });
+      }
 
       await pauseThread(6, "seconds", "welcome plugin simulation");
 
-      this.container.client.emit(Events.GuildMemberRemove, interaction.member as GuildMember);
-
-      await interaction.editReply({
-        embeds: [
-          new BaseEmbed().interactionEmbed(
-            {
-              description: "second event fired...",
-            },
-            interaction
-          ),
-        ],
-      });
+      if (!checkIfData.GuildGoodbyeChannelId) {
+        client.logger.debug("[WelcomePlugin] Simulation was ran but no goodbye channel was found.");
+        await interaction.editReply({
+          content: "No goodbye channel setup skipping...",
+        });
+      } else {
+        this.container.client.emit(Events.GuildMemberRemove, interaction.member as GuildMember);
+        await interaction.editReply({
+          embeds: [
+            new BaseEmbed().interactionEmbed(
+              {
+                description: "goodbye event fired...",
+              },
+              interaction
+            ),
+          ],
+        });
+      }
 
       await pauseThread(6, "seconds", "welcome plugin simulation");
 
@@ -284,19 +308,29 @@ export class UserCommand extends ICommand {
         embeds: [
           new BaseEmbed().interactionEmbed(
             {
-              description: `Simulation complete! You can find the result in ${channelMention(
-                checkIfData.GuildWelcomeChannelId!
-              )}`,
+              description: `Simulation complete!`,
+              fields: [
+                {
+                  name: "Welcome Channel",
+                  value: `${channelMention(checkIfData.GuildWelcomeChannelId!)}`
+                },
+                {
+                  name: "Goodbye Channel",
+                  value: `${channelMention(checkIfData.GuildGoodbyeChannelId!)}`
+                }
+              ]
             },
             interaction
           ),
         ],
       });
     } else if (interaction.options.getSubcommand() === "update") {
+
       await interaction.deferReply({
         ephemeral: true,
       });
 
+      // arguments
       let newGreetMessage = interaction.options.getString("greet-message");
       let newGoodbyeMessage = interaction.options.getString("goodbye-message");
       let newTheme = interaction.options.getString("theme");
@@ -305,6 +339,7 @@ export class UserCommand extends ICommand {
       const welcomePingOnJoin = interaction.options.getBoolean("welcome-ping-on-join", false);
       let cardBackground = interaction.options.getString("card-background", false);
       let cardPreBuiltBackground = interaction.options.getString("pre-built-background", false);
+      let deleteOption = interaction.options.getString("update-delete", false);
 
       if (
         !newGreetMessage &&
@@ -314,17 +349,18 @@ export class UserCommand extends ICommand {
         !newGoodbyeChannel &&
         !welcomePingOnJoin &&
         !cardBackground &&
-        !cardPreBuiltBackground
+        !cardPreBuiltBackground &&
+        !deleteOption
       ) {
         return await interaction.editReply({
-          content: "You did not select any options to update! Please try again...",
+          content: "You did not select update any options! Please try again...",
         });
       }
 
-      let checkIfData = await WelcomePluginMongoModel.findOne({ GuildId: interaction.guildId });
+      let document = await WelcomePluginMongoModel.findOne({ GuildId: interaction.guild.id });
       let oldData = client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild!);
 
-      if (!checkIfData || !checkIfData.Enabled || !oldData || !oldData.Enabled) {
+      if (!document || !document.Enabled || !oldData || !oldData.Enabled) {
         return await interaction.editReply(
           "You have no welcome plugin data or the plugin is disabled. Please use `welcome setup` to setup the plugin. You can also view your current settings with the `welcome view` command."
         );
@@ -334,8 +370,10 @@ export class UserCommand extends ICommand {
       if (cardBackground) {
         if (!cardBackground.startsWith("https://")) {
           return await interaction.editReply({
-            content:
-              "Card URL you entered is not valid! Please use a valid URL using `https://`. Make sure the link to the background is public. If you have a picture you want to use, try uploading it to <https://imgur.com/> \n Example: https://i.imgur.com/az1Sx59.jpeg",
+            content: `Card URL you entered is not valid! Please use a valid URL using \`https://\`. 
+              Make sure the link to the background is public. If you have a picture you want to use, try uploading it to ${hideLinkEmbed(
+              "https://imgur.com/"
+            )}\n Example: https://i.imgur.com/az1Sx59.jpeg`,
           });
         }
       }
@@ -348,7 +386,7 @@ export class UserCommand extends ICommand {
           GuildId: oldData.GuildId,
           GuildName: oldData.GuildName ?? undefined,
           GuildOwnerId: oldData.GuildOwnerId ?? undefined,
-          Enabled: oldData.Enabled ?? false,
+          Enabled: oldData.Enabled ?? true,
           CreatedAt: oldData.CreatedAt ?? new Date(),
           GuildWelcomeChannelId: oldData.GuildWelcomeChannelId ?? undefined,
           GuildGoodbyeChannelId: oldData.GuildGoodbyeChannelId ?? undefined,
@@ -359,16 +397,20 @@ export class UserCommand extends ICommand {
           GuildWelcomeThemeUrl: cardBackground
             ? cardBackground
             : cardPreBuiltBackground
-            ? cardPreBuiltBackground
-            : undefined,
+              ? cardPreBuiltBackground
+              : DEFAULT_CARD_URL,
           CreatedById: oldData.CreatedById ?? undefined,
         });
       } else {
         client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
-          GuildId: interaction.guildId!,
-          GuildName: interaction.guild!.name,
-          GuildOwnerId: interaction.guild!.ownerId,
-          Enabled: false,
+          GuildId: interaction.guild.id,
+          GuildName: interaction.guild.name,
+          GuildOwnerId: interaction.guild.ownerId,
+          Enabled: true,
+          GuildWelcomeEmbed: {},
+          GuildWelcomePingOnJoin: welcomePingOnJoin ?? false,
+          GuildWelcomeThemeUrl: DEFAULT_CARD_URL,
+          CreatedById: interaction.user.id,
           CreatedAt: new Date(),
         });
       }
@@ -473,13 +515,13 @@ export class UserCommand extends ICommand {
       if (cardPreBuiltBackground) {
         client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
           ...oldData,
-          GuildWelcomeThemeUrl: cardPreBuiltBackground,
+          GuildWelcomeThemeUrl: cardPreBuiltBackground ?? DEFAULT_CARD_URL,
         });
         await WelcomePluginMongoModel.updateOne(
           { GuildId: interaction.guildId },
           {
             $set: {
-              GuildWelcomeThemeUrl: cardPreBuiltBackground,
+              GuildWelcomeThemeUrl: cardPreBuiltBackground ?? DEFAULT_CARD_URL,
             },
           }
         ).then((res) => client.logger.info(res));
@@ -489,38 +531,70 @@ export class UserCommand extends ICommand {
       if (cardBackground) {
         client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
           ...oldData,
-          GuildWelcomeThemeUrl: cardBackground,
+          GuildWelcomeThemeUrl: cardBackground ?? DEFAULT_CARD_URL,
         });
         await WelcomePluginMongoModel.updateOne(
           { GuildId: interaction.guildId },
           {
             $set: {
-              GuildWelcomeThemeUrl: cardBackground,
+              GuildWelcomeThemeUrl: cardBackground ?? DEFAULT_CARD_URL,
             },
           }
         ).then((res) => client.logger.info(res));
         settingsChanged.push("theme url");
       }
 
+      if (deleteOption) {
+        client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
+          ...oldData,
+          [deleteOption]: undefined,
+        });
+        if (deleteOption === "GuildWelcomeThemeUrl") {
+          await WelcomePluginMongoModel.updateOne(
+            { GuildId: interaction.guildId },
+            {
+              $set: {
+                [deleteOption]: DEFAULT_CARD_URL,
+              },
+            }
+          ).then((res) => client.logger.info(res));
+        } else {
+          await WelcomePluginMongoModel.updateOne(
+            { GuildId: interaction.guildId },
+            {
+              $set: {
+                [deleteOption]: null,
+              },
+            }
+          ).then((res) => client.logger.info(res));
+        }
+        settingsChanged.push("deleted option");
+      }
+
       return await interaction.editReply({
         content: `Successfully updated the following settings: \n${settingsChanged
           .map((setting) => `\`${setting}\``)
-          .join(", ")}`,
+          .join(", ")}\n Run \`welcome view\` to see your changes or \`welcome simulate\` to test them.`,
       });
     } else if (interaction.options.getSubcommand() === "view") {
+
+      await interaction.deferReply({
+        ephemeral: true,
+      })
+
       let getData = await WelcomePluginMongoModel.findOne({ GuildId: interaction.guildId });
 
       if (!getData) {
-        return await interaction.reply({
+        return await interaction.editReply({
           content: "You have no welcome plugin data to view... Please use `welcome setup` to setup the plugin.",
-          ephemeral: true,
         });
-      } else {
-        return interaction.reply({
-          embeds: [
-            new BaseEmbed().interactionEmbed(
-              {
-                description: stripIndent(`
+      }
+
+      return await interaction.editReply({
+        embeds: [
+          new BaseEmbed().interactionEmbed(
+            {
+              description: stripIndent(`
               === Welcome Plugin Configuration ===
 
               Status = ${getData.Enabled ? "Enabled" : "Disabled"}
@@ -530,16 +604,15 @@ export class UserCommand extends ICommand {
               Goodbye Message = \`${getData.GuildGoodbyeMessage}\`
               Theme = __${getData.GuildWelcomeTheme}__
               Ping on join = ${getData.GuildWelcomePingOnJoin ? "Enabled" : "Disabled"}
-              Theme URL = \`${getData.GuildWelcomeThemeUrl}\`
+              Theme URL = \`${getData.GuildWelcomeThemeUrl ?? DEFAULT_CARD_URL}\`
               Created By = __${memberMention(getData.CreatedById!) || "Unknown"}__
+              Last Updated At = \`${getData.CreatedAt.toLocaleDateString()} at ${getData.CreatedAt.toLocaleTimeString()}\`
               `),
-              },
-              interaction
-            ),
-          ],
-          ephemeral: true,
-        });
-      }
+            },
+            interaction
+          ),
+        ],
+      });
     }
   }
   // slash command registry
@@ -648,6 +721,19 @@ export class UserCommand extends ICommand {
                 options
                   .setName("welcome-ping-on-join")
                   .setDescription("Ping the user when they join.")
+                  .setRequired(false)
+              ).addStringOption((options) =>
+                options.setName("update-delete").setDescription("Delete a value in the welcome system.").addChoices(
+                  [
+                    ["Greet Message", "GuildWelcomeMessage"],
+                    ["Goodbye Message", "GuildGoodbyeMessage"],
+                    ["Theme", "GuildWelcomeTheme"],
+                    ["Theme URL", "GuildWelcomeThemeUrl"],
+                    ["Ping on join", "GuildWelcomePingOnJoin"],
+                    ["Welcome Channel", "GuildWelcomeChannelId"],
+                    ["Goodbye Channel", "GuildGoodbyeChannelId"],
+                  ]
+                )
                   .setRequired(false)
               )
           )

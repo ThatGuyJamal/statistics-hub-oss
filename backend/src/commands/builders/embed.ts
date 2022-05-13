@@ -26,7 +26,7 @@ import { getTestGuilds } from "../../internal/load-test-guilds";
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
-  runIn: "GUILD_TEXT",
+  runIn: ["GUILD_TEXT", "GUILD_NEWS"],
   nsfw: false,
   enabled: true,
   extendedDescription: {
@@ -35,7 +35,7 @@ import { getTestGuilds } from "../../internal/load-test-guilds";
 })
 export class UserCommand extends ICommand {
   public async messageRun(ctx: Message) {
-    return ctx.reply("Work in progress...");
+    return ctx.reply("This command is only available in slash command form.");
   }
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
     return interaction.reply("Work in progress...");

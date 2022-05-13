@@ -79,7 +79,7 @@ export interface CommandModelStructure {
   CreatedAt: Date;
 }
 
-interface CustomCommandSchema {
+export interface CustomCommandSchema {
   /**
    * The regex pattern to match the command.
    */
@@ -91,9 +91,17 @@ interface CustomCommandSchema {
   /**
    * The channel to send the message to.
    */
-  allowedChannels: string[];
+  allowedChannels?: string[];
   /**
    * The users who can use this command.
    */
-  allowedUsers: string[];
+  allowedUsers?: string[];
+  /**
+   * The roles that can use this command.
+   */
+  allowedRoles?: string[];
+}
+
+export enum CommandPluginEnum {
+  commandLimit = 5,
 }

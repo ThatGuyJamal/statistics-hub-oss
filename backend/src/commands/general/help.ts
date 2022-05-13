@@ -59,33 +59,22 @@ export class UserCommand extends ICommand {
     const commandName = await args.pick("string").catch(() => null);
 
     if (!commandName) {
-      if (client.BotDevelopers.has(ctx.author.id)) {
-        let result = codeBlock(
-          "css",
-          `
+      let result = codeBlock(
+        "css",
+        `
 === Command list ===
 ${validCommandList}
 
 You can run help <command> to get more information about a command.
       `
-        );
-        return await ctx.reply({
-          content: result,
-        });
-      } else {
-        let result = codeBlock(
-          "css",
-          `
-=== Command list ===
-${validCommandList}
-
-You can run help <command> to get more information about a command.
-      `
-        );
-        return await ctx.reply({
-          content: result,
-        });
-      }
+      );
+      return await ctx.reply({
+        embeds: [
+          {
+            description: result,
+          }
+        ]
+      });
     } else {
       const commandFound = await this.__resolveCommand(commandName);
       if (!commandFound) {
@@ -133,33 +122,22 @@ You can run help <command> to get more information about a command.
     const commandName = interaction.options.getString("name", false);
 
     if (!commandName) {
-      if (client.BotDevelopers.has(interaction.user.id)) {
-        let result = codeBlock(
-          "css",
-          `
+      let result = codeBlock(
+        "css",
+        `
 === Command list ===
 ${validCommandList}
 
 You can run help <command> to get more information about a command.
       `
-        );
-        return await interaction.reply({
-          content: result,
-        });
-      } else {
-        let result = codeBlock(
-          "css",
-          `
-=== Command list ===
-${validCommandList}
-
-You can run help <command> to get more information about a command.
-      `
-        );
-        return await interaction.reply({
-          content: result,
-        });
-      }
+      );
+      return await interaction.reply({
+        embeds: [
+          {
+            description: result,
+          }
+        ]
+      });
     } else {
       const commandFound = await this.__resolveCommand(commandName);
       if (!commandFound) {
@@ -180,10 +158,9 @@ You can run help <command> to get more information about a command.
           });
         }
 
-        return await interaction.reply({
-          content: codeBlock(
-            "css",
-            `
+        const result = codeBlock(
+          "css",
+          `
               === ${capitalizeFirstLetter(commandFound.name)} Command ===
               [Description] = ${commandFound.description || "No description provided."}
               [Aliases] = ${commandFound.aliases.join(", ") || "None"}
@@ -192,13 +169,26 @@ You can run help <command> to get more information about a command.
               [Examples] = ${commandFound.extendedDescription?.examples?.join(", ") || "None"}
               [Command type] = ${commandFound.extendedDescription?.command_type}
               [Subcommands] = ${commandFound.extendedDescription?.subcommands?.map((name) => name).join(", ") || "None"}
-              ${
-                commandFound.extendedDescription?.subcommands?.length! > 0
-                  ? `[Note] = Subcommands can be used with slash commands. There syntax is as follows: ${commandFound.name} <subcommand> `
-                  : ""
-              }
+              ${commandFound.extendedDescription?.subcommands?.length! > 0
+            ? `[Note] = Subcommands can be used with slash commands. There syntax is as follows: ${commandFound.name} <subcommand> `
+            : ""
+          }
             `
-          ),
+        )
+        
+        return await interaction.reply({
+          embeds: [
+            {
+              description: result,
+              footer: {
+                text: "Use `help <command>` to get more information about a command.",
+                iconURL: interaction.user.displayAvatarURL({
+                  dynamic: true,
+                  format: "png",
+                }),
+              }
+            }
+          ]
         });
       }
     }

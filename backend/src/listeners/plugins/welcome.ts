@@ -16,6 +16,7 @@ import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener, ListenerOptions } from "@sapphire/framework";
 import { drawCard, Text } from "discord-welcome-card";
 import { GuildMember, TextChannel } from "discord.js";
+import { WelcomePluginMongoModel } from "../../database/models/plugins/welcome/welcome";
 import { Colors, colorToStyle } from "../../internal/constants/colors";
 import { codeBlock, memberMention } from "../../internal/functions/formatting";
 
@@ -29,8 +30,9 @@ export class UserEvent extends Listener {
       const { client } = this.container;
 
       const data = client.LocalCacheStore.memory.plugins.welcome.get(member.guild);
+      // const data = await WelcomePluginMongoModel.findOne({ guildID: member.guild.id });
 
-      if (!data || data.Enabled === false) return;
+      if (!data || data.Enabled === false || !data.GuildWelcomeTheme) return;
 
       if (data.GuildWelcomeChannelId) {
         const welcomeChannel = client.channels.cache.get(data.GuildWelcomeChannelId) as TextChannel;
@@ -143,8 +145,9 @@ export class UserEvent2 extends Listener {
       const { client } = this.container;
 
       const data = client.LocalCacheStore.memory.plugins.welcome.get(member.guild);
+      // const data = await WelcomePluginMongoModel.findOne({ guildID: member.guild.id });
 
-      if (!data || data.Enabled === false) return;
+      if (!data || data.Enabled === false || !data.GuildWelcomeTheme) return;
 
       if (data.GuildGoodbyeChannelId) {
         const goodbyeChannel = client.channels.cache.get(data.GuildGoodbyeChannelId) as TextChannel;

@@ -37,7 +37,7 @@ export class BaseEmbed extends MessageEmbed {
         }),
       },
       author: {
-        name: `${interaction.user.username} | 🥀`,
+        name: `${interaction.user.username} (${interaction.user.id})`,
         url: environment.bot.support_server_url,
         iconURL: interaction.user.displayAvatarURL({
           dynamic: true,
@@ -66,7 +66,7 @@ export class BaseEmbed extends MessageEmbed {
       },
       timestamp: Date.now(),
       author: {
-        name: `${ctx.author.username}`,
+        name: `${ctx.author.username} (${ctx.author.id})`,
         url: environment.bot.support_server_url,
         iconURL: ctx.author.displayAvatarURL({
           dynamic: true,

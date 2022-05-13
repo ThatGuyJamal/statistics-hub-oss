@@ -14,13 +14,18 @@
 
 import { CommandInteraction, Message } from "discord.js";
 import { ChatInputCommand, container, MessageCommand, Precondition } from "@sapphire/framework";
+import { canaryMode } from "../config";
 
 export class UserPrecondition extends Precondition {
   public override async chatInputRun(interaction: CommandInteraction, command: ChatInputCommand) {
     // Make sure the precondition is run on a guild.
     if (!interaction.guild) return this.ok();
-    // Make sure the command is valid from the api.
 
+    if (this.checkCanaryMode() && !container.client.BotDevelopers.has(interaction.user.id)) {
+      return this.error({ message: `Sorry but im in \`canary\` mode and only developers can run my commands.` });
+    }
+
+    // Make sure the command is valid from the api.
     if (!command) return this.ok();
 
     const cachedData = container.client.LocalCacheStore.memory.plugins.commands.get(interaction.guild);
@@ -48,6 +53,11 @@ export class UserPrecondition extends Precondition {
   public override async messageRun(ctx: Message, command: MessageCommand) {
     // Make sure the precondition is run on a guild.
     if (!ctx.guild) return this.ok();
+
+    if(this.checkCanaryMode() && !container.client.BotDevelopers.has(ctx.author.id)) {
+      return this.error({ message: `Sorry but im in \`canary\` mode and only developers can run my commands.` });
+    }
+
     const cachedData = container.client.LocalCacheStore.memory.plugins.commands.get(ctx.guild);
     // Make sure the guild has commands.
     if (!cachedData) return this.ok();
@@ -67,5 +77,9 @@ export class UserPrecondition extends Precondition {
     }
 
     return this.ok();
+  }
+
+  private checkCanaryMode(): boolean {
+    return canaryMode
   }
 }
