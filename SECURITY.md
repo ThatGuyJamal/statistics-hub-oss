@@ -2,17 +2,12 @@
 
 ## Supported Versions
 
-Currently the bot is on version 0.0.1 and is unstable. This document will updated in the future.
+Currently the bot is on version 1.1.0 and is supported on the following versions:
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 0.0.2   | :white_check_mark: |
-| 0.0.1   | :x:                |
+| 1.1.0   | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
-
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+If you find any vulnerabilities in the bot, please report them [here](https://docs.google.com/forms/d/e/1FAIpQLScWst-6pROvdzYUHPRp6iVSfG6QqMvWwe7tYNrBfkdhsTrfdA/viewform?usp=sf_link)
