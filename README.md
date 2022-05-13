@@ -90,3 +90,4 @@ You can invite the production version of the bot [here](https://discord.com/api/
 ### `Miscellaneous`
 
 - Project started on `2022-03-07`
+- The [Documentation](./documentation/) is being managed by [gitbook](https://www.gitbook.com/)'s auto github integration. Any files changed in markdown format will be automatically updated on the gitbook website.
