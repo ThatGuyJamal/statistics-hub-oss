@@ -25,7 +25,6 @@ import { CacheType, CommandInteraction, Message } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
 import { CommandPluginEnum, CommandPluginMongoModel, CustomCommandSchema } from "../../database/models/command";
-import { channelMention, memberMention, roleMention } from "../../internal/functions/formatting";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
 
@@ -33,7 +32,7 @@ const validCommandList = [...container.stores.get("commands").values()].map((c) 
 
 @ApplyOptions<ICommandOptions>({
   name: "customcommand",
-  aliases: ["ccl"],
+  aliases: ["ccl", "cc"],
   description: "A simple way to create custom commands.",
   cooldownDelay: seconds(15),
   cooldownScope: BucketScope.User,
@@ -45,7 +44,7 @@ const validCommandList = [...container.stores.get("commands").values()].map((c) 
     usage: "customcommand create <trigger> <response>",
     examples: ["customcommand create server {{server.name}}"],
     command_type: "both",
-    subcommands: ["create", "delete", "list"]
+    subcommands: ["create", "delete", "list"],
   },
   requiredUserPermissions: ["MANAGE_GUILD"],
 })
@@ -55,8 +54,7 @@ export class UserCommand extends ICommand {
     const { client } = container;
 
     const document = await CommandPluginMongoModel.findOne({ GuildId: ctx.guild.id });
-    const prefix =
-      client.LocalCacheStore.memory.guild.get(ctx.guild)?.GuildPrefix ?? client.environment.bot.bot_prefix;
+    const prefix = client.LocalCacheStore.memory.guild.get(ctx.guild)?.GuildPrefix ?? client.environment.bot.bot_prefix;
 
     if (!document) {
       return await ctx.channel.send({
