@@ -15,7 +15,7 @@ _This project is in rapid development and any information is subject to change a
 - [MongoDB](https://www.mongodb.com/) is the main database for the project.
 - [Redis](https://redis.io/) is the cache for the project.
 - [Next-js](https://nextjs.org/) is the dashboard for the project
-- [Discord.js](https://discord.js.org/) is the  api library used for the project.
+- [Discord.js](https://discord.js.org/) is the api library used for the project.
 - [Sapphire.js](https://www.sapphirejs.dev/) is the command/event framework for the project.
 
 ### Directory's
@@ -26,9 +26,19 @@ _This project is in rapid development and any information is subject to change a
 
 ## `Commands`
 
-| Name       | Description                                          | Access Level  | Command Type    | Scope      |
-| :--------- | :--------------------------------------------------- | :------------ | :-------------- | :--------- |
-| ping       | Shows the bot latency.                               | everyone      | slash & message | Global     |
+| Name          | Description                          | Access Level | Command Type    | Scope  |
+| :------------ | :----------------------------------- | :----------- | :-------------- | :----- |
+| ping          | Shows the bot latency.               | everyone     | slash & message | Global |
+| help          | Shows the bot help menu.             | everyone     | slash & message | Global |
+| invite        | Shows the bot invite link.           | everyone     | slash & message | Global |
+| stats         | Shows the bot statistics.            | everyone     | slash & message | Global |
+| welcome       | Configures the welcome plugin        | admins       | slash           | Global |
+| customcommand | Configures the custom command plugin | admins       | slash           | Global |
+| command       | Enables or disables a command        | admins       | slash           | Global |
+| prefix        | Configures the bot prefix            | admins       | message         | Global |
+| language      | Configures the bot language          | admins       | message         | Global |
+
+*More commands will be added to the list in the future.*
 
 ## `Languages`
 
@@ -38,7 +48,7 @@ the language [folder](./backend/src/languages/) and submit a pull request.
 - English (default)
 - Spanish
 
-*make a pr to add more languages*
+_make a pr to add more languages_
 
 ---
 
@@ -50,17 +60,17 @@ started with the bot.
 
 ### `Requirements`
 
-1.  ⭐Star this repository to show some support.
+1. ⭐Star this repository to show some support.
 
-2.  Have Nodejs installed on your computer. With version 17.0.0 or higher.
+2. Have Nodejs installed on your computer. With version 17.0.0 or higher.
 
-3.  Go to mongodb.com and create a database, then save the connection url.
+3. Go to mongodb.com and create a database, then save the connection url.
 
-4.  Clone this repository, and rename the [example.config.ts](./backend/src) file to config.ts and fill it out.
+4. Clone this repository, and rename the [example.config.ts](./backend/src) file to config.ts and fill it out.
 
-5.  Install the dependency's and then compile the code using `yarn compile`.
+5. Install the dependency's and then compile the code using `yarn compile`.
 
-6.  Lastly you can run the bot using `yarn start`.&#x20;
+6. Lastly you can run the bot using `yarn start`.&#x20;
 
 ### `Important Notes`
 
@@ -76,7 +86,6 @@ started with the bot.
 Join my support server [here](https://discord.com/invite/N79DZsm3m2). You can find planned features [here](https://github.com/ThatGuyJamal/statistics-hub-oss/projects/2).
 
 You can invite the production version of the bot [here](https://discord.com/api/oauth2/authorize?client_id=946398697254703174&permissions=415001496704&scope=bot%20applications.commands).
-
 
 ### `Miscellaneous`
 
