@@ -41,11 +41,20 @@ export class UserCommand extends ICommand {
     if (!ctx.guild) return;
     const numberArg = await args.pick("number").catch(() => null);
     const channelArg = await args.pick("channel").catch(() => null);
+    
     const channel = ctx.channel as TextChannel;
 
     if (!numberArg) {
       return await ctx.channel.send({
         content: "Please provide a number of messages to purge.\n Usage: `purge [amount] (channel)`",
+        allowedMentions: { users: [ctx.author.id], roles: [] },
+      });
+    }
+
+    // Make sure the numberArg is greater than 1 and less than 99
+    if (numberArg < 2 || numberArg > 99) {
+      return await ctx.channel.send({
+        content: "Please provide a number between 2 and 99.",
         allowedMentions: { users: [ctx.author.id], roles: [] },
       });
     }
@@ -65,7 +74,7 @@ export class UserCommand extends ICommand {
           finishedMessage.delete().catch(() => {});
         }, seconds(8));
       } catch (e) {
-        // this.container.logger.error(e);
+        this.container.logger.error(e);
         let finishedMessage = await ctx.channel.send({
           content:
             "An error occurred while purging messages. Please make sure the messages are not older than 2 weeks.",

@@ -336,10 +336,10 @@ export class UserCommand extends ICommand {
       let newTheme = interaction.options.getString("theme");
       let newWelcomeChannel = interaction.options.getChannel("welcome-channel");
       let newGoodbyeChannel = interaction.options.getChannel("goodbye-channel");
-      const welcomePingOnJoin = interaction.options.getBoolean("welcome-ping-on-join", false);
-      let cardBackground = interaction.options.getString("card-background", false);
-      let cardPreBuiltBackground = interaction.options.getString("pre-built-background", false);
-      let deleteOption = interaction.options.getString("update-delete", false);
+      let welcomePingOnJoin = interaction.options.getBoolean("welcome-ping-on-join");
+      let cardBackground = interaction.options.getString("card-background");
+      let cardPreBuiltBackground = interaction.options.getString("pre-built-background");
+      let deleteOption = interaction.options.getString("update-delete");
 
       if (
         !newGreetMessage &&
@@ -347,7 +347,7 @@ export class UserCommand extends ICommand {
         !newTheme &&
         !newWelcomeChannel &&
         !newGoodbyeChannel &&
-        !welcomePingOnJoin &&
+        welcomePingOnJoin === null &&
         !cardBackground &&
         !cardPreBuiltBackground &&
         !deleteOption
@@ -583,6 +583,7 @@ export class UserCommand extends ICommand {
       })
 
       let getData = await WelcomePluginMongoModel.findOne({ GuildId: interaction.guildId });
+      // let getData = await client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild!);
 
       if (!getData) {
         return await interaction.editReply({

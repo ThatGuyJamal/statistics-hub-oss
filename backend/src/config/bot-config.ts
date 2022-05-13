@@ -14,7 +14,7 @@
 
 import { container, LogLevel } from "@sapphire/framework";
 import { ClientOptions, Message, Options, Sweepers } from "discord.js";
-import { environment } from "../config";
+import { canaryMode, environment } from "../config";
 import { isGuildMessage } from "../internal/functions/guards";
 import { hours, minutes, seconds } from "../internal/functions/time";
 import { parseInternationalizationOptions } from "../internal/il8n";
@@ -112,12 +112,12 @@ export const CLIENT_OPTIONS: ClientOptions = {
     client_id: environment.bot.client_id,
     key: environment.bot.statcord.key, // (Required) Statcord API key.
     autopost: environment.bot.statcord.autopost, // (Optional) Allows automatic posting of statistics.
-    debug: environment.bot.production ? true : false, // (Optional) Show debug messages.
+    debug: canaryMode ? true : false, // (Optional) Show debug messages.
     sharding: environment.bot.statcord.sharding, // (Optional) Activate the sharding mode.
   },
   // Hot Module Replacement
   // @see https://github.com/sapphiredev/plugins/tree/main/packages/hmr
   hmr: {
-    enabled: environment.bot.production ? true : false,
+    enabled: canaryMode ? true : false,
   },
 };
