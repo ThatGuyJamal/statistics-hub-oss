@@ -112,12 +112,12 @@ export const CLIENT_OPTIONS: ClientOptions = {
     client_id: environment.bot.client_id,
     key: environment.bot.statcord.key, // (Required) Statcord API key.
     autopost: environment.bot.statcord.autopost, // (Optional) Allows automatic posting of statistics.
-    debug: environment.bot.enabled ? true : false, // (Optional) Show debug messages.
+    debug: environment.bot.production ? true : false, // (Optional) Show debug messages.
     sharding: environment.bot.statcord.sharding, // (Optional) Activate the sharding mode.
   },
   // Hot Module Replacement
   // @see https://github.com/sapphiredev/plugins/tree/main/packages/hmr
   hmr: {
-    enabled: environment.bot.enabled ? true : false,
+    enabled: environment.bot.production ? true : false,
   },
 };

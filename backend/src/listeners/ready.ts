@@ -16,7 +16,7 @@ import { ApplyOptions } from "@sapphire/decorators";
 import { ListenerOptions, Events, Listener, Store } from "@sapphire/framework";
 import { Message } from "discord.js";
 import { blue, bold, gray, green, magenta, magentaBright, white, yellow } from "colorette";
-import { environment } from "../config";
+import { canaryMode, environment } from "../config";
 
 const dev = environment.bot.enabled;
 
@@ -33,7 +33,7 @@ export class UserEvent extends Listener {
       status: "idle",
       activities: [
         {
-          name: "a mathematics lecture",
+          name: canaryMode ? "In Development" : "mathematics lecture",
           type: "LISTENING",
         },
       ],

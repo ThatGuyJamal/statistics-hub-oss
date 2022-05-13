@@ -46,7 +46,7 @@ export class UserCommand extends ICommand {
                     === Invite Link ===
                     ${createHyperLink(
                       "Click Here",
-                      environment.bot.support_server_url
+                      environment.bot.bot_oauth_url
                     )} to invite the bot to your server.
                     `),
           },

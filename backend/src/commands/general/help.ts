@@ -19,25 +19,15 @@ import {
   RegisterBehavior,
   ChatInputCommand,
   Args,
-  container,
 } from "@sapphire/framework";
-import { AutocompleteInteraction, Message, TextChannel } from "discord.js";
-import Fuse from "discord.js-docs/node_modules/fuse.js";
+import { Message} from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
-import { capitalizeFirstLetter, codeBlock } from "../../internal/functions/formatting";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
 
-const validCommandList = [...container.stores.get("commands").values()]
-  // filter out categories that are hidden
-  .filter((c) => c.category !== "developer")
-  // sort categories alphabetically
-  .sort((a, b) => a.category!.localeCompare(b.category!))
-  .map((c) => `[Category] ${c.category} > [Name] = ${c.name}`)
-  .join("\n");
-
 @ApplyOptions<ICommandOptions>({
+  name: "help",
   description: "Shows information about the commands and how to use them.",
   aliases: ["h", "commands", "cmds"],
   cooldownDelay: seconds(10),
@@ -53,145 +43,12 @@ const validCommandList = [...container.stores.get("commands").values()]
   },
 })
 export class UserCommand extends ICommand {
-  public async messageRun(ctx: Message, args: Args) {
-    const { client } = this.container;
-
-    const commandName = await args.pick("string").catch(() => null);
-
-    if (!commandName) {
-      let result = codeBlock(
-        "css",
-        `
-=== Command list ===
-${validCommandList}
-
-You can run help <command> to get more information about a command.
-      `
-      );
-      return await ctx.reply({
-        embeds: [
-          {
-            description: result,
-          }
-        ]
-      });
-    } else {
-      const commandFound = await this.__resolveCommand(commandName);
-      if (!commandFound) {
-        return await ctx.reply({
-          content: await this.translate(ctx.channel as TextChannel, "commands/general:help_command.command_not_found"),
-        });
-      } else {
-        // Make sure only dev's get info on this command.
-        if (commandFound.category === "developer" && !client.BotDevelopers.has(ctx.author.id)) {
-          return await ctx.reply({
-            content: await this.translate(
-              ctx.channel as TextChannel,
-              "commands/config:help_command.developer_command_only"
-            ),
-          });
-        }
-
-        return await ctx.reply({
-          content: codeBlock(
-            "css",
-            `
-              === ${capitalizeFirstLetter(commandFound.name)} Command ===
-              [Description] = ${commandFound.description || "No description provided."}
-              [Aliases] = ${commandFound.aliases.join(", ") || "None"}
-              [Category] = ${commandFound.category || "None"}
-              [Usage] = ${commandFound.extendedDescription?.usage || "None"}
-              [Examples] = ${commandFound.extendedDescription?.examples?.join(", ") || "None"}
-              [Command type] = ${commandFound.extendedDescription?.command_type}
-              [Subcommands] = ${commandFound.extendedDescription?.subcommands?.map((name) => name).join(", ") || "None"}
-              ${
-                commandFound.extendedDescription?.subcommands?.length! > 0
-                  ? `[Note] = Subcommands can be used with slash commands. There syntax is as follows: ${commandFound.name} <subcommand> `
-                  : ""
-              }
-            `
-          ),
-        });
-      }
-    }
+  public async messageRun(ctx: Message, _args: Args) {
+   return ctx.reply("Coming soon...");
   }
 
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
-    const { client } = this.container;
-
-    const commandName = interaction.options.getString("name", false);
-
-    if (!commandName) {
-      let result = codeBlock(
-        "css",
-        `
-=== Command list ===
-${validCommandList}
-
-You can run help <command> to get more information about a command.
-      `
-      );
-      return await interaction.reply({
-        embeds: [
-          {
-            description: result,
-          }
-        ]
-      });
-    } else {
-      const commandFound = await this.__resolveCommand(commandName);
-      if (!commandFound) {
-        return await interaction.reply({
-          content: await this.translate(
-            interaction.channel as TextChannel,
-            "commands/general:help_command.command_not_found"
-          ),
-        });
-      } else {
-        // Make sure only dev's get info on this command.
-        if (commandFound.category === "developer" && !client.BotDevelopers.has(interaction.user.id)) {
-          return await interaction.reply({
-            content: await this.translate(
-              interaction.channel as TextChannel,
-              "commands/config:help_command.developer_command_only"
-            ),
-          });
-        }
-
-        const result = codeBlock(
-          "css",
-          `
-              === ${capitalizeFirstLetter(commandFound.name)} Command ===
-              [Description] = ${commandFound.description || "No description provided."}
-              [Aliases] = ${commandFound.aliases.join(", ") || "None"}
-              [Category] = ${commandFound.category || "None"}
-              [Usage] = ${commandFound.extendedDescription?.usage || "None"}
-              [Examples] = ${commandFound.extendedDescription?.examples?.join(", ") || "None"}
-              [Command type] = ${commandFound.extendedDescription?.command_type}
-              [Subcommands] = ${commandFound.extendedDescription?.subcommands?.map((name) => name).join(", ") || "None"}
-              ${commandFound.extendedDescription?.subcommands?.length! > 0
-            ? `[Note] = Subcommands can be used with slash commands. There syntax is as follows: ${commandFound.name} <subcommand> `
-            : ""
-          }
-            `
-        )
-        
-        return await interaction.reply({
-          embeds: [
-            {
-              description: result,
-              footer: {
-                text: "Use `help <command>` to get more information about a command.",
-                iconURL: interaction.user.displayAvatarURL({
-                  dynamic: true,
-                  format: "png",
-                }),
-              }
-            }
-          ]
-        });
-      }
-    }
+    return interaction.reply("Coming soon...");
   }
 
   /**
@@ -203,43 +60,6 @@ You can run help <command> to get more information about a command.
     const command = this.container.stores.get("commands").get(providedCommand.toLowerCase()) as ICommand | undefined;
 
     return command === undefined ? undefined : command;
-  }
-
-  /**
-   * Allows autocomplete for command search
-   * @param interaction
-   */
-  public override async autocompleteRun(interaction: AutocompleteInteraction) {
-    const query = interaction.options.getFocused() as string;
-
-    const options = this.container.stores.get("commands");
-
-    if (!query) {
-      let owner = environment.bot.developerMetaData.discord_dev_ids.includes(interaction.user.id);
-
-      /**
-       * This function filters out commands to the user. If the user is not a dev, it will return all non developer commands.
-       * It will then map the command and return there name to the slash autocomplete api.
-       */
-      return await interaction.respond(
-        [...options.values()]
-          .filter((cmd) => (owner ? true : cmd.category !== "developer"))
-          .map((item) => ({
-            name: `${item.name}`,
-            value: item.name,
-          }))
-      );
-    }
-
-    const fuzzerSearcher = new Fuse([...options.values()], { keys: ["name"] });
-    const results = fuzzerSearcher.search(query.toLowerCase(), { limit: 25 });
-
-    return await interaction.respond(
-      results.map((item) => ({
-        name: `${item.name}`,
-        value: item.name,
-      }))
-    );
   }
 
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
