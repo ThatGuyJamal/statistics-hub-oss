@@ -26,7 +26,7 @@ const Home: NextPage = () => {
     useEffect(() => {
 					const { pathname } = router;
 					if (pathname == "/invite") {
-						router.push(common.website_discord_server);
+						router.push(common.bot_oath_url);
 					}
 				});
 
