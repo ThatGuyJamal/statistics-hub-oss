@@ -15,14 +15,14 @@ _This project is in rapid development and any information is subject to change._
 * [MongoDB](https://www.mongodb.com/) is the main database for the project.
 * [Redis](https://redis.io/) is the cache for the project.
 * [Next-js](https://nextjs.org/) is the dashboard for the project
-* [Discord.js](https://discord.js.org/) is the api library used for the project.
+* [Discord.js](https://discord.js.org/) is the API library used for the project.
 * [Sapphire.js](https://www.sapphirejs.dev/) is the command/event framework for the project.
 
 #### Directory's
 
 * [Backend](broken-reference) is the main source code of the bot and its functions.
-* [api](api/) is the handler for the bots api and cloud functions.
-* [frontend](frontend/) is the react client side for the bot.
+* [api](api/) is the handler for the bot API and cloud functions.
+* [frontend](frontend/) is the react client-side for the bot.
 
 ### `Commands`
 
@@ -42,7 +42,7 @@ _More commands will be added to the list in the future._
 
 ### `Languages`
 
-Currently supported translations. If you would like to help improve them, join our support server. You can also clone this repository, make changes to the language [folder](backend/src/languages/) and submit a pull request.
+Currently supported translations. If you would like to help improve them, join our support server. You can also clone this repository, make changes to the language [folder](backend/src/languages/), and submit a pull request.
 
 * English (default)
 * Spanish
@@ -53,7 +53,7 @@ _make a pr to add more languages_
 
 ### `Self Hosting Guide`
 
-I highly recommend using the live version of the bot and not self hosting. I will not prove detailed information or tech support if something goes wrong in the process. While being open source, and free to use and published under the [GNU](LICENSE/) Public License I will help you get started with the bot.
+I highly recommend using the live version of the bot and not self-hosting. I will not prove detailed information or tech support if something goes wrong in the process. While being open-source, and free to use and published under the [GNU](LICENSE/) Public License I will help you get started with the bot.
 
 #### `Requirements`
 
@@ -61,14 +61,14 @@ I highly recommend using the live version of the bot and not self hosting. I wil
 2. Have Nodejs installed on your computer. With version 17.0.0 or higher.
 3. Go to mongodb.com and create a database, then save the connection url.
 4. Clone this repository, and rename the [example.config.ts](backend/src/) file to config.ts and fill it out.
-5. Install the dependency's and then compile the code using `yarn compile`.
+5. Install the dependency and then compile the code using `yarn compile`.
 6. Lastly you can run the bot using `yarn start`.
 
 #### `Important Notes`
 
-1. Because of the lack of support moving forward with many message based commands from both the discord api and library's, the bot has limited support for things such as a custom prefix and message commands. You can implement this yourself but just know it had no been implemented fully. _And will be removed in the future._
-2. As of now, the current version of the bot is being updated rapidly and is not in a stable version. It is also being developed to be a multi-guild bot in mind, meaning you may want to disabled or enable some of the features depending on your needs.
-3. If you want to host on linux, read this gist for the [commands](https://gist.github.com/ThatGuyJamal/42a65ede25b5da6d84c04eada89d12ff).
+1. Because of the lack of support moving forward with many message-based commands from both the discord API and libraries, the bot has limited support for things such as a custom prefix and message commands. You can implement this yourself but just know it had not been implemented fully. _And will be removed in the future._
+2. As of now, the current version of the bot is being updated rapidly and is not in a stable version. It is also being developed to be a multi-guild bot in mind, meaning you may want to disable or enable some of the features depending on your needs.
+3. If you want to host on Linux, read this gist for the [commands](https://gist.github.com/ThatGuyJamal/42a65ede25b5da6d84c04eada89d12ff).
 
 ***
 
@@ -79,4 +79,4 @@ You can invite the production version of the bot [here](https://discord.com/api/
 #### `Miscellaneous`
 
 * Project started on `2022-03-07`
-* The [Documentation](documentation/) is being managed by [gitbook](https://www.gitbook.com/)'s auto github integration. Any files changed in markdown format will be automatically updated on the gitbook website.
+* The [Documentation](documentation/) is being managed by [gitbook](https://www.gitbook.com/)'s auto GitHub integration. Any files changed in markdown format will be automatically updated on the gitbook website.
