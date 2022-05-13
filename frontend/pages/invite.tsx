@@ -14,11 +14,27 @@
     GNU Affero General Public License for more details.
  */
 
+import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { common } from "../utils/common";
 
-export const common = {
-  website_title: "Statistics Hub OSS",
-  website_description: "A data analysis bot for discord servers",
-  website_github_repo: "https://github.com/ThatGuyJamal/statistics-hub-oss",
-  website_discord_server: "https://discord.com/invite/N79DZsm3m2",
-  developer_youtube_channel: "https://www.youtube.com/channel/UCVOQobByo_2WISQf2037eXQ",
+const Home: NextPage = () => {
+    const router = useRouter();
+
+    // Sends us to the invite url
+    useEffect(() => {
+					const { pathname } = router;
+					if (pathname == "/invite") {
+						router.push(common.website_discord_server);
+					}
+				});
+
+	return (
+		<>
+			<h1>Redirecting...</h1>
+		</>
+	);
 };
+
+export default Home;

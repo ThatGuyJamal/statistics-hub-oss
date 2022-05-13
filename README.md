@@ -53,7 +53,7 @@ _make a pr to add more languages_
 
 ### `Self Hosting Guide`
 
-I highly recommend using the live version of the bot and not self-hosting. I will not prove detailed information or tech support if something goes wrong in the process. While being open-source, and free to use and published under the [GNU](LICENSE/) Public License I will help you get started with the bot.
+I highly recommend using the [live version](https://discord-statistics.vercel.app/invite) of the bot and not self-hosting. I will not prove detailed information or tech support if something goes wrong in the process. While being open-source, and free to use and published under the [GNU](LICENSE/) Public License I will try help you get started with the basics.
 
 #### `Requirements`
 
