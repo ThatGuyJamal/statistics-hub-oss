@@ -61,3 +61,8 @@ export class UserEvent extends Listener {
       .catch(() => {});
   }
 }
+
+
+// TODO Cooldown for custom commands
+// outline
+const customCommandCooldown = new Map<string, number>();
