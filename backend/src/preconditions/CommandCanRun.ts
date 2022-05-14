@@ -22,7 +22,7 @@ export class UserPrecondition extends Precondition {
     if (!interaction.guild) return this.ok();
 
     if (this.checkCanaryMode() && !container.client.BotDevelopers.has(interaction.user.id)) {
-      return this.error({ message: `Sorry but im in \`canary\` mode and only developers can run my commands.` });
+      return this.error({ message: `Sorry but im in "canary" mode and only my developers can run this version of the bot.` });
     }
 
     // Make sure the command is valid from the api.

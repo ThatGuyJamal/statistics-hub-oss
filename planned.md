@@ -14,9 +14,11 @@ Below are planned features I will be adding to the bot in no specific order...
 
 - [x] Fix ping command latency bug for slash command. Not showing discord api info
 
+- [x] Fix mute and unmute command permission and error handling.
+
 - [ ] Send an hour interval of stats from the db to the channel for logging and growth of the bot API
 
-- [ ] Add premium plugin for the bot. This will allow users to get more benefits such as more custom commands, and premium commands only.
+- [ ] Add premium config plugin for the bot. This will allow users to get more benefits such as more custom commands, and premium commands only.
 
 - [ ] Redo help command with categories and information pointing to the documentation.
 
@@ -31,5 +33,3 @@ Below are planned features I will be adding to the bot in no specific order...
 - [ ] Custom command limiters (channel, users, roles)
 
 - [ ] Remove hard coded bot reply's and replace them with the language json file.
-
-- [ ] Fix mute and unmute command permission and error handling.
