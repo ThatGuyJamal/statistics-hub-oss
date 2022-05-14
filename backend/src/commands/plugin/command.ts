@@ -97,11 +97,6 @@ export class UserCommand extends ICommand {
     if (!subCommandList.includes(subCommand)) {
       return await ctx.reply({
         content: messageCommandNoSubCommandReply,
-        // embeds: [
-        //     new BaseEmbed().contextEmbed({
-        //         description: messageCommandNoSubCommandReply
-        //     }, ctx)
-        // ]
       });
     }
 

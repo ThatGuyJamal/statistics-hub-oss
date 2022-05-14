@@ -18,7 +18,7 @@ export class UserEvent extends Listener {
     const ratelimit = this.container.client.RateLimitAPI.customCommandLimiter.acquire(message.author.id);
 
     // If we are limited, dont run the command.
-    if (ratelimit.limited) return
+    if (ratelimit.limited) return;
 
     const channel = message.channel as TextChannel;
 

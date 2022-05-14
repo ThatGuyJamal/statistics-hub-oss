@@ -13,7 +13,7 @@
  */
 
 import { ApplyOptions } from "@sapphire/decorators";
-import { Args, BucketScope } from "@sapphire/framework";
+import { BucketScope } from "@sapphire/framework";
 import { Message, TextChannel } from "discord.js";
 import { ICommandOptions, ICommand } from "../../../Command";
 import { GuildsMongoModel } from "../../../database/models/guild";
@@ -22,7 +22,7 @@ import { BaseEmbed } from "../../../internal/structures/Embed";
 
 @ApplyOptions<ICommandOptions>({
   name: "view-config",
-  aliases: ["view-configuration", "view-settings", "viewcs"],
+  aliases: ["view-configuration", "view-settings", "vc"],
   description: "Shows the current active configuration for the bot.",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,

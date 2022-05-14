@@ -54,7 +54,7 @@ export class UserPrecondition extends Precondition {
     // Make sure the precondition is run on a guild.
     if (!ctx.guild) return this.ok();
 
-    if(this.checkCanaryMode() && !container.client.BotDevelopers.has(ctx.author.id)) {
+    if (this.checkCanaryMode() && !container.client.BotDevelopers.has(ctx.author.id)) {
       return this.error({ message: `Sorry but im in \`canary\` mode and only developers can run my commands.` });
     }
 
@@ -80,6 +80,6 @@ export class UserPrecondition extends Precondition {
   }
 
   private checkCanaryMode(): boolean {
-    return canaryMode
+    return canaryMode;
   }
 }

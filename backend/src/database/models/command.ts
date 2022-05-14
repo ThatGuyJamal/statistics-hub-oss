@@ -72,7 +72,7 @@ export interface CommandModelStructure {
    */
   GuildCustomCommands?: {
     /** Command data */
-    data: CustomCommandSchema[]
+    data: CustomCommandSchema[];
     /** Max number of commands this guild can have.*/
     limit: number;
   };
@@ -106,5 +106,8 @@ export interface CustomCommandSchema {
 }
 
 export enum CommandPluginEnum {
+  /**
+   * The max allowed commands for non premium guilds.
+   */
   commandLimit = 5,
 }

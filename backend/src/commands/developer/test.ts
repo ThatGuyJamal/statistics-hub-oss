@@ -66,18 +66,9 @@ export class UserCommand extends ICommand {
     ctx.channel.send("Working on it...");
     const text = await args.pick("string").catch(() => null);
     if (!text) {
-      return ctx.reply("No prefix was given as an argument!");
+      return ctx.reply("No arguments passed for test...");
     }
 
-    return ctx.reply(`Prefix is: **${text}**`);
+    return ctx.reply(`Argument is: **${text}**`);
   }
-  // public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) { }
-  // public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
-  //     registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
-  //         guildIds: getTestGuilds(),
-  //         registerCommandIfMissing: environment.bot.register_commands,
-  //         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
-  //         idHints: [],
-  //     });
-  // }
 }

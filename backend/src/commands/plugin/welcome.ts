@@ -35,7 +35,7 @@ import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
 import { BaseEmbed } from "../../internal/structures/Embed";
 
-const DEFAULT_CARD_URL = "https://i.imgur.com/dCS4tQk.jpeg"
+const DEFAULT_CARD_URL = "https://i.imgur.com/dCS4tQk.jpeg";
 
 @ApplyOptions<ICommandOptions>({
   name: "welcome",
@@ -185,7 +185,7 @@ export class UserCommand extends ICommand {
           return interaction.reply({
             content: "You dont have a welcome plugin setup, so I can't disable it.",
             ephemeral: true,
-          })
+          });
         } else {
           client.logger.info(res);
           return interaction.reply({
@@ -244,7 +244,7 @@ export class UserCommand extends ICommand {
 
       await interaction.deferReply({
         ephemeral: true,
-      })
+      });
 
       if (!checkIfData || !checkIfData.Enabled) {
         return await interaction.editReply({
@@ -313,20 +313,19 @@ export class UserCommand extends ICommand {
               fields: [
                 {
                   name: "Welcome Channel",
-                  value: `${channelMention(checkIfData.GuildWelcomeChannelId!)}`
+                  value: `${channelMention(checkIfData.GuildWelcomeChannelId!)}`,
                 },
                 {
                   name: "Goodbye Channel",
-                  value: `${channelMention(checkIfData.GuildGoodbyeChannelId!)}`
-                }
-              ]
+                  value: `${channelMention(checkIfData.GuildGoodbyeChannelId!)}`,
+                },
+              ],
             },
             interaction
           ),
         ],
       });
     } else if (interaction.options.getSubcommand() === "update") {
-
       await interaction.deferReply({
         ephemeral: true,
       });
@@ -373,8 +372,8 @@ export class UserCommand extends ICommand {
           return await interaction.editReply({
             content: `Card URL you entered is not valid! Please use a valid URL using \`https://\`. 
               Make sure the link to the background is public. If you have a picture you want to use, try uploading it to ${hideLinkEmbed(
-              "https://imgur.com/"
-            )}\n Example: https://i.imgur.com/az1Sx59.jpeg`,
+                "https://imgur.com/"
+              )}\n Example: https://i.imgur.com/az1Sx59.jpeg`,
           });
         }
       }
@@ -398,8 +397,8 @@ export class UserCommand extends ICommand {
           GuildWelcomeThemeUrl: cardBackground
             ? cardBackground
             : cardPreBuiltBackground
-              ? cardPreBuiltBackground
-              : DEFAULT_CARD_URL,
+            ? cardPreBuiltBackground
+            : DEFAULT_CARD_URL,
           CreatedById: oldData.CreatedById ?? undefined,
         });
       } else {
@@ -578,10 +577,9 @@ export class UserCommand extends ICommand {
           .join(", ")}\n Run \`welcome view\` to see your changes or \`welcome simulate\` to test them.`,
       });
     } else if (interaction.options.getSubcommand() === "view") {
-
       await interaction.deferReply({
         ephemeral: true,
-      })
+      });
 
       // let getData = await WelcomePluginMongoModel.findOne({ GuildId: interaction.guildId });
       let getData = await client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild!);
@@ -724,9 +722,12 @@ export class UserCommand extends ICommand {
                   .setName("welcome-ping-on-join")
                   .setDescription("Ping the user when they join.")
                   .setRequired(false)
-              ).addStringOption((options) =>
-                options.setName("update-delete").setDescription("Delete a value in the welcome system.").addChoices(
-                  [
+              )
+              .addStringOption((options) =>
+                options
+                  .setName("update-delete")
+                  .setDescription("Delete a value in the welcome system.")
+                  .addChoices([
                     ["Greet Message", "GuildWelcomeMessage"],
                     ["Goodbye Message", "GuildGoodbyeMessage"],
                     ["Theme", "GuildWelcomeTheme"],
@@ -734,8 +735,7 @@ export class UserCommand extends ICommand {
                     ["Ping on join", "GuildWelcomePingOnJoin"],
                     ["Welcome Channel", "GuildWelcomeChannelId"],
                     ["Goodbye Channel", "GuildGoodbyeChannelId"],
-                  ]
-                )
+                  ])
                   .setRequired(false)
               )
           )
