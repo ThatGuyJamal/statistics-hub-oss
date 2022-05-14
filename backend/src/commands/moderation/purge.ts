@@ -41,7 +41,7 @@ export class UserCommand extends ICommand {
     if (!ctx.guild) return;
     const numberArg = await args.pick("number").catch(() => null);
     const channelArg = await args.pick("channel").catch(() => null);
-    
+
     const channel = ctx.channel as TextChannel;
 
     if (!numberArg) {

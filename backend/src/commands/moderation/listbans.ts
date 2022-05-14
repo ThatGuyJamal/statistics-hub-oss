@@ -76,7 +76,7 @@ export class UserCommand extends ICommand {
             title: `Banned Users in ${ctx.guild?.name} | ${amount - 1}`,
             description: stripIndent(`
                     === Banned Users ===
-                    ${bannedMembers}
+                    ${bannedMembers || "No banned users."}
                     `),
           },
           ctx
@@ -84,13 +84,4 @@ export class UserCommand extends ICommand {
       ],
     });
   }
-  // public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) { }
-  // public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
-  //     registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
-  //         guildIds: getTestGuilds(),
-  //         registerCommandIfMissing: environment.bot.register_commands,
-  //         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
-  //         idHints: [],
-  //     });
-  // }
 }

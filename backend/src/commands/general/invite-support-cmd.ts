@@ -44,10 +44,7 @@ export class UserCommand extends ICommand {
           {
             description: stripIndent(`
                     === Invite Link ===
-                    ${createHyperLink(
-                      "Click Here",
-                      environment.bot.bot_oauth_url
-                    )} to invite the bot to your server.
+                    ${createHyperLink("Click Here", environment.bot.bot_oauth_url)} to invite the bot to your server.
                     `),
           },
           ctx

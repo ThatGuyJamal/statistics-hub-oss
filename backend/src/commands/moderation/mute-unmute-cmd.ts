@@ -4,7 +4,7 @@ import { Message } from "discord.js";
 import ms from "ms";
 import { ICommandOptions, ICommand } from "../../Command";
 import { memberMention } from "../../internal/functions/formatting";
-import { isRoleManageable } from "../../internal/functions/role";
+import { isGuildMessage } from "../../internal/functions/guards";
 import { seconds } from "../../internal/functions/time";
 
 @ApplyOptions<ICommandOptions>({
@@ -21,12 +21,16 @@ import { seconds } from "../../internal/functions/time";
     examples: ["mute @user 1h", "mute @user 1d"],
     command_type: "message",
   },
+  requiredClientPermissions: ["MODERATE_MEMBERS"],
+  requiredUserPermissions: ["MODERATE_MEMBERS"],
 })
 export class UserCommand extends ICommand {
   public async messageRun(ctx: Message, args: Args) {
     const userToMute = await args.pick("member").catch(() => null);
     const timeToMute = await args.pick("string").catch(() => null);
     const muteReason = await args.pick("string").catch(() => "No reason provided.");
+
+    if(!isGuildMessage) return
 
     const invalidReply = `Invalid arguments. Try \`mute <user> <time> (reason)\`\nExample: \`mute @user 1h "bad kids go in time out"\``;
 
@@ -54,6 +58,28 @@ export class UserCommand extends ICommand {
       });
     }
 
+    if(userToMute.pending) {
+      return await ctx.channel.send({
+        content: "That user cant be muted because this member has yet to pass the servers's membership gate.",
+      });
+    }
+
+    if (userToMute.user.bot) {
+      return await ctx.channel.send({
+        content: "I can't mute bots. If you dont want them to be able to speak, you need to change there permissions manually.",
+      });
+    }
+
+    if(!userToMute.moderatable) {
+      return await ctx.channel.send({
+        content: "I dont have permissions to mute this user.",
+      });
+    } else if (!userToMute.manageable) {
+      return await ctx.channel.send({
+        content: "It seems this user has a higher role than me, so I can't mute them.",
+      });
+    }
+
     if (!timeToMute) {
       return await ctx.channel.send({
         content: invalidReply,
@@ -62,26 +88,28 @@ export class UserCommand extends ICommand {
 
     const timeToMuteMs = ms(timeToMute);
 
-    return await userToMute
-      .timeout(timeToMuteMs, muteReason)
-      .then(() => {
-        return ctx.channel.send({
-          embeds: [
-            {
-              title: "Mute Successful 🔇",
-              description: `${memberMention(ctx.author.id)} Muted ${memberMention(userToMute.id)} for ${ms(
-                timeToMuteMs
-              )} :shushing_face:`,
-              color: "WHITE",
-            },
-          ],
-        });
-      })
-      .catch(() => {
-        return ctx.channel.send({
-          content: "Failed to mute user. Please make sure I have a high enough role to mute that users.",
-        });
+    try {
+      return await userToMute
+        .timeout(timeToMuteMs, muteReason)
+        .then((res) => {
+          return ctx.channel.send({
+            embeds: [
+              {
+                title: "Mute Successful 🔇",
+                description: `${memberMention(ctx.author.id)} Muted ${memberMention(res.user.id)} for ${ms(
+                  timeToMuteMs
+                )} :shushing_face:`,
+                color: "WHITE",
+              },
+            ],
+          });
+        })
+    } catch (err) {
+      this.container.client.logger.error(err);
+      return ctx.channel.send({
+        content: "Failed to mute user. Please make sure I have a high enough role to mute that users.",
       });
+    }
   }
 }
 
@@ -113,6 +141,7 @@ export class UserCommand2 extends ICommand {
       });
     }
 
+    try {
     return await userToUnMute
       .timeout(null, unMuteReason)
       .then(() => {
@@ -126,10 +155,11 @@ export class UserCommand2 extends ICommand {
           ],
         });
       })
-      .catch(() => {
+    } catch (err) {
+      this.container.client.logger.error(err);
         return ctx.channel.send({
           content: "Failed to unmute user. Please make sure I have a high enough role to unmute that users.",
         });
-      });
+      }
   }
 }

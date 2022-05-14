@@ -13,6 +13,7 @@
  */
 
 import { StatCordHandler } from "../api/statcord";
+import { RateLimitAPI } from "../cache/ratelimit";
 import { RedisController } from "../cache/redis";
 import { LocalCacheStore } from "../cache/store";
 import { environment } from "../config";
@@ -36,6 +37,7 @@ declare module "discord.js" {
     BotStaff: Set<string>;
 
     IntervalController: IntervalController;
+    RateLimitAPI: RateLimitAPI;
     EventLogger: IEventLogger;
   }
 }

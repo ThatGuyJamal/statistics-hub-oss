@@ -13,14 +13,8 @@
  */
 
 import { ApplyOptions } from "@sapphire/decorators";
-import {
-  BucketScope,
-  ApplicationCommandRegistry,
-  RegisterBehavior,
-  ChatInputCommand,
-  Args,
-} from "@sapphire/framework";
-import { Message} from "discord.js";
+import { BucketScope, ApplicationCommandRegistry, RegisterBehavior, ChatInputCommand, Args } from "@sapphire/framework";
+import { Message } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
 import { seconds } from "../../internal/functions/time";
@@ -44,7 +38,7 @@ import { getTestGuilds } from "../../internal/load-test-guilds";
 })
 export class UserCommand extends ICommand {
   public async messageRun(ctx: Message, _args: Args) {
-   return ctx.reply("Coming soon...");
+    return ctx.reply("Coming soon...");
   }
 
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {

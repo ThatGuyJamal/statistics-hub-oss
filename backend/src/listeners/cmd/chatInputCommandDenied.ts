@@ -16,11 +16,11 @@ import { Listener, Events, UserError, ChatInputCommandDeniedPayload } from "@sap
 import { sendError } from "../../internal/interactions/responses";
 
 export class UserListener extends Listener<typeof Events.ChatInputCommandDenied> {
-  public run(error: UserError, { interaction }: ChatInputCommandDeniedPayload) {
+  public async run(error: UserError, { interaction }: ChatInputCommandDeniedPayload) {
     try {
       if (Reflect.get(Object(error.context), "silent")) return;
 
-      return sendError(interaction, error.message);
+      return await sendError(interaction, error.message);
     } catch (err) {
       return this.container.logger.error(err);
     }

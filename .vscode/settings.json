@@ -12,6 +12,7 @@
     "colorette",
     "cooldown",
     "cooldowns",
+    "cpuload",
     "customcommand",
     "Deno",
     "discordjs",
@@ -22,7 +23,11 @@
     "importx",
     "kaname",
     "Kodo",
+    "listbans",
     "Lngs",
+    "lockchannel",
+    "memload",
+    "moderatable",
     "mycustomcommand",
     "nocheck",
     "ratelimit",
@@ -34,6 +39,7 @@
     "thatguyjamal",
     "threadchannel",
     "typegoose",
+    "unmute",
     "upsert"
   ]
 }

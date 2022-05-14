@@ -1,17 +1,24 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener, ListenerOptions, MessageCommand } from "@sapphire/framework";
+import { RateLimit } from "@sapphire/ratelimits";
 import { Message, TextChannel } from "discord.js";
-import { memberMention } from "../../internal/functions/formatting";
+import { channelMention, memberMention, roleMention } from "../../internal/functions/formatting";
+import { isGuildMessage } from "../../internal/functions/guards";
 
 @ApplyOptions<ListenerOptions>({
   name: "customcommand-event",
   event: Events.MessageCreate,
 })
 export class UserEvent extends Listener {
-  public async run(message: Message): Promise<void> {
+  public async run(message: Message){
     // TODO - Add role, user, and channel limitations
 
-    if (message.author.bot) return;
+    if (message.partial || !isGuildMessage(message) || message.author.bot) return;
+
+    const ratelimit = this.container.client.RateLimitAPI.customCommandLimiter.acquire(message.author.id);
+
+    // If we are limited, dont run the command.
+    if (ratelimit.limited) return;
 
     const channel = message.channel as TextChannel;
 
@@ -19,11 +26,14 @@ export class UserEvent extends Listener {
 
     const fetchedCache = this.container.client.LocalCacheStore.memory.plugins.commands.get(channel.guild);
 
+    if (!fetchedCache) return;
+
     const fetchPrefix =
       this.container.client.LocalCacheStore.memory.guild.get(channel.guild)?.GuildPrefix ||
       this.container.client.environment.bot.bot_prefix;
 
-    if (!fetchedCache) return;
+    // Check if the command started with the prefix
+    if (!message.content.startsWith(fetchPrefix)) return;
 
     // Checks if there are any commands in the array
     if (!fetchedCache.GuildCustomCommands || fetchedCache.GuildCustomCommands.data.length < 1) return;
@@ -36,18 +46,45 @@ export class UserEvent extends Listener {
 
     if (!customCommand) return;
 
-    // Check if the command started with the prefix
-    if (!message.content.startsWith(fetchPrefix)) return;
-
-    // Check if the trigger is the same as the custom command
+    // Check if the trigger name after the prefix has been removed, is the same as the custom command name.
     if (trigger !== customCommand.trigger) return;
-
-    // Send the custom command message to the channel
 
     // Check if we have permissions in this channel to send messages
     if (!channel.permissionsFor(message.guild?.me!).has("SEND_MESSAGES")) return;
 
-    await channel
+    /**
+     * ? Permission handler. 
+     * Here we will check if the user has the required role, channel, or user Id to run the command.
+     * Permission order: User, Role, Channel
+     */
+
+    if (customCommand.allowedUser && message.author.id !== customCommand.allowedUser) {
+      return message.channel.send(
+        `${memberMention(message.author.id)} You do not have permission to use this command custom command.`
+      );
+    }
+
+    if (customCommand.allowedRole && !message.member?.roles.cache.has(customCommand.allowedRole)) {
+      return message.channel.send(
+        {
+          content: `${memberMention(message.author.id)} |  Only members with the ${roleMention(customCommand.allowedRole)} role can use this command.`,
+          allowedMentions: {
+            roles: []
+          }
+        }
+      );
+    }
+
+    if (customCommand.allowedChannel && message.channel.id !== customCommand.allowedChannel) {
+      return message.channel.send(
+        `${memberMention(message.author.id)} | This custom command can only be used in the ${channelMention(customCommand.allowedChannel)} channel.`
+      );
+    }
+
+    // Removes one limit from the user
+    ratelimit.consume();
+
+    return await channel
       .send(
         customCommand.response
           .replaceAll("{{user.mention}}", memberMention(message.author.id))
