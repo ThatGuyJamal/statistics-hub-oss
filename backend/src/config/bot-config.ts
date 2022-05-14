@@ -26,7 +26,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
   caseInsensitivePrefixes: false,
   defaultPrefix: environment.bot.bot_prefix,
   logger: {
-    level: environment.production ? LogLevel.Warn : LogLevel.Debug,
+    level: canaryMode ? LogLevel.Warn : LogLevel.Debug,
   },
   fetchPrefix: async (ctx: Message) => {
     if (!isGuildMessage(ctx)) return environment.bot.bot_prefix;
@@ -39,7 +39,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
       }
     }
   },
-  regexPrefix: /^(hey +)?sho[,! ]/i,
+  // regexPrefix: /^(hey +)?sho[,! ]/i,
   intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"],
   loadDefaultErrorListeners: true,
   loadMessageCommandListeners: true,
@@ -56,10 +56,10 @@ export const CLIENT_OPTIONS: ClientOptions = {
    */
   makeCache: Options.cacheWithLimits({
     ApplicationCommandManager: {
-      maxSize: 100,
+      maxSize: 500,
     }, // guild.commands
-    BaseGuildEmojiManager: 0, // guild.emojis
-    GuildBanManager: 0, // guild.bans
+    BaseGuildEmojiManager: 10, // guild.emojis
+    GuildBanManager: 100, // guild.bans
     GuildInviteManager: 0, // guild.invites
     GuildMemberManager: {
       maxSize: 1000,
@@ -97,7 +97,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
     }, // threadchannel.members
     UserManager: {
       sweepInterval: hours(6),
-      maxSize: 50,
+      maxSize: 100,
     }, // client.users
     VoiceStateManager: 0, // guild.voiceStates
   }),
