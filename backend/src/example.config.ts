@@ -70,6 +70,7 @@ export const environment = {
     bot_name: "",
     bot_full_name: "",
     bot_prefix: "!!",
+    version: "1.0.0",
     /**
      * The bot default language.
      * @default "en-US"
@@ -85,6 +86,12 @@ export const environment = {
      * It is recommended to set this to false after they are updated becasue we will get ratelimited for posting to the api a lot.
      */
     register_commands: false,
+    /**
+      * ! WARNING
+      * This will push all commands to the global api and not development servers. 
+      * @default false
+      */
+    register_global_commands: false,
     /**
      * The guilds to register slash commands to for testing. If this is empty, all commands will be set to global.
      */

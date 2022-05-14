@@ -1,6 +1,7 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { BucketScope } from "@sapphire/framework";
 import { Message, MessageActionRow, MessageButton } from "discord.js";
+import ms from "ms";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
 import { codeBlock } from "../../internal/functions/formatting";
@@ -87,6 +88,17 @@ ${
                   ),
                   inline: false,
                 },
+                {
+                  name: "Miscellaneous",
+                  value: codeBlock(
+                    "css",
+                    `
+                    [Uptime] = ${ms(this.container.client.uptime ?? 0)}
+                    [Ping] = ${ms(this.container.client.ws.ping)}
+                    [Bot Version] = ${environment.bot.version ?? "Unknown"}
+                    `),
+                  inline: true,
+                }
               ],
               footer: {
                 text: `Thanks to StatCord for the amazing API!`,
