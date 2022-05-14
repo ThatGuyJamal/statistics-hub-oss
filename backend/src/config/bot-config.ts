@@ -40,10 +40,10 @@ export const CLIENT_OPTIONS: ClientOptions = {
     }
   },
   regexPrefix: /^(hey +)?sho[,! ]/i,
-  intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES", "GUILD_VOICE_STATES", "GUILD_BANS"],
+  intents: ["GUILDS", "GUILD_MEMBERS", "GUILD_MESSAGES"],
   loadDefaultErrorListeners: true,
   loadMessageCommandListeners: true,
-  partials: ["MESSAGE", "GUILD_MEMBER", "CHANNEL"],
+  partials: ["MESSAGE", "GUILD_MEMBER", "CHANNEL", "USER"],
   // Default global cool down settings.
   defaultCooldown: {
     // Ignored by Cooldown.

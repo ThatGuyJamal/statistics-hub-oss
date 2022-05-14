@@ -72,13 +72,16 @@ export interface CommandModelStructure {
    */
   GuildCustomCommands?: {
     /** Command data */
-    data: Array<CustomCommandSchema>;
+    data: CustomCommandSchema[]
     /** Max number of commands this guild can have.*/
     limit: number;
   };
   CreatedAt: Date;
 }
 
+/**
+ * Typings for our custom command schema
+ */
 export interface CustomCommandSchema {
   /**
    * The regex pattern to match the command.
@@ -89,15 +92,15 @@ export interface CustomCommandSchema {
    */
   response: string;
   /**
-   * The channel to send the message to.
+   * The channel this custom command is allowed to be used in. If null, it can be used in any channel.
    */
   allowedChannels?: string[];
   /**
-   * The users who can use this command.
+   * The users who can use this command. If null, it can be used by anyone.
    */
   allowedUsers?: string[];
   /**
-   * The roles that can use this command.
+   * The roles that can use this command. If null, it can be used by anyone.
    */
   allowedRoles?: string[];
 }

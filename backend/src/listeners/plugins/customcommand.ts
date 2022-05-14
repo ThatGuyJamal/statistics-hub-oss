@@ -3,6 +3,7 @@ import { Events, Listener, ListenerOptions, MessageCommand } from "@sapphire/fra
 import { RateLimit } from "@sapphire/ratelimits";
 import { Message, TextChannel } from "discord.js";
 import { memberMention } from "../../internal/functions/formatting";
+import { isGuildMessage } from "../../internal/functions/guards";
 
 @ApplyOptions<ListenerOptions>({
   name: "customcommand-event",
@@ -12,7 +13,7 @@ export class UserEvent extends Listener {
   public async run(message: Message): Promise<void> {
     // TODO - Add role, user, and channel limitations
 
-    if (message.author.bot) return
+    if (message.partial || !isGuildMessage(message) || message.author.bot) return;
 
     const ratelimit = this.container.client.RateLimitAPI.customCommandLimiter.acquire(message.author.id);
 
