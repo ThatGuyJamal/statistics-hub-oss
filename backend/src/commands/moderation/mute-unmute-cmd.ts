@@ -62,26 +62,28 @@ export class UserCommand extends ICommand {
 
     const timeToMuteMs = ms(timeToMute);
 
-    return await userToMute
-      .timeout(timeToMuteMs, muteReason)
-      .then(() => {
-        return ctx.channel.send({
-          embeds: [
-            {
-              title: "Mute Successful 🔇",
-              description: `${memberMention(ctx.author.id)} Muted ${memberMention(userToMute.id)} for ${ms(
-                timeToMuteMs
-              )} :shushing_face:`,
-              color: "WHITE",
-            },
-          ],
-        });
-      })
-      .catch(() => {
-        return ctx.channel.send({
-          content: "Failed to mute user. Please make sure I have a high enough role to mute that users.",
-        });
+    try {
+      return await userToMute
+        .timeout(timeToMuteMs, muteReason)
+        .then((res) => {
+          return ctx.channel.send({
+            embeds: [
+              {
+                title: "Mute Successful 🔇",
+                description: `${memberMention(ctx.author.id)} Muted ${memberMention(res.user.id)} for ${ms(
+                  timeToMuteMs
+                )} :shushing_face:`,
+                color: "WHITE",
+              },
+            ],
+          });
+        })
+    } catch (err) {
+      this.container.client.logger.error(err);
+      return ctx.channel.send({
+        content: "Failed to mute user. Please make sure I have a high enough role to mute that users.",
       });
+    }
   }
 }
 
@@ -113,6 +115,7 @@ export class UserCommand2 extends ICommand {
       });
     }
 
+    try {
     return await userToUnMute
       .timeout(null, unMuteReason)
       .then(() => {
@@ -126,10 +129,11 @@ export class UserCommand2 extends ICommand {
           ],
         });
       })
-      .catch(() => {
+    } catch (err) {
+      this.container.client.logger.error(err);
         return ctx.channel.send({
           content: "Failed to unmute user. Please make sure I have a high enough role to unmute that users.",
         });
-      });
+      }
   }
 }
