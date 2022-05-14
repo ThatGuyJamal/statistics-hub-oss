@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri May 13 08:55:25 2022
+# Make data base, printed on Fri May 13 21:16:46 2022
 
 # Variables
 
@@ -23,7 +23,7 @@ PULSE_SERVER = unix:/run/flatpak/pulse/native
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-876613ed-48ab-45da-9361-e9cd89d4ec52.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-ba5133a7-b7bf-479e-a422-7949ee465585.sock
 # environment
 MANDATORY_PATH = /usr/share/gconf/pop.mandatory.path
 # environment
@@ -121,7 +121,7 @@ XDG_DATA_HOME = /home/thatguyjamal/.var/app/com.visualstudio.code/data
 # environment
 SANDBOX_LD_PRELOAD = /app/bin/../lib/libzypak-preload-host.so:/app/bin/../lib/libzypak-preload-host-spawn-strategy.so
 # environment
-SESSION_MANAGER = local/iusepopbtw:@/tmp/.ICE-unix/2689,unix/iusepopbtw:/tmp/.ICE-unix/2689
+SESSION_MANAGER = local/iusepopbtw:@/tmp/.ICE-unix/2696,unix/iusepopbtw:/tmp/.ICE-unix/2696
 # automatic
 *F = $(notdir $*)
 # environment
@@ -167,7 +167,7 @@ DBUS_SYSTEM_BUS_ADDRESS = unix:path=/run/dbus/system_bus_socket
 # environment
 XDG_CONFIG_HOME = /home/thatguyjamal/.var/app/com.visualstudio.code/config
 # environment
-INVOCATION_ID = fb7dd5b5ea824351977acca920623524
+INVOCATION_ID = ea1709aabc094689b36482049105347f
 # environment
 VSCODE_LOG_NATIVE = false
 # environment
@@ -197,7 +197,7 @@ GIO_LAUNCHED_DESKTOP_FILE = /home/thatguyjamal/.local/share/flatpak/exports/shar
 # makefile
 .DEFAULT_GOAL := 
 # environment
-SYSTEMD_EXEC_PID = 2712
+SYSTEMD_EXEC_PID = 2719
 # environment
 NPM_CONFIG_GLOBALCONFIG = /app/etc/npmrc
 # environment
@@ -211,9 +211,9 @@ DEFAULTS_PATH = /usr/share/gconf/pop.default.path
 # default
 MAKE_VERSION := 4.3
 # environment
-MANAGERPID = 2486
+MANAGERPID = 2467
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 9458
+GIO_LAUNCHED_DESKTOP_FILE_PID = 8539
 # environment
 _ = /usr/bin/make
 # environment
@@ -227,7 +227,7 @@ NVM_RC_VERSION =
 # environment
 NVM_CD_FLAGS = 
 # environment
-JOURNAL_STREAM = 8:47347
+JOURNAL_STREAM = 8:47309
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -271,9 +271,9 @@ GDMSESSION = pop
 
 # Directories
 
-# . (device 64769, inode 25039156): 13 files, no impossibilities.
+# . (device 64769, inode 25039156): 16 files, no impossibilities.
 
-# 13 files, no impossibilities in 1 directories.
+# 16 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -323,13 +323,13 @@ GNUmakefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 20 / storage = 166 B / avg = 8 B
-# current buf: size = 8162 B / used = 166 B / count = 20 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 23 / storage = 202 B / avg = 8 B
+# current buf: size = 8162 B / used = 202 B / count = 23 / avg = 8 B
 
-# strcache performance: lookups = 23 / hit rate = 13%
+# strcache performance: lookups = 26 / hit rate = 11%
 # hash-table stats:
-# Load=20/8192=0%, Rehash=0, Collisions=0/23=0%
-# Finished Make data base on Fri May 13 08:55:25 2022
+# Load=23/8192=0%, Rehash=0, Collisions=0/26=0%
+# Finished Make data base on Fri May 13 21:16:46 2022
 
  
 make: *** No rule to make target 'all'.  Stop.

@@ -1,5 +1,6 @@
 import { ApplyOptions } from "@sapphire/decorators";
 import { Events, Listener, ListenerOptions, MessageCommand } from "@sapphire/framework";
+import { RateLimit } from "@sapphire/ratelimits";
 import { Message, TextChannel } from "discord.js";
 import { memberMention } from "../../internal/functions/formatting";
 
@@ -11,7 +12,12 @@ export class UserEvent extends Listener {
   public async run(message: Message): Promise<void> {
     // TODO - Add role, user, and channel limitations
 
-    if (message.author.bot) return;
+    if (message.author.bot) return
+
+    const ratelimit = this.container.client.RateLimitAPI.customCommandLimiter.acquire(message.author.id);
+
+    // If we are limited, dont run the command.
+    if (ratelimit.limited) return
 
     const channel = message.channel as TextChannel;
 
@@ -47,6 +53,9 @@ export class UserEvent extends Listener {
     // Check if we have permissions in this channel to send messages
     if (!channel.permissionsFor(message.guild?.me!).has("SEND_MESSAGES")) return;
 
+    // Removes one limit from the user
+    ratelimit.consume();
+
     await channel
       .send(
         customCommand.response
@@ -61,8 +70,3 @@ export class UserEvent extends Listener {
       .catch(() => {});
   }
 }
-
-
-// TODO Cooldown for custom commands
-// outline
-const customCommandCooldown = new Map<string, number>();
