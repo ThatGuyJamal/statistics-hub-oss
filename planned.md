@@ -6,8 +6,6 @@ Below are planned features I will be adding to the bot in no specific order...
 
 - [x] Add statcord command information to statistics command.
 
-- [ ] Update information / info command to include [b-card](https://github.com/discord-card/bot)
-
 - [x] Add support for enable or disabling of commands.
 
 - [x] Add caching to some of the db query's.
@@ -16,6 +14,8 @@ Below are planned features I will be adding to the bot in no specific order...
 
 - [x] Fix mute and unmute command permission and error handling.
 
+- [ ] Custom embed builder command using slash commands.
+
 - [ ] Send an hour interval of stats from the db to the channel for logging and growth of the bot API
 
 - [ ] Add premium config plugin for the bot. This will allow users to get more benefits such as more custom commands, and premium commands only.
@@ -23,6 +23,8 @@ Below are planned features I will be adding to the bot in no specific order...
 - [ ] Redo help command with categories and information pointing to the documentation.
 
 - [ ] Blacklist system for users and guilds
+
+- [ ] Update information / info command to include [b-card](https://github.com/discord-card/bot)
 
 - [ ] Ping on join config command for server owners.
 
