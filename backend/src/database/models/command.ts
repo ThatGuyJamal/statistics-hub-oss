@@ -94,15 +94,15 @@ export interface CustomCommandSchema {
   /**
    * The channel this custom command is allowed to be used in. If null, it can be used in any channel.
    */
-  allowedChannels?: string[];
+  allowedChannel: string | null
   /**
    * The users who can use this command. If null, it can be used by anyone.
    */
-  allowedUsers?: string[];
+  allowedUser: string | null
   /**
    * The roles that can use this command. If null, it can be used by anyone.
    */
-  allowedRoles?: string[];
+  allowedRole: string | null
 }
 
 export enum CommandPluginEnum {

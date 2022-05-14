@@ -86,7 +86,7 @@ export class UserCommand extends ICommand {
         "css",
         `
 === Custom Commands ===
-${customCommands.map((command) => `#${amount++} - [${ command.trigger }] = ${ command.response }`).join("\n\n")}
+${customCommands.map((command) => `#${amount++} - [${command.trigger}] = ${command.response}`).join("\n\n")}
 
 Tip > To run a custom command you must use the bots prefix. Example: ${prefix}mycustomcommand
 `
@@ -101,8 +101,8 @@ Tip > To run a custom command you must use the bots prefix. Example: ${prefix}my
     if (interaction.options.getSubcommand() === "create") {
       const triggerArgument = interaction.options.getString("trigger", true);
       const responseArgument = interaction.options.getString("response", true);
-      const allowedChannelArgument = interaction.options.getChannel("channel", false);
-      const allowedUserArgument = interaction.options.getUser("user", false);
+      const allowedChannelArgument = interaction.options.getChannel("channel", false)
+      const allowedUserArgument = interaction.options.getUser("user", false)
       const allowedRoleArgument = interaction.options.getRole("role", false);
 
       await interaction.deferReply({
@@ -143,22 +143,9 @@ Tip > To run a custom command you must use the bots prefix. Example: ${prefix}my
       // TODO - Check if the guild is premium before limiting...
       if (customCommands.length >= CommandPluginEnum.commandLimit) {
         return await interaction.editReply(
-`You have reached the max limit of ${CommandPluginEnum.commandLimit} custom commands for this server. Please delete a custom command to add a new one or upgrade server to premium. You can learn more in the ${createHyperLink("documentation", environment.bot.developerMetaData.documentation_link)}. Run \`customcommand view\` to see your current command list.`
+          `You have reached the max limit of ${CommandPluginEnum.commandLimit} custom commands for this server. Please delete a custom command to add a new one or upgrade server to premium. You can learn more in the ${createHyperLink("documentation", environment.bot.developerMetaData.documentation_link)}. Run \`customcommand view\` to see your current command list.`
         );
       }
-
-      // Grab the old data so we can push the new value to the array
-      const allowedChannelsArray = document?.GuildCustomCommands!.data!.find(
-        (cmd) => cmd.trigger === triggerArgument
-      )?.allowedChannels || [];
-
-      const allowedUsersArray = document?.GuildCustomCommands!.data!.find(
-        (cmd) => cmd.trigger === triggerArgument
-      )?.allowedUsers || [];
-
-      const allowedRolesArray = document?.GuildCustomCommands!.data!.find(
-        (cmd) => cmd.trigger === triggerArgument
-      )?.allowedRoles || [];
 
       /**
        * The new and updated command object to push to the database array.
@@ -166,33 +153,36 @@ Tip > To run a custom command you must use the bots prefix. Example: ${prefix}my
       const newCommand = {
         trigger: triggerArgument,
         response: responseArgument,
-        allowedChannels: allowedChannelArgument ? allowedChannelsArray?.push(allowedChannelArgument.id) : [],
-        allowedUsers: allowedUserArgument ? allowedUsersArray?.push(allowedUserArgument?.id) : [],
-        allowedRoles: allowedRoleArgument ? allowedRolesArray?.push(allowedRoleArgument?.id) : [],
+        allowedChannel: allowedChannelArgument ? allowedChannelArgument.id : null,
+        allowedUser: allowedUserArgument ? allowedUserArgument.id : null,
+        allowedRole: allowedRoleArgument ? allowedRoleArgument.id : null,
       } as CustomCommandSchema;
 
       // Save the new command to the cache
       let newLimit = document?.GuildCustomCommands?.limit! || CommandPluginEnum.commandLimit;
-      let newData = document?.GuildCustomCommands?.data || [];
+
+      // We will use this to push the new command to the array of custom commands
+      let customCommandData = document?.GuildCustomCommands?.data || [];
 
       // Check if the limit is reached
       if (newLimit === 0) {
         return await interaction.editReply({
           content: `You have reached the limit of **${CommandPluginEnum.commandLimit}** custom commands for this server. Please update to a premium account to remove the limit.`,
         });
-      } else {
-        newLimit--;
       }
 
+      // If the limit is not reached, we will push the new command to the array and decrement the limit by 1
+      newLimit--;
+
       // Check if the command already exists
-      if (newData.find((command) => command.trigger === triggerArgument)) {
+      if (customCommandData.find((command) => command.trigger === triggerArgument)) {
         return await interaction.editReply({
           content: `The command \`${triggerArgument}\` already exists. Please use a different trigger or update the existing command.`,
         });
       }
 
       // Add the new command to the cache
-      newData.push(newCommand);
+      customCommandData.push(newCommand);
 
       // save the new data to the cache
       client.LocalCacheStore.memory.plugins.commands.set(interaction.guild, {
@@ -201,7 +191,7 @@ Tip > To run a custom command you must use the bots prefix. Example: ${prefix}my
         GuildName: interaction.guild.name,
         CreatedAt: new Date(),
         GuildCustomCommands: {
-          data: newData,
+          data: customCommandData,
           limit: newLimit,
         },
       });
@@ -212,7 +202,7 @@ Tip > To run a custom command you must use the bots prefix. Example: ${prefix}my
         {
           $set: {
             GuildCustomCommands: {
-              data: newData,
+              data: customCommandData,
               limit: newLimit,
             },
           },
@@ -242,6 +232,12 @@ Tip > To run a custom command you must use the bots prefix. Example: ${prefix}my
         await this.createMissingCacheStorages(interaction);
       }
 
+      if(deleteAllArgument && triggerArgument) {
+        return await interaction.editReply({
+          content: "You cannot use the delete-all and delete-trigger flags at the same time.",
+        });
+      }
+
       if (deleteAllArgument) {
         // Delete all commands
         await CommandPluginMongoModel.updateOne(
@@ -265,11 +261,11 @@ Tip > To run a custom command you must use the bots prefix. Example: ${prefix}my
         });
       }
 
-    if(!triggerArgument) {
-      return await interaction.editReply({
-        content: `Please specify a custom command to delete or delete them all.`,
-      });
-    }      
+      if (!triggerArgument) {
+        return await interaction.editReply({
+          content: `Please specify a custom command to delete or delete them all.`,
+        });
+      }
 
       // Make sure the command exists in the database
       if (
@@ -338,7 +334,7 @@ Tip > To run a custom command you must use the bots prefix. Example: ${prefix}my
       const prefix =
         client.LocalCacheStore.memory.guild.get(interaction.guild)?.GuildPrefix ?? client.environment.bot.bot_prefix;
 
-        let amount = 1
+      let amount = 1
 
       return await interaction.editReply({
         content: codeBlock(
@@ -419,10 +415,10 @@ Tip > To run a custom command you must use the bots prefix. Example: ${prefix}my
                 .addStringOption((builder) =>
                   builder.setName("response").setDescription("The response for the command.").setRequired(true)
                 )
-            // TODO Debug error with these not saving to db...
-            .addRoleOption((builder) => builder.setName("role").setDescription("If set only this role can use this custom command").setRequired(false))
-            .addChannelOption((builder) => builder.setName("channel").setDescription("If set this custom command can only be used in this channel.").setRequired(false))
-            .addUserOption((builder) => builder.setName("user").setDescription("If set this custom command can only be used by this server.").setRequired(false))
+                // TODO Debug error with these not saving to db...
+                .addRoleOption((builder) => builder.setName("role").setDescription("If set only this role can use this custom command").setRequired(false))
+                .addChannelOption((builder) => builder.setName("channel").setDescription("If set this custom command can only be used in this channel.").setRequired(false))
+                .addUserOption((builder) => builder.setName("user").setDescription("If set this custom command can only be used by this server.").setRequired(false))
           )
           .addSubcommand((options) => options.setName("list").setDescription("List all custom commands."))
           .addSubcommand((options) =>
