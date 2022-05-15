@@ -17,6 +17,7 @@ import { ListenerOptions, Events, Listener, Store } from "@sapphire/framework";
 import { Message } from "discord.js";
 import { blue, bold, gray, green, magenta, magentaBright, white, yellow } from "colorette";
 import { canaryMode, environment } from "../config";
+import { ActivityTypes } from "discord.js/typings/enums";
 
 const dev = environment.bot.enabled;
 
@@ -33,8 +34,8 @@ export class UserEvent extends Listener {
       status: canaryMode ? "dnd" : "online",
       activities: [
         {
-          name: canaryMode ? "Under Construction 🚧" : "mathematics lecture",
-          type: "LISTENING",
+          name: canaryMode ? "Under Construction 🚧" : environment.bot.readyPresenceMessage,
+          type: ActivityTypes.LISTENING,
         },
       ],
     });

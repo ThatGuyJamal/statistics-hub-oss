@@ -71,6 +71,7 @@ export const environment = {
     bot_full_name: "",
     bot_prefix: "!!",
     version: "1.0.0",
+    readyPresenceMessage: "hello world!",
     /**
      * The bot default language.
      * @default "en-US"
