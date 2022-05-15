@@ -262,18 +262,16 @@ export class UserCommand extends ICommand {
       });
     } else if (interaction.options.getSubcommand() === "simulate") {
       let checkIfData = client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild!);
-
-      await interaction.deferReply({
-        ephemeral: true,
-      });
+      const missingPerms: string[] = [];
 
       if (!checkIfData || !checkIfData.Enabled) {
-        return await interaction.editReply({
+        return await interaction.reply({
           content: "Please enable the welcome plugin first!",
+          ephemeral: true,
         });
       }
 
-      await interaction.editReply({
+      await interaction.reply({
         embeds: [
           new BaseEmbed().interactionEmbed(
             {
@@ -282,6 +280,7 @@ export class UserCommand extends ICommand {
             interaction
           ),
         ],
+        ephemeral: true,
       });
 
       if (!checkIfData.GuildWelcomeChannelId) {
@@ -290,20 +289,14 @@ export class UserCommand extends ICommand {
           content: "No welcome channel setup skipping...",
         });
       } else {
+        const channel = interaction.guild.channels.cache.get(checkIfData.GuildWelcomeChannelId);
+        // Check if we have permissions to send messages in the channel.
+        if (!channel || !channel.permissionsFor(interaction.guild.me!)?.has("SEND_MESSAGES")) {
+          client.logger.debug("[WelcomePlugin] Simulation was ran but no permissions to send messages in the channel.");
+          missingPerms.push(checkIfData.GuildWelcomeChannelId);
+        }
         this.container.client.emit(Events.GuildMemberAdd, interaction.member as GuildMember);
-        await interaction.editReply({
-          embeds: [
-            new BaseEmbed().interactionEmbed(
-              {
-                description: "greet event fired...",
-              },
-              interaction
-            ),
-          ],
-        });
       }
-
-      await pauseThread(6, "seconds", "welcome plugin simulation");
 
       if (!checkIfData.GuildGoodbyeChannelId) {
         client.logger.debug("[WelcomePlugin] Simulation was ran but no goodbye channel was found.");
@@ -311,22 +304,16 @@ export class UserCommand extends ICommand {
           content: "No goodbye channel setup skipping...",
         });
       } else {
+        const channel = interaction.guild.channels.cache.get(checkIfData.GuildGoodbyeChannelId);
+        // Check if we have permissions to send messages in the channel.
+        if (!channel || !channel.permissionsFor(interaction.guild.me!)?.has("SEND_MESSAGES")) {
+          client.logger.debug("[WelcomePlugin] Simulation was ran but no permissions to send messages in the channel.");
+          missingPerms.push(checkIfData.GuildGoodbyeChannelId);
+        }
         this.container.client.emit(Events.GuildMemberRemove, interaction.member as GuildMember);
-        await interaction.editReply({
-          embeds: [
-            new BaseEmbed().interactionEmbed(
-              {
-                description: "goodbye event fired...",
-              },
-              interaction
-            ),
-          ],
-        });
       }
 
-      await pauseThread(6, "seconds", "welcome plugin simulation");
-
-      return await interaction.editReply({
+       await interaction.editReply({
         embeds: [
           new BaseEmbed().interactionEmbed(
             {
@@ -346,6 +333,14 @@ export class UserCommand extends ICommand {
           ),
         ],
       });
+
+      if (missingPerms.length > 0) {
+        return await interaction.followUp({
+          content: `Warning! Im missing permissions to send messages in the following channels: ${missingPerms.map((c) => `${channelMention(c)
+            }`).join(", ")}. So the simulation message was not sent...`,
+          ephemeral: true,
+        })
+      }
     } else if (interaction.options.getSubcommand() === "update") {
       await interaction.deferReply({
         ephemeral: true,
