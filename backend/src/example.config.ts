@@ -87,10 +87,10 @@ export const environment = {
      */
     register_commands: false,
     /**
-      * ! WARNING
-      * This will push all commands to the global api and not development servers. 
-      * @default false
-      */
+     * ! WARNING
+     * This will push all commands to the global api and not development servers.
+     * @default false
+     */
     register_global_commands: false,
     /**
      * The guilds to register slash commands to for testing. If this is empty, all commands will be set to global.

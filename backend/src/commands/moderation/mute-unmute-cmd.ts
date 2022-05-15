@@ -30,7 +30,7 @@ export class UserCommand extends ICommand {
     const timeToMute = await args.pick("string").catch(() => null);
     const muteReason = await args.pick("string").catch(() => "No reason provided.");
 
-    if(!isGuildMessage) return
+    if (!isGuildMessage) return;
 
     const invalidReply = `Invalid arguments. Try \`mute <user> <time> (reason)\`\nExample: \`mute @user 1h "bad kids go in time out"\``;
 
@@ -58,7 +58,7 @@ export class UserCommand extends ICommand {
       });
     }
 
-    if(userToMute.pending) {
+    if (userToMute.pending) {
       return await ctx.channel.send({
         content: "That user cant be muted because this member has yet to pass the servers's membership gate.",
       });
@@ -66,11 +66,12 @@ export class UserCommand extends ICommand {
 
     if (userToMute.user.bot) {
       return await ctx.channel.send({
-        content: "I can't mute bots. If you dont want them to be able to speak, you need to change there permissions manually.",
+        content:
+          "I can't mute bots. If you dont want them to be able to speak, you need to change there permissions manually.",
       });
     }
 
-    if(!userToMute.moderatable) {
+    if (!userToMute.moderatable) {
       return await ctx.channel.send({
         content: "I dont have permissions to mute this user.",
       });
@@ -89,21 +90,19 @@ export class UserCommand extends ICommand {
     const timeToMuteMs = ms(timeToMute);
 
     try {
-      return await userToMute
-        .timeout(timeToMuteMs, muteReason)
-        .then((res) => {
-          return ctx.channel.send({
-            embeds: [
-              {
-                title: "Mute Successful 🔇",
-                description: `${memberMention(ctx.author.id)} Muted ${memberMention(res.user.id)} for ${ms(
-                  timeToMuteMs
-                )} :shushing_face:`,
-                color: "WHITE",
-              },
-            ],
-          });
-        })
+      return await userToMute.timeout(timeToMuteMs, muteReason).then((res) => {
+        return ctx.channel.send({
+          embeds: [
+            {
+              title: "Mute Successful 🔇",
+              description: `${memberMention(ctx.author.id)} Muted ${memberMention(res.user.id)} for ${ms(
+                timeToMuteMs
+              )} :shushing_face:`,
+              color: "WHITE",
+            },
+          ],
+        });
+      });
     } catch (err) {
       this.container.client.logger.error(err);
       return ctx.channel.send({
@@ -142,9 +141,7 @@ export class UserCommand2 extends ICommand {
     }
 
     try {
-    return await userToUnMute
-      .timeout(null, unMuteReason)
-      .then(() => {
+      return await userToUnMute.timeout(null, unMuteReason).then(() => {
         return ctx.channel.send({
           embeds: [
             {
@@ -154,12 +151,12 @@ export class UserCommand2 extends ICommand {
             },
           ],
         });
-      })
+      });
     } catch (err) {
       this.container.client.logger.error(err);
-        return ctx.channel.send({
-          content: "Failed to unmute user. Please make sure I have a high enough role to unmute that users.",
-        });
-      }
+      return ctx.channel.send({
+        content: "Failed to unmute user. Please make sure I have a high enough role to unmute that users.",
+      });
+    }
   }
 }

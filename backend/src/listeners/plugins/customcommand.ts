@@ -10,7 +10,7 @@ import { isGuildMessage } from "../../internal/functions/guards";
   event: Events.MessageCreate,
 })
 export class UserEvent extends Listener {
-  public async run(message: Message){
+  public async run(message: Message) {
     // TODO - Add role, user, and channel limitations
 
     if (message.partial || !isGuildMessage(message) || message.author.bot) return;
@@ -53,36 +53,38 @@ export class UserEvent extends Listener {
     if (!channel.permissionsFor(message.guild?.me!).has("SEND_MESSAGES")) return;
 
     /**
-     * ? Permission handler. 
+     * ? Permission handler.
      * Here we will check if the user has the required role, channel, or user Id to run the command.
      * Permission order: User, Role, Channel
      */
 
     if (customCommand.allowedUser && message.author.id !== customCommand.allowedUser) {
-      return message.channel.send(
-        {
-          content: `:lock: ${memberMention(message.author.id)} | Only ${memberMention(customCommand.allowedUser)} can use this command.`,
-          allowedMentions: {
-            users: []
-          }
-        }
-      );
+      return message.channel.send({
+        content: `:lock: ${memberMention(message.author.id)} | Only ${memberMention(
+          customCommand.allowedUser
+        )} can use this command.`,
+        allowedMentions: {
+          users: [],
+        },
+      });
     }
 
     if (customCommand.allowedRole && !message.member?.roles.cache.has(customCommand.allowedRole)) {
-      return message.channel.send(
-        {
-          content: `:lock: ${memberMention(message.author.id)} |  Only members with the ${roleMention(customCommand.allowedRole)} role can use this command.`,
-          allowedMentions: {
-            roles: []
-          }
-        }
-      );
+      return message.channel.send({
+        content: `:lock: ${memberMention(message.author.id)} |  Only members with the ${roleMention(
+          customCommand.allowedRole
+        )} role can use this command.`,
+        allowedMentions: {
+          roles: [],
+        },
+      });
     }
 
     if (customCommand.allowedChannel && message.channel.id !== customCommand.allowedChannel) {
       return message.channel.send(
-        `:lock: ${memberMention(message.author.id)} | This custom command can only be used in the ${channelMention(customCommand.allowedChannel)} channel.`
+        `:lock: ${memberMention(message.author.id)} | This custom command can only be used in the ${channelMention(
+          customCommand.allowedChannel
+        )} channel.`
       );
     }
 

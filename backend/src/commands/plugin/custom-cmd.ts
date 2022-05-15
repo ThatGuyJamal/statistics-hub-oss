@@ -30,10 +30,15 @@ import {
   CommandPluginMongoModel,
   CustomCommandSchema,
 } from "../../database/models/command";
-import stripIndent, { channelMention, createHyperLink, memberMention, roleMention } from "../../internal/functions/formatting";
+import stripIndent, {
+  channelMention,
+  createHyperLink,
+  memberMention,
+  roleMention,
+} from "../../internal/functions/formatting";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
-import { Pagination } from "pagination.djs"
+import { Pagination } from "pagination.djs";
 import { BaseEmbed } from "../../internal/structures/Embed";
 import { isGuildMessage } from "../../internal/functions/guards";
 
@@ -62,7 +67,7 @@ export class UserCommand extends ICommand {
     if (!ctx.guild) return;
     const { client } = container;
 
-    if(!isGuildMessage) return;
+    if (!isGuildMessage) return;
 
     const cachedData = client.LocalCacheStore.memory.plugins.commands.get(ctx.guild);
 
@@ -96,8 +101,8 @@ export class UserCommand extends ICommand {
     if (interaction.options.getSubcommand() === "create") {
       const triggerArgument = interaction.options.getString("trigger", true);
       const responseArgument = interaction.options.getString("response", true);
-      const allowedChannelArgument = interaction.options.getChannel("channel", false)
-      const allowedUserArgument = interaction.options.getUser("user", false)
+      const allowedChannelArgument = interaction.options.getChannel("channel", false);
+      const allowedUserArgument = interaction.options.getUser("user", false);
       const allowedRoleArgument = interaction.options.getRole("role", false);
 
       await interaction.deferReply({
@@ -138,7 +143,12 @@ export class UserCommand extends ICommand {
       // TODO - Check if the guild is premium before limiting...
       if (customCommands.length >= CommandPluginEnum.commandLimit) {
         return await interaction.editReply(
-          `You have reached the max limit of ${CommandPluginEnum.commandLimit} custom commands for this server. Please delete a custom command to add a new one or upgrade server to premium. You can learn more in the ${createHyperLink("documentation", environment.bot.developerMetaData.documentation_link)}. Run \`customcommand view\` to see your current command list.`
+          `You have reached the max limit of ${
+            CommandPluginEnum.commandLimit
+          } custom commands for this server. Please delete a custom command to add a new one or upgrade server to premium. You can learn more in the ${createHyperLink(
+            "documentation",
+            environment.bot.developerMetaData.documentation_link
+          )}. Run \`customcommand view\` to see your current command list.`
         );
       }
 
@@ -329,7 +339,7 @@ export class UserCommand extends ICommand {
       const prefix =
         client.LocalCacheStore.memory.guild.get(interaction.guild)?.GuildPrefix ?? client.environment.bot.bot_prefix;
 
-      let amount = 1
+      let amount = 1;
 
       return await this.fetchCustomCommands(interaction, customCommands);
     }
@@ -342,55 +352,62 @@ export class UserCommand extends ICommand {
   private async fetchCustomCommands(ctx: any, commandData: CustomCommandSchema[] | undefined) {
     const pagination = new Pagination(ctx, {
       limit: 5,
-      idle: seconds(30)
-    })
-    const prefix = this.container.client.LocalCacheStore.memory.guild.get(ctx.guild)?.GuildPrefix ?? this.container.client.environment.bot.bot_prefix;
+      idle: seconds(30),
+    });
+    const prefix =
+      this.container.client.LocalCacheStore.memory.guild.get(ctx.guild)?.GuildPrefix ??
+      this.container.client.environment.bot.bot_prefix;
 
     pagination.setButtonAppearance({
       first: {
-        label: 'First',
-        emoji: '⏮',
-        style: 'PRIMARY',
+        label: "First",
+        emoji: "⏮",
+        style: "PRIMARY",
       },
       prev: {
-        label: 'Prev',
-        emoji: '◀️',
-        style: 'SECONDARY',
+        label: "Prev",
+        emoji: "◀️",
+        style: "SECONDARY",
       },
       next: {
-        label: 'Next',
-        emoji: '▶️',
-        style: 'SUCCESS',
+        label: "Next",
+        emoji: "▶️",
+        style: "SUCCESS",
       },
       last: {
-        label: 'Last',
-        emoji: '⏭',
-        style: 'DANGER',
+        label: "Last",
+        emoji: "⏭",
+        style: "DANGER",
       },
     });
 
     const embeds: BaseEmbed[] = [];
 
-    if (!commandData || !commandData) return null
+    if (!commandData || !commandData) return null;
 
-    const customCommands = commandData
+    const customCommands = commandData;
 
     for (let i = 0; i < customCommands.length; i++) {
       const embed = new BaseEmbed({
         footer: {
-          text: `The prefix to run triggers is: ${prefix}`
-        }
+          text: `The prefix to run triggers is: ${prefix}`,
+        },
       });
 
       embed.setTitle(`#${i + 1} - ${customCommands[i].trigger} | Custom Command`);
-      embed.setDescription(stripIndent(`
+      embed
+        .setDescription(
+          stripIndent(`
 __**Legend**__
 Trigger - Whats used to run the custom command.
 Response - What the bot will say when the trigger is run.
 Restricted Role - The role that is required to run the custom command.
 Restricted Channel - The channel that is required to run the custom command.
 Restricted User - The user that is required to run the custom command.
-      `)).setColor("RANDOM").setTimestamp()
+      `)
+        )
+        .setColor("RANDOM")
+        .setTimestamp();
       embed.addFields([
         {
           name: "Trigger",
@@ -406,16 +423,18 @@ Restricted User - The user that is required to run the custom command.
           name: "Restricted Role",
           value: customCommands[i].allowedRole ? roleMention(customCommands[i].allowedRole) : "None",
           inline: true,
-        }, {
+        },
+        {
           name: "Restricted Channel",
           value: customCommands[i].allowedChannel ? channelMention(customCommands[i].allowedChannel) : "None",
           inline: true,
-        }, {
+        },
+        {
           name: "Restricted User",
           value: customCommands[i].allowedUser ? memberMention(customCommands[i].allowedUser) : "None",
           inline: true,
-        }
-      ])
+        },
+      ]);
 
       embeds.push(embed);
     }
@@ -474,21 +493,35 @@ Restricted User - The user that is required to run the custom command.
         builder
           .setName(this.name)
           .setDescription(this.description)
-          .addSubcommand(
-            (options) =>
-              options
-                .setName("create")
-                .setDescription("Create a custom command.")
-                .addStringOption((builder) =>
-                  builder.setName("trigger").setDescription("The trigger for the command.").setRequired(true)
-                )
-                .addStringOption((builder) =>
-                  builder.setName("response").setDescription("The response for the command.").setRequired(true)
-                )
-                // TODO Debug error with these not saving to db...
-                .addRoleOption((builder) => builder.setName("role").setDescription("If set only this role can use this custom command").setRequired(false))
-                .addChannelOption((builder) => builder.setName("channel").setDescription("If set this custom command can only be used in this channel.").setRequired(false))
-                .addUserOption((builder) => builder.setName("user").setDescription("If set this custom command can only be used by this server.").setRequired(false))
+          .addSubcommand((options) =>
+            options
+              .setName("create")
+              .setDescription("Create a custom command.")
+              .addStringOption((builder) =>
+                builder.setName("trigger").setDescription("The trigger for the command.").setRequired(true)
+              )
+              .addStringOption((builder) =>
+                builder.setName("response").setDescription("The response for the command.").setRequired(true)
+              )
+              // TODO Debug error with these not saving to db...
+              .addRoleOption((builder) =>
+                builder
+                  .setName("role")
+                  .setDescription("If set only this role can use this custom command")
+                  .setRequired(false)
+              )
+              .addChannelOption((builder) =>
+                builder
+                  .setName("channel")
+                  .setDescription("If set this custom command can only be used in this channel.")
+                  .setRequired(false)
+              )
+              .addUserOption((builder) =>
+                builder
+                  .setName("user")
+                  .setDescription("If set this custom command can only be used by this server.")
+                  .setRequired(false)
+              )
           )
           .addSubcommand((options) => options.setName("list").setDescription("List all custom commands."))
           .addSubcommand((options) =>
@@ -497,8 +530,12 @@ Restricted User - The user that is required to run the custom command.
               .setDescription("Delete a custom command.")
               .addStringOption((builder) =>
                 builder.setName("delete-trigger").setDescription("The trigger to delete.").setRequired(false)
-              ).addBooleanOption((builder) =>
-                builder.setName("delete-all").setDescription("If set all custom commands will be deleted.").setRequired(false)
+              )
+              .addBooleanOption((builder) =>
+                builder
+                  .setName("delete-all")
+                  .setDescription("If set all custom commands will be deleted.")
+                  .setRequired(false)
               )
           ),
       {

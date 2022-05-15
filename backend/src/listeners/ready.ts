@@ -33,7 +33,7 @@ export class UserEvent extends Listener {
       status: "idle",
       activities: [
         {
-          name: canaryMode ? "In Development" : "mathematics lecture",
+          name: canaryMode ? "Under Construction :construction:" : "mathematics lecture",
           type: "LISTENING",
         },
       ],

@@ -96,9 +96,10 @@ ${
                     [Uptime] = ${ms(this.container.client.uptime ?? 0)}
                     [Ping] = ${ms(this.container.client.ws.ping)}
                     [Bot Version] = ${environment.bot.version ?? "Unknown"}
-                    `),
+                    `
+                  ),
                   inline: true,
-                }
+                },
               ],
               footer: {
                 text: `Thanks to StatCord for the amazing API!`,
