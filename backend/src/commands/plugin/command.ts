@@ -60,8 +60,6 @@ command dc ping #general => Disables commands to be ran in the #general channel.
 `
 );
 
-const allValidCommands = [...container.stores.get("commands").values()].map((c) => c.name);
-
 @ApplyOptions<ICommandOptions>({
   aliases: ["cmd"],
   description: "A plugin for managing the bots commands.",
@@ -104,6 +102,7 @@ export class UserCommand extends ICommand {
 
     const commandCache = client.LocalCacheStore.memory.plugins.commands.get(ctx.guild!);
     const document = await CommandPluginMongoModel.findOne({ GuildId: ctx.guild.id });
+    const allValidCommands = [...container.stores.get("commands").values()].map((c) => c.name);
 
     if (!commandCache) {
       client.LocalCacheStore.memory.plugins.commands.set(ctx.guild, {
@@ -144,7 +143,7 @@ export class UserCommand extends ICommand {
         });
       }
 
-      if (!allValidCommands.includes(commandEnabledArgument)) {
+      if (!allValidCommands.includes(commandEnabledArgument.toLowerCase())) {
         return ctx.reply({
           content: `The command \`${commandEnabledArgument}\` does not exist.`,
         });
@@ -156,7 +155,7 @@ export class UserCommand extends ICommand {
         });
       }
 
-      if (!commandCache?.GuildDisabledCommands?.includes(commandEnabledArgument)) {
+      if (!commandCache?.GuildDisabledCommands?.includes(commandEnabledArgument.toLowerCase())) {
         return ctx.reply({
           content: `The command \`${commandEnabledArgument}\` is not disabled.`,
         });
@@ -357,6 +356,7 @@ __**Notes**__
 
     const cachedData = client.LocalCacheStore.memory.plugins.commands.get(interaction.guild);
     const document = await CommandPluginMongoModel.findOne({ GuildId: interaction.guild.id });
+    const allValidCommands = [...container.stores.get("commands").values()].map((c) => c.name);
 
     if (!cachedData) {
       client.LocalCacheStore.memory.plugins.commands.set(interaction.guild, {
@@ -402,7 +402,7 @@ __**Notes**__
       }
 
       // Check if the command exists
-      if (!allValidCommands.includes(disableCommandArg)) {
+      if (!allValidCommands.includes(disableCommandArg.toLocaleLowerCase())) {
         return interaction.editReply({
           content: `The command \`${disableCommandArg}\` does not exist.`,
         });

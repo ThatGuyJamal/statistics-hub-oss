@@ -71,6 +71,10 @@ export class UserCommand extends ICommand {
             })
             .then((res) => res.react("🔒"));
         }
+
+        // Clear the set after the command is ran.
+        anotherResponse.clear()
+
         return ctx.channel
           .send({
             embeds: [
@@ -83,11 +87,14 @@ export class UserCommand extends ICommand {
           })
           .then((res) => res.react("🔒"));
       })
-      .catch(() => {
+      .catch((err) => {
+        this.container.logger.error(err);
         return ctx.reply({
-          content: `Error locking channel. Make sure I have permissions and the channel is a text channel.`,
+          content: `I dont have permissions to lock ${channelMention(channelArg?.id!)}. Make sure my role in the channel settings has permissions.`,
         });
       });
+
+
   }
 }
 
@@ -106,6 +113,8 @@ export class UserCommand extends ICommand {
     examples: ["unlockchannel #off-topic", "unlockchannel"],
     command_type: "message",
   },
+  requiredClientPermissions: ["MANAGE_CHANNELS", "ADD_REACTIONS"],
+  requiredUserPermissions: ["MANAGE_CHANNELS"],
 })
 export class UserCommand2 extends ICommand {
   public async messageRun(ctx: Message, args: Args) {
@@ -147,7 +156,7 @@ export class UserCommand2 extends ICommand {
             embeds: [
               {
                 title: "Channel Unlocked :unlock:",
-                description: `${memberMention(ctx.author.id)} unlocked ${channelMention(res.id)}.`,
+                description: `${memberMention(ctx.author.id)} unlocked ${channelMention(res.id)}. Make sure my role in the channel settings has permissions.`,
                 color: "GREEN",
               },
             ],
@@ -156,7 +165,7 @@ export class UserCommand2 extends ICommand {
       })
       .catch(() => {
         return ctx.reply({
-          content: `Error unlocking channel. Make sure I have permissions and the channel is a text channel.`,
+          content: `I dont have permissions to unlock ${channelMention(channelArg?.id!)}.`,
         });
       });
   }

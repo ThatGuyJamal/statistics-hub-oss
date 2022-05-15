@@ -30,12 +30,12 @@ export class UserEvent extends Listener {
   public async run(_ctx: Message): Promise<void> {
     const { client } = this.container;
 
-    await client.user?.setPresence({
+    client.user?.setPresence({
       status: canaryMode ? "dnd" : "online",
       activities: [
         {
-          name: canaryMode ? "Under Construction 🚧" : environment.bot.readyPresenceMessage,
-          type: ActivityTypes.LISTENING,
+          name: canaryMode ? "The Construction Site 🚧" : environment.bot.readyPresenceMessage,
+          type: canaryMode ? ActivityTypes.WATCHING : environment.bot.readyPresenceType,
         },
       ],
     });

@@ -164,7 +164,10 @@ export class UserEvent2 extends Listener {
                 .replaceAll("{{user.tag}}", member.user.tag)
                 .replaceAll("{{server.memberCount}}", member.guild.memberCount.toString())
                 .replaceAll("{{server.name}}", member.guild.name)
-                .replaceAll("{{server.id}}", member.guild.id)}`.replaceAll("{{user.createdAt}}", member.user.createdAt.toLocaleDateString()),
+                .replaceAll("{{server.id}}", member.guild.id)}`.replaceAll(
+                "{{user.createdAt}}",
+                member.user.createdAt.toLocaleDateString()
+              ),
             });
             break;
           case "card":
@@ -237,8 +240,10 @@ export class UserEvent2 extends Listener {
                 .replaceAll("{{user.username}}", member.user.username)
                 .replaceAll("{{user.id}}", member.id)
                 .replaceAll("{{user.tag}}", member.user.tag)
-                .replaceAll("{{server.id}}", member.guild.id)}`
-                .replaceAll("{{user.createdAt}}", member.user.createdAt.toLocaleDateString()),
+                .replaceAll("{{server.id}}", member.guild.id)}`.replaceAll(
+                "{{user.createdAt}}",
+                member.user.createdAt.toLocaleDateString()
+              ),
             });
             break;
         }

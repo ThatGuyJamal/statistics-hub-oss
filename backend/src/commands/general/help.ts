@@ -228,13 +228,15 @@ export class UserCommand extends ICommand {
 [Cooldown Filtered users] = ${command.options.cooldownFilteredUsers?.join(", ") ?? "None"}
 [Run In] = ${command.options.runIn ?? "None"}
 [Enabled] = ${command.options.enabled ? "Yes" : "No"}
-[User Permissions] = ${command.options.requiredUserPermissions
-                ? new Permissions(command.options.requiredUserPermissions).toArray().join(", ")
-                : "None"
+[User Permissions] = ${
+                command.options.requiredUserPermissions
+                  ? new Permissions(command.options.requiredUserPermissions).toArray().join(", ")
+                  : "None"
               }
-[Bot Permissions] = ${command.options.requiredClientPermissions
-                ? new Permissions(command.options.requiredClientPermissions).toArray().join(", ")
-                : "None"
+[Bot Permissions] = ${
+                command.options.requiredClientPermissions
+                  ? new Permissions(command.options.requiredClientPermissions).toArray().join(", ")
+                  : "None"
               }
 [Examples] = ${command.extendedDescription?.examples ?? "None"}
         `

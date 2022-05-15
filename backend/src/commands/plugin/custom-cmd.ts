@@ -49,7 +49,7 @@ const validCommandList = [...container.stores.get("commands").values()].map((c) 
   nsfw: false,
   enabled: true,
   extendedDescription: {
-    usage: "customcommand create <trigger> <response> [<channel>] [<role>] [<user>]",
+    usage: "customcommand create <trigger> <response> (channel) (role) (user)",
     examples: ["customcommand create gif <link>", "customcommand delete gif", "customcommand list"],
     command_type: "both",
     subcommands: ["create", "delete", "list"],
@@ -346,7 +346,7 @@ export class UserCommand extends ICommand {
   private async fetchCustomCommands(ctx: any, commandData: CustomCommandSchema[] | undefined) {
     const pagination = new Pagination(ctx, {
       limit: 5,
-      idle: seconds(30),
+      idle: seconds(45),
     });
     const prefix =
       this.container.client.LocalCacheStore.memory.guild.get(ctx.guild)?.GuildPrefix ??
@@ -410,7 +410,7 @@ Restricted User - The user that is required to run the custom command.
         },
         {
           name: "Response",
-          value: `__${customCommands[i].response}__`,
+          value: `\`${customCommands[i].response}\``,
           inline: false,
         },
         {

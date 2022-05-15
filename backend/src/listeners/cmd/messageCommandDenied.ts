@@ -8,9 +8,8 @@ export class CommandDenied extends Listener<typeof Events.MessageCommandDenied> 
 
     try {
       const sent = await sendLegacyError(message, content);
-      
-      setTimeout(async() => await sent.delete().catch(() => {}), seconds(6))
 
+      setTimeout(async () => await sent.delete().catch(() => {}), seconds(6));
     } catch (err) {
       this.container.logger.error(err);
     }

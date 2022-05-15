@@ -60,10 +60,9 @@ export class UserCommand extends ICommand {
     if (!interaction.guild) return;
 
     if (interaction.options.getSubcommand() === "setup") {
-
       await interaction.deferReply({
         ephemeral: true,
-      })
+      });
 
       const themeOptions = interaction.options.getString("theme-type", true);
       const welcomeChannel = interaction.options.getChannel("welcome-channel", true);
@@ -79,7 +78,7 @@ export class UserCommand extends ICommand {
       if (!goodbyeMessage) goodbyeMessage = "Goodbye, {{user.mention}}!";
 
       const document = await WelcomePluginMongoModel.findOne({ GuildId: interaction.guildId });
-      const cachedData = client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild)
+      const cachedData = client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild);
 
       // If no document found, we create a new one.
       if (!document) {
@@ -166,7 +165,7 @@ export class UserCommand extends ICommand {
           GuildWelcomeThemeUrl: CardURl ?? cachedData?.GuildWelcomeThemeUrl ?? DEFAULT_CARD_URL,
           CreatedById: interaction.user.id,
           CreatedAt: new Date(),
-        })
+        });
         await WelcomePluginMongoModel.updateOne(
           { GuildId: interaction.guildId },
           {

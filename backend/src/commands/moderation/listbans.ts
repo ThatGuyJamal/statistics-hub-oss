@@ -73,11 +73,11 @@ export class UserCommand extends ICommand {
       embeds: [
         new BaseEmbed().contextEmbed(
           {
-            title: `Banned Users in ${ctx.guild?.name} | ${amount - 1}`,
+            title: `Banned Users | ${ctx.guild?.name} | ${amount - 1}`,
             description: stripIndent(`
-                    === Banned Users ===
                     ${bannedMembers || "No banned users."}
                     `),
+            color: "RED",
           },
           ctx
         ),

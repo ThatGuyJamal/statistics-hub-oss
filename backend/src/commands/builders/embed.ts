@@ -99,18 +99,19 @@ export class UserCommand extends ICommand {
 
     if (thumbnailArgument) {
       if (!thumbnailArgument.startsWith("http" || "https"))
-        return await interaction.followUp("Invalid thumbnail url. Must start with http or https.");
+        return await interaction.followUp("Invalid thumbnail URL. Must start with http or https.");
       embed.setThumbnail(thumbnailArgument);
     }
 
     if (imageArgument) {
       if (!imageArgument.startsWith("http" || "https"))
-        return await interaction.followUp("Invalid image url. Must start with http or https.");
+        return await interaction.followUp("Invalid image URL. Must start with http or https.");
       embed.setImage(imageArgument);
     }
 
     if (authorNameArgument) {
-      if (!descriptionArgument) return await interaction.followUp("You can't have author argument without a description field.");
+      if (!descriptionArgument)
+        return await interaction.followUp("You can't have author argument without a description field.");
       if (authorNameArgument.length > 256)
         return await interaction.followUp("The author name is too long. Must be less than 256 characters.");
       embed.setAuthor({
@@ -144,7 +145,9 @@ export class UserCommand extends ICommand {
       })
       .catch(() => {
         // this.container.client.logger.error(err);
-        interaction.editReply({ content: `Failed to create embed.` });
+        interaction.editReply({
+          content: `Failed to create embed. This is probably due to you have invalid field options.`,
+        });
       });
   }
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {

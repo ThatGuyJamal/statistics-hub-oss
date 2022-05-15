@@ -128,6 +128,7 @@ export class UserCommand extends ICommand {
     examples: ["unmute @user"],
     command_type: "message",
   },
+  requiredClientPermissions: ["MODERATE_MEMBERS"],
 })
 export class UserCommand2 extends ICommand {
   public async messageRun(ctx: Message, args: Args) {
