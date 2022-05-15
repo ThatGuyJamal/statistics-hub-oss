@@ -19,22 +19,22 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { common } from "../utils/common";
 
-const Invite: NextPage = () => {
-    const router = useRouter();
+const Docs: NextPage = () => {
+	const router = useRouter();
 
-    // Sends us to the invite url
-    useEffect(() => {
-					const { pathname } = router;
-					if (pathname == "/invite") {
-						router.push(common.bot_oath_url);
-					}
-				});
+	// Sends us to the invite url
+	useEffect(() => {
+		const { pathname } = router;
+		if (pathname == "/docs") {
+			router.push(common.welcome_documentation_link);
+		}
+	});
 
 	return (
 		<>
-			<h1>Redirecting to the support server...</h1>
+			<h1>Redirecting to the documentation...</h1>
 		</>
 	);
 };
 
-export default Invite;
+export default Docs;
