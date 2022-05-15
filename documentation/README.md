@@ -42,3 +42,7 @@ bot instance if the main bot crashes.
 | language      | Configures the bot language          | admins       | message         | Global |
 
 *and much more*
+
+## Self Hosting
+
+Read more [here](./self_hosting.md).
