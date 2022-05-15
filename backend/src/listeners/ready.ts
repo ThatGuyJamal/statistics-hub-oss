@@ -47,20 +47,21 @@ export class UserEvent extends Listener {
   }
 
   private async initializeFunctions() {
-    this.clearApplicationCommands();
+    await this.clearApplicationCommands(environment.bot.wipe_test_commands);
     this.container.client.StatCordHandler.init();
     UserEvent.printBanner();
     this.printStoreDebugInformation();
   }
 
-  private clearApplicationCommands(enabled = false) {
+  private async clearApplicationCommands(enabled: boolean) {
     if (!enabled) return;
     else {
       const { client } = this.container;
       // Loop over each test server and clear the application commands
       for (const id of client.environment.bot.test_guild_ids) {
-        client.application?.commands.set([], id).then((res) => {
+        await client.application?.commands.set([], id).then((res) => {
           if (res) this.container.logger.warn(`Cleared application commands in ${id}`);
+          else this.container.logger.warn(`Failed to clear application commands in ${id}`);
         });
       }
       client.logger.fatal("Application commands have been cleared!");
