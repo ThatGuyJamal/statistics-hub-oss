@@ -22,7 +22,7 @@ import { seconds } from "../../internal/functions/time";
 @ApplyOptions<ICommandOptions>({
   name: "lockchannel",
   aliases: ["lockc", "lc"],
-  description: "Locks a channel and stops members from chatting in it.",
+  description: "Prevents users from sending messages in a channel.",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
@@ -94,7 +94,7 @@ export class UserCommand extends ICommand {
 @ApplyOptions<ICommandOptions>({
   name: "unlockchannel",
   aliases: ["unlockc", "ulc"],
-  description: "Unlocks a channel for members to chat in.",
+  description: "Allows users to send messages in a channel.",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,

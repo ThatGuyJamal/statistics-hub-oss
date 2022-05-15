@@ -23,6 +23,7 @@ import { getTestGuilds } from "../../internal/load-test-guilds";
 @ApplyOptions<ICommandOptions>({
   name: "config",
   description: "Configures the bot settings and more.",
+  detailedDescription: "Allows the user to configure the bots prefix and language using slash commands.",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,

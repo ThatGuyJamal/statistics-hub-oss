@@ -20,16 +20,10 @@ import {
   ChatInputCommand,
   container,
 } from "@sapphire/framework";
-import { codeBlock } from "@sapphire/utilities";
 import { CacheType, CommandInteraction, Message } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
-import {
-  CommandModelStructure,
-  CommandPluginEnum,
-  CommandPluginMongoModel,
-  CustomCommandSchema,
-} from "../../database/models/command";
+import { CommandPluginEnum, CommandPluginMongoModel, CustomCommandSchema } from "../../database/models/command";
 import stripIndent, {
   channelMention,
   createHyperLink,
@@ -47,7 +41,7 @@ const validCommandList = [...container.stores.get("commands").values()].map((c) 
 @ApplyOptions<ICommandOptions>({
   name: "customcommand",
   aliases: ["ccl", "cc"],
-  description: "A simple way to create custom commands.",
+  description: "A simple way to create custom commands for your server.",
   cooldownDelay: seconds(17),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
@@ -55,8 +49,8 @@ const validCommandList = [...container.stores.get("commands").values()].map((c) 
   nsfw: false,
   enabled: true,
   extendedDescription: {
-    usage: "customcommand create <trigger> <response>",
-    examples: ["customcommand create server {{server.name}}"],
+    usage: "customcommand create <trigger> <response> [<channel>] [<role>] [<user>]",
+    examples: ["customcommand create gif <link>", "customcommand delete gif", "customcommand list"],
     command_type: "both",
     subcommands: ["create", "delete", "list"],
   },

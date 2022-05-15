@@ -9,7 +9,8 @@ import { seconds } from "../../internal/functions/time";
 
 @ApplyOptions<ICommandOptions>({
   name: "mute",
-  description: "Mutes a user in the server.",
+  aliases: ["timeout"],
+  description: "timeout a user from speaking in the server.",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
@@ -114,7 +115,8 @@ export class UserCommand extends ICommand {
 
 @ApplyOptions<ICommandOptions>({
   name: "unmute",
-  description: "unmute a user in the server.",
+  aliases: ["untimeout"],
+  description: "Remove a timeout from a user.",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,

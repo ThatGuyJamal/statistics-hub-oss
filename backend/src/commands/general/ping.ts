@@ -24,7 +24,7 @@ import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
 
 @ApplyOptions<ICommandOptions>({
-  description: "Replies with the bots API latency.",
+  description: "pong",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,

@@ -17,18 +17,17 @@ import { Args, BucketScope } from "@sapphire/framework";
 import { Message, TextChannel } from "discord.js";
 import { ICommandOptions, ICommand } from "../../../Command";
 import { GuildsMongoModel, supportedLanguagesArray } from "../../../database/models/guild";
-import { codeBlock } from "../../../internal/functions/formatting";
 import { seconds } from "../../../internal/functions/time";
 import { BaseEmbed } from "../../../internal/structures/Embed";
 
 const langsWeCanUse = supportedLanguagesArray;
 
 @ApplyOptions<ICommandOptions>({
-  description: "Configure the bot's language.",
+  description: "Configure the bot's language settings.",
   aliases: ["lang", "setlang", "slang"],
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
-  cooldownLimit: 2,
+  cooldownLimit: 1,
   runIn: "GUILD_TEXT",
   nsfw: false,
   enabled: true,

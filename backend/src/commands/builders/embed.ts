@@ -22,16 +22,18 @@ import { getTestGuilds } from "../../internal/load-test-guilds";
 
 @ApplyOptions<ICommandOptions>({
   aliases: ["create-embed"],
-  description: "A simple embed builder.",
-  cooldownDelay: seconds(10),
+  description: "A simple way to build embeds in your server.",
+  detailedDescription: "An Rich Embed builder for your sever. Fully customizable by slash commands.",
+  cooldownDelay: seconds(15),
   cooldownScope: BucketScope.User,
-  cooldownLimit: 2,
+  cooldownLimit: 1,
   runIn: ["GUILD_TEXT", "GUILD_NEWS"],
   nsfw: false,
   enabled: true,
   extendedDescription: {
     command_type: "slash",
   },
+  requiredUserPermissions: ["MANAGE_MESSAGES"],
 })
 export class UserCommand extends ICommand {
   public async messageRun(ctx: Message) {

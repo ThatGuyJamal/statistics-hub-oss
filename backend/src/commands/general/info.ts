@@ -11,7 +11,7 @@ import { BaseEmbed } from "../../internal/structures/Embed";
 @ApplyOptions<ICommandOptions>({
   name: "info",
   aliases: ["stats", "botinfo"],
-  description: "Info about the bot and its host environment.",
+  description: "Bot statistics.",
   cooldownDelay: minutes(1),
   cooldownScope: BucketScope.User,
   cooldownLimit: 1,

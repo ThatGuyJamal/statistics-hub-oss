@@ -33,6 +33,7 @@
     "ratelimit",
     "ratelimits",
     "setlang",
+    "setprefix",
     "statcord",
     "statshub",
     "Tedis",

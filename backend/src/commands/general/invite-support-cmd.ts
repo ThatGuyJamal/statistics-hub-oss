@@ -24,7 +24,7 @@ import { BaseEmbed } from "../../internal/structures/Embed";
 
 @ApplyOptions<ICommandOptions>({
   name: "invite",
-  description: "Returns and invite url for the bot.",
+  description: "Allows users to add the bot to new servers.",
   cooldownDelay: seconds(30),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
@@ -80,7 +80,7 @@ export class UserCommand extends ICommand {
 
 @ApplyOptions<ICommandOptions>({
   name: "support",
-  description: "Sends basic help information to the user.",
+  description: "Sends helpful links to the user.",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,

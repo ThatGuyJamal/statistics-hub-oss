@@ -61,7 +61,7 @@ export class UserEvent extends Listener {
       for (const id of client.environment.bot.test_guild_ids) {
         client.application?.commands.set([], id).then((res) => {
           if (res) this.container.logger.warn(`Cleared application commands in ${id}`);
-        })
+        });
       }
       client.logger.fatal("Application commands have been cleared!");
     }

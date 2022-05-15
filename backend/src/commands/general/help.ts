@@ -27,9 +27,10 @@ import ms from "ms";
 
 @ApplyOptions<ICommandOptions>({
   name: "help",
-  description: "Shows information about the commands and how to use them.",
+  description: "Shows the help menu.",
+  detailedDescription: "Shows information about the commands and how to use them.",
   aliases: ["h", "commands", "cmds"],
-  cooldownDelay: seconds(35),
+  cooldownDelay: seconds(45),
   cooldownScope: BucketScope.User,
   cooldownLimit: 1,
   runIn: "GUILD_TEXT",

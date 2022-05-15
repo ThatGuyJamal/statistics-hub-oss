@@ -22,7 +22,7 @@ import { BaseEmbed } from "../../internal/structures/Embed";
 
 @ApplyOptions<ICommandOptions>({
   aliases: ["lb"],
-  description: "Shows the banned users in your server.",
+  description: "Shows information about the banned users in your server.",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,

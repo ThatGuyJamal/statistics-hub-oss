@@ -40,7 +40,7 @@ const DEFAULT_CARD_URL = "https://i.imgur.com/dCS4tQk.jpeg";
 @ApplyOptions<ICommandOptions>({
   name: "welcome",
   description: "Configure the welcome plugin",
-  cooldownDelay: seconds(10),
+  cooldownDelay: seconds(20),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
   runIn: "GUILD_TEXT",

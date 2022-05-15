@@ -64,7 +64,7 @@ const allValidCommands = [...container.stores.get("commands").values()].map((c) 
 
 @ApplyOptions<ICommandOptions>({
   aliases: ["cmd"],
-  description: "Configure the command plugin.",
+  description: "A plugin for managing the bots commands.",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
@@ -76,6 +76,7 @@ const allValidCommands = [...container.stores.get("commands").values()].map((c) 
     examples: ["command d <command>", "command e <command>", "command dc <channel>", "command ec <channel>"],
     command_type: "both",
     subcommands: ["enable", "disable", "list", "enable-channel", "disable-channel"],
+    hidden: false,
   },
   requiredUserPermissions: ["MANAGE_GUILD"],
 })

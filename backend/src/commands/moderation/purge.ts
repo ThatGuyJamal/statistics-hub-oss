@@ -21,7 +21,7 @@ import { seconds } from "../../internal/functions/time";
 
 @ApplyOptions<ICommandOptions>({
   aliases: ["clear-messages", "prune", "prune-messages", "clear"],
-  description: "Purge messages in a channel.",
+  description: "Deletes a specified amount of messages in a channel.",
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
