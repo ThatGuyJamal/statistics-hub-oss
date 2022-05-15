@@ -25,13 +25,17 @@ import { CacheType, CommandInteraction, Message } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
 import {
+  CommandModelStructure,
   CommandPluginEnum,
   CommandPluginMongoModel,
   CustomCommandSchema,
 } from "../../database/models/command";
-import { createHyperLink } from "../../internal/functions/formatting";
+import stripIndent, { channelMention, createHyperLink, memberMention, roleMention } from "../../internal/functions/formatting";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
+import { Pagination } from "pagination.djs"
+import { BaseEmbed } from "../../internal/structures/Embed";
+import { isGuildMessage } from "../../internal/functions/guards";
 
 const validCommandList = [...container.stores.get("commands").values()].map((c) => c.name);
 
@@ -58,16 +62,17 @@ export class UserCommand extends ICommand {
     if (!ctx.guild) return;
     const { client } = container;
 
-    const document = await CommandPluginMongoModel.findOne({ GuildId: ctx.guild.id });
-    const prefix = client.LocalCacheStore.memory.guild.get(ctx.guild)?.GuildPrefix ?? client.environment.bot.bot_prefix;
+    if(!isGuildMessage) return;
 
-    if (!document) {
+    const cachedData = client.LocalCacheStore.memory.plugins.commands.get(ctx.guild);
+
+    if (!cachedData) {
       return await ctx.channel.send({
         content: `No custom commands exist for this server.`,
       });
     }
 
-    const customCommands = document.GuildCustomCommands!.data || [];
+    const customCommands = cachedData.GuildCustomCommands!.data || [];
 
     if (customCommands.length === 0) {
       return await ctx.channel.send({
@@ -81,17 +86,7 @@ export class UserCommand extends ICommand {
 
     let amount = 1;
 
-    return await ctx.channel.send({
-      content: codeBlock(
-        "css",
-        `
-=== Custom Commands ===
-${customCommands.map((command) => `#${amount++} - [${command.trigger}] = ${command.response}`).join("\n\n")}
-
-Tip > To run a custom command you must use the bots prefix. Example: ${prefix}mycustomcommand
-`
-      ),
-    });
+    return await this.fetchCustomCommands(ctx, customCommands);
   }
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
     const { client } = this.container;
@@ -232,7 +227,7 @@ Tip > To run a custom command you must use the bots prefix. Example: ${prefix}my
         await this.createMissingCacheStorages(interaction);
       }
 
-      if(deleteAllArgument && triggerArgument) {
+      if (deleteAllArgument && triggerArgument) {
         return await interaction.editReply({
           content: "You cannot use the delete-all and delete-trigger flags at the same time.",
         });
@@ -336,22 +331,97 @@ Tip > To run a custom command you must use the bots prefix. Example: ${prefix}my
 
       let amount = 1
 
-      return await interaction.editReply({
-        content: codeBlock(
-          "css",
-          `
-=== Custom Commands ===
-${customCommands.map((command) => `#${amount++} - [${command.trigger}] = ${command.response}`).join("\n\n")}
-
-Tip > To run a custom command you must use the bots prefix. Example: ${prefix}mycustomcommand
-`
-        ),
-      });
+      return await this.fetchCustomCommands(interaction, customCommands);
     }
 
     return await interaction.editReply({
       content: `Invalid subcommand. Please use \`customcommand list\` to see the list of custom commands.`,
     });
+  }
+
+  private async fetchCustomCommands(ctx: any, commandData: CustomCommandSchema[] | undefined) {
+    const pagination = new Pagination(ctx, {
+      limit: 5,
+      idle: seconds(30)
+    })
+    const prefix = this.container.client.LocalCacheStore.memory.guild.get(ctx.guild)?.GuildPrefix ?? this.container.client.environment.bot.bot_prefix;
+
+    pagination.setButtonAppearance({
+      first: {
+        label: 'First',
+        emoji: '⏮',
+        style: 'PRIMARY',
+      },
+      prev: {
+        label: 'Prev',
+        emoji: '◀️',
+        style: 'SECONDARY',
+      },
+      next: {
+        label: 'Next',
+        emoji: '▶️',
+        style: 'SUCCESS',
+      },
+      last: {
+        label: 'Last',
+        emoji: '⏭',
+        style: 'DANGER',
+      },
+    });
+
+    const embeds: BaseEmbed[] = [];
+
+    if (!commandData || !commandData) return null
+
+    const customCommands = commandData
+
+    for (let i = 0; i < customCommands.length; i++) {
+      const embed = new BaseEmbed({
+        footer: {
+          text: `The prefix to run triggers is: ${prefix}`
+        }
+      });
+
+      embed.setTitle(`#${i + 1} - ${customCommands[i].trigger} | Custom Command`);
+      embed.setDescription(stripIndent(`
+__**Legend**__
+Trigger - Whats used to run the custom command.
+Response - What the bot will say when the trigger is run.
+Restricted Role - The role that is required to run the custom command.
+Restricted Channel - The channel that is required to run the custom command.
+Restricted User - The user that is required to run the custom command.
+      `)).setColor("RANDOM").setTimestamp()
+      embed.addFields([
+        {
+          name: "Trigger",
+          value: `__${customCommands[i].trigger}__`,
+          inline: false,
+        },
+        {
+          name: "Response",
+          value: `__${customCommands[i].response}__`,
+          inline: false,
+        },
+        {
+          name: "Restricted Role",
+          value: customCommands[i].allowedRole ? roleMention(customCommands[i].allowedRole) : "None",
+          inline: true,
+        }, {
+          name: "Restricted Channel",
+          value: customCommands[i].allowedChannel ? channelMention(customCommands[i].allowedChannel) : "None",
+          inline: true,
+        }, {
+          name: "Restricted User",
+          value: customCommands[i].allowedUser ? memberMention(customCommands[i].allowedUser) : "None",
+          inline: true,
+        }
+      ])
+
+      embeds.push(embed);
+    }
+
+    pagination.setEmbeds(embeds);
+    return await pagination.render();
   }
 
   /**

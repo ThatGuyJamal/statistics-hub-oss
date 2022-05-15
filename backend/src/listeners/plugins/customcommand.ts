@@ -60,14 +60,19 @@ export class UserEvent extends Listener {
 
     if (customCommand.allowedUser && message.author.id !== customCommand.allowedUser) {
       return message.channel.send(
-        `${memberMention(message.author.id)} You do not have permission to use this command custom command.`
+        {
+          content: `:lock: ${memberMention(message.author.id)} | Only ${memberMention(customCommand.allowedUser)} can use this command.`,
+          allowedMentions: {
+            users: []
+          }
+        }
       );
     }
 
     if (customCommand.allowedRole && !message.member?.roles.cache.has(customCommand.allowedRole)) {
       return message.channel.send(
         {
-          content: `${memberMention(message.author.id)} |  Only members with the ${roleMention(customCommand.allowedRole)} role can use this command.`,
+          content: `:lock: ${memberMention(message.author.id)} |  Only members with the ${roleMention(customCommand.allowedRole)} role can use this command.`,
           allowedMentions: {
             roles: []
           }
@@ -77,7 +82,7 @@ export class UserEvent extends Listener {
 
     if (customCommand.allowedChannel && message.channel.id !== customCommand.allowedChannel) {
       return message.channel.send(
-        `${memberMention(message.author.id)} | This custom command can only be used in the ${channelMention(customCommand.allowedChannel)} channel.`
+        `:lock: ${memberMention(message.author.id)} | This custom command can only be used in the ${channelMention(customCommand.allowedChannel)} channel.`
       );
     }
 
