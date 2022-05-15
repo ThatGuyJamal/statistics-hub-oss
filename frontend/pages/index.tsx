@@ -55,7 +55,8 @@ const Home: NextPage = () => {
 								rel="noreferrer"
 								href={common.developer_youtube_channel}>
 								YouTube
-							</a>
+							</a>{" "}
+							|{" "}
 							<a
 								target="_blank"
 								rel="noreferrer"
