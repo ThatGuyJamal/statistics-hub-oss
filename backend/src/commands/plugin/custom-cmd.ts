@@ -539,7 +539,7 @@ Restricted User - The user that is required to run the custom command.
               )
           ),
       {
-        guildIds: getTestGuilds(),
+        guildIds: environment.bot.register_global_commands ? undefined : getTestGuilds(),
         registerCommandIfMissing: environment.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
         idHints: [],

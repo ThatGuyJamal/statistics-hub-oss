@@ -142,7 +142,7 @@ export class UserCommand2 extends ICommand {
   }
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
     registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
-      guildIds: getTestGuilds(),
+      guildIds: environment.bot.register_global_commands ? undefined : getTestGuilds(),
       registerCommandIfMissing: environment.bot.register_commands,
       behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
       idHints: [],

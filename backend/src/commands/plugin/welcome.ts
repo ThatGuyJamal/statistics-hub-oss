@@ -742,7 +742,7 @@ export class UserCommand extends ICommand {
           .addSubcommand((options) => options.setName("delete").setDescription("Delete the welcome system."))
           .addSubcommand((options) => options.setName("view").setDescription("View the welcome systems settings.")),
       {
-        guildIds: getTestGuilds(),
+        guildIds: environment.bot.register_global_commands ? undefined : getTestGuilds(),
         registerCommandIfMissing: environment.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
         idHints: ["973652318224535633"],

@@ -35,3 +35,5 @@ Below are planned features I will be adding to the bot in no specific order...
 - [ ] Autopost notifications to channels features.
 
 - [ ] Remove hard coded bot reply's and replace them with the language json file.
+
+- [ ] Create a slash version of the set prefix and language command.

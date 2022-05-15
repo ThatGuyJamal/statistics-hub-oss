@@ -631,7 +631,7 @@ __**Notes**__
               )
           ),
       {
-        guildIds: getTestGuilds(),
+        guildIds: environment.bot.register_global_commands ? undefined : getTestGuilds(),
         registerCommandIfMissing: environment.bot.register_commands,
         behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
         idHints: ["974034185561985076"],
