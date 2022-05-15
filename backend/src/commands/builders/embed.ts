@@ -19,6 +19,7 @@ import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
+import { BaseEmbed } from "../../internal/structures/Embed";
 
 @ApplyOptions<ICommandOptions>({
   aliases: ["create-embed"],
@@ -40,7 +41,104 @@ export class UserCommand extends ICommand {
     return ctx.reply("This command is only available in slash command form.");
   }
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
-    return interaction.reply("Coming soon...");
+
+    const titleArgument = interaction.options.getString("title", false)
+    const descriptionArgument = interaction.options.getString("description", false)
+    const colorArgument = interaction.options.getString("color", false)
+    const thumbnailArgument = interaction.options.getString("thumbnail", false)
+    const imageArgument = interaction.options.getString("image", false)
+    const authorNameArgument = interaction.options.getString("author", false)
+    const authorIconArgument = interaction.options.getString("authorIcon", false)
+    const authorUrlArgument = interaction.options.getString("authorUrl", false)
+    const footerArgument = interaction.options.getString("footer", false)
+    const footerIconArgument = interaction.options.getString("footerIcon", false)
+    const timestampArgument = interaction.options.getBoolean("timestamp", false)
+    const contentArgument = interaction.options.getString("content", false)
+
+    await interaction.deferReply({
+      ephemeral: true,
+    })
+
+    if (
+      !titleArgument &&
+      !descriptionArgument &&
+      !colorArgument &&
+      !thumbnailArgument &&
+      !imageArgument &&
+      !authorNameArgument &&
+      !authorIconArgument &&
+      !authorUrlArgument &&
+      !footerArgument &&
+      !timestampArgument
+    ) {
+      return await interaction.editReply({
+        content: `No arguments passed for an embed to be built.`
+      });
+    }
+
+    const embed = new BaseEmbed()
+
+    if (titleArgument) {
+      if (titleArgument.length > 256) return await interaction.followUp("The title is too long. Must be less than 256 characters.");
+      embed.setTitle(titleArgument);
+    }
+
+    if (descriptionArgument) {
+      if (descriptionArgument.length > 4096) return await interaction.followUp("Description is too long. Cant be over 2048 characters.");
+      embed.setDescription(descriptionArgument);
+    }
+
+    if (colorArgument) {
+      if(!colorArgument.match(/^#[0-9A-F]{6}$/i)) await interaction.followUp("Color must be a hex color code.");
+      let convertedColor = parseInt(colorArgument.replace("#", ""), 16);
+      console.log(convertedColor);
+      embed.setColor(convertedColor);
+    }
+
+    if (thumbnailArgument) {
+      if (!thumbnailArgument.startsWith("http" || "https")) return await interaction.followUp("Invalid thumbnail url. Must start with http or https.");
+      embed.setThumbnail(thumbnailArgument);
+    }
+
+    if (imageArgument) {
+      if (!imageArgument.startsWith("http" || "https")) return await interaction.followUp("Invalid image url. Must start with http or https.");
+      embed.setImage(imageArgument);
+    }
+
+    if (authorNameArgument) {
+      if (!descriptionArgument) await interaction.followUp("You can't have author without a description field.");
+      if(authorNameArgument.length > 256) return await interaction.followUp("The author name is too long. Must be less than 256 characters.");
+      embed.setAuthor({
+        name: authorNameArgument,
+        iconURL: authorIconArgument ?? undefined,
+        url: authorUrlArgument ?? undefined,
+      })
+    }
+
+    if (footerArgument) {
+      if (footerArgument.length > 2048) return await interaction.followUp("The footer is too long. Must be less than 2048 characters.");
+      embed.setFooter({
+        text: footerArgument,
+        iconURL: footerIconArgument ?? undefined,
+      });
+    }
+
+    if (timestampArgument) {
+      embed.setTimestamp();
+    }
+
+    await interaction.editReply({
+      content: `Custom Embed created.`,
+    });
+
+    return await interaction.channel?.send({
+      content: contentArgument ?? null,
+      embeds: [embed],
+    }).catch(() => {
+      // this.container.client.logger.error(err);
+      interaction.editReply({ content: `Failed to create embed.` })
+    });
+
   }
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
     registry.registerChatInputCommand(
@@ -53,12 +151,15 @@ export class UserCommand extends ICommand {
           .addStringOption((builder) => builder.setName("url").setDescription("The url of the embed").setRequired(false))
           .addStringOption((builder) => builder.setName("color").setDescription("The color of the embed").setRequired(false))
           .addStringOption((builder) => builder.setName("footer").setDescription("The footer of the embed").setRequired(false))
+          .addStringOption((builder) => builder.setName("footer-icon").setDescription("The icon for the footer of the embed.").setRequired(false))
           .addStringOption((builder) => builder.setName("author").setDescription("The author of the embed").setRequired(false))
+          .addStringOption((builder) => builder.setName("author-icon").setDescription("The icon for the author of the embed").setRequired(false))
+          .addStringOption((builder) => builder.setName("author-url").setDescription("The url for the author of the embed").setRequired(false))
           .addStringOption((builder) => builder.setName("thumbnail").setDescription("The thumbnail of the embed").setRequired(false))
           .addStringOption((builder) => builder.setName("image").setDescription("The image of the embed").setRequired(false))
           .addStringOption((builder) => builder.setName("content").setDescription("The content with the embed").setRequired(false))
           .addBooleanOption((builder) => builder.setName("timestamp").setDescription("If the embed should have a timestamp").setRequired(false))
-          ,
+      ,
       {
         guildIds: environment.bot.register_global_commands ? undefined : getTestGuilds(),
         registerCommandIfMissing: environment.bot.register_commands,
