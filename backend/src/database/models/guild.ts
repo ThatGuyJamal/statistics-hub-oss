@@ -92,10 +92,10 @@ export const supportedLanguagesArray = [
     name: "English",
     code: "en-US",
   },
-  {
-    name: "Spanish",
-    code: "es-ES",
-  },
+  // {
+  //   name: "Spanish",
+  //   code: "es-ES",
+  // },
 ];
 
 export { GuildsMongoModel };

@@ -23,6 +23,7 @@ import {
 import { GuildMember } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
+import { welcomeCommandOptions, welcomeCommandThemeOptions, welcomeCommandThemeURlChoices } from "../../config/commands/slashCommandBuilderChoices";
 import { WelcomePluginMongoModel } from "../../database/models/plugins/welcome/welcome";
 import stripIndent, {
   channelMention,
@@ -30,7 +31,6 @@ import stripIndent, {
   hideLinkEmbed,
   memberMention,
 } from "../../internal/functions/formatting";
-import { pauseThread } from "../../internal/functions/promises";
 import { seconds } from "../../internal/functions/time";
 import { getTestGuilds } from "../../internal/load-test-guilds";
 import { BaseEmbed } from "../../internal/structures/Embed";
@@ -649,12 +649,8 @@ export class UserCommand extends ICommand {
                 options
                   .setName("theme-type")
                   .setDescription("The type of theme you wish to use for the welcome plugin.")
+                  .addChoices(...welcomeCommandThemeOptions)
                   .setRequired(true)
-                  .addChoices([
-                    ["Card", "card"],
-                    ["Text", "text"],
-                    // ["Embed", "embed"],
-                  ])
               )
               .addChannelOption((options) =>
                 options.setName("welcome-channel").setDescription("The welcome channel.").setRequired(true)
@@ -698,12 +694,8 @@ export class UserCommand extends ICommand {
                 options
                   .setName("theme")
                   .setDescription("The new theme.")
+                  .addChoices(...welcomeCommandThemeOptions)
                   .setRequired(false)
-                  .addChoices([
-                    ["Card", "card"],
-                    ["Text", "text"],
-                    // ["Embed", "embed"],
-                  ])
               )
               .addChannelOption((options) =>
                 options.setName("welcome-channel").setDescription("The new welcome channel.").setRequired(false)
@@ -718,19 +710,7 @@ export class UserCommand extends ICommand {
                 options
                   .setName("pre-built-background")
                   .setDescription("Pre-built backgrounds for the welcome/goodbye card.")
-                  .addChoices([
-                    ["Sunset forest Banner", "https://i.imgur.com/ea9PB3H.png"],
-                    ["Green Railroad", "https://i.imgur.com/dCS4tQk.jpeg"],
-                    ["Rain Drops", "https://i.imgur.com/ftY0903.jpeg"],
-                    [
-                      "Hidden Lighthouse",
-                      "https://cdn.discordapp.com/attachments/937124004492365874/968196852056997938/EpicBanner.png",
-                    ],
-                    [
-                      "Warm sunset",
-                      "https://cdn.discordapp.com/attachments/937124004492365874/972560334965579886/Banner2.png",
-                    ],
-                  ])
+                  .addChoices(...welcomeCommandThemeURlChoices)
                   .setRequired(false)
               )
               .addBooleanOption((options) =>
@@ -743,15 +723,7 @@ export class UserCommand extends ICommand {
                 options
                   .setName("update-delete")
                   .setDescription("Delete a value in the welcome system.")
-                  .addChoices([
-                    ["Greet Message", "GuildWelcomeMessage"],
-                    ["Goodbye Message", "GuildGoodbyeMessage"],
-                    ["Theme", "GuildWelcomeTheme"],
-                    ["Theme URL", "GuildWelcomeThemeUrl"],
-                    ["Ping on join", "GuildWelcomePingOnJoin"],
-                    ["Welcome Channel", "GuildWelcomeChannelId"],
-                    ["Goodbye Channel", "GuildGoodbyeChannelId"],
-                  ])
+                  .addChoices(...welcomeCommandOptions)
                   .setRequired(false)
               )
           )

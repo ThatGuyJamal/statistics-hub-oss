@@ -24,7 +24,7 @@ import { BaseEmbed } from "../../../internal/structures/Embed";
   name: "prefix",
   aliases: ["setprefix", "sprefix"],
   description: "Sets the prefix for the bot.",
-  cooldownDelay: seconds(10),
+  cooldownDelay: seconds(15),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
   runIn: "GUILD_TEXT",

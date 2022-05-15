@@ -15,7 +15,7 @@
 import { APIApplicationCommandOptionChoice } from "discord-api-types/v9";
 
 // TODO replace this with this hardcoded list in the command file
-export const welcomeUpdateChoices: APIApplicationCommandOptionChoice<string>[] = [
+export const welcomeCommandThemeURlChoices: APIApplicationCommandOptionChoice<string>[] = [
   {
     name: "Sunset forest Banner",
     value: "https://i.imgur.com/ea9PB3H.png",
@@ -37,3 +37,38 @@ export const welcomeUpdateChoices: APIApplicationCommandOptionChoice<string>[] =
     value: "https://cdn.discordapp.com/attachments/937124004492365874/972560334965579886/Banner2.png",
   },
 ];
+
+export const welcomeCommandThemeOptions: APIApplicationCommandOptionChoice<string>[] = [
+  {
+    name: "Text",
+    value: "text",
+  }, {
+    name: "Card",
+    value: "card",
+  }
+]
+
+export const welcomeCommandOptions: APIApplicationCommandOptionChoice<string>[] = [
+  {
+    name: "Greet Message",
+    value: "GuildWelcomeMessage",
+  } , {
+    name: "Goodbye Message",
+    value: "GuildGoodbyeMessage",
+  }, {
+    name: "Theme",
+    value: "GuildWelcomeTheme",
+  }, {
+    name: "Theme URL",
+    value: "GuildWelcomeThemeUrl",
+  }, {
+    name: "Ping on join",
+    value: "GuildWelcomePingOnJoin",
+  }, {
+    name: "Welcome Channel",
+    value: "GuildWelcomeChannelId",
+  }, {
+    name: "Goodbye Channel",
+    value: "GuildGoodbyeChannelId",
+  },
+]
