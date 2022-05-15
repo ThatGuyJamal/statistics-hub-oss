@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
-
 # GNU Make 4.3
 # Built for x86_64-unknown-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat May 14 14:36:01 2022
+# Make data base, printed on Sun May 15 03:43:33 2022
 
 # Variables
 
@@ -25,7 +23,7 @@ PULSE_SERVER = unix:/run/flatpak/pulse/native
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-48a4a201-db6a-4bc4-a3e9-ea592c5788a4.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-394a3b75-16fa-4ae3-8228-bf8731d61627.sock
 # environment
 MANDATORY_PATH = /usr/share/gconf/pop.mandatory.path
 # environment
@@ -215,7 +213,7 @@ MAKE_VERSION := 4.3
 # environment
 MANAGERPID = 1629
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 6353
+GIO_LAUNCHED_DESKTOP_FILE_PID = 111549
 # environment
 _ = /usr/bin/make
 # environment
@@ -295,10 +293,12 @@ Makefile:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
- 
 
 # Not a target:
 all:
+ 
+make: *** No rule to make target 'all'.  Stop.
+
 #  Command line target.
 #  Implicit rule search has been done.
 #  File does not exist.
@@ -326,12 +326,12 @@ GNUmakefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 23 / storage = 202 B / avg = 8 B
-# current buf: size = 8162 B / used = 202 B / count = 23 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 23 / storage = 205 B / avg = 8 B
+# current buf: size = 8162 B / used = 205 B / count = 23 / avg = 8 B
 
 # strcache performance: lookups = 26 / hit rate = 11%
 # hash-table stats:
 # Load=23/8192=0%, Rehash=0, Collisions=0/26=0%
-# Finished Make data base on Sat May 14 14:36:01 2022
+# Finished Make data base on Sun May 15 03:43:33 2022
 
  
