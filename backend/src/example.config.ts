@@ -88,6 +88,10 @@ export const environment = {
      */
     register_commands: false,
     /**
+      * If true, will delete all the slash commands from your test server.
+      */
+    wipe_test_commands: false,
+    /**
      * ! WARNING
      * This will push all commands to the global api and not development servers.
      * @default false
