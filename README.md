@@ -15,7 +15,7 @@ _This project is in rapid development and any information is subject to change._
 * [Backend](./backend/) is the main source code of the bot and its functions.
 * [api](./server/) is the handler for the bot API and cloud functions.
 * [frontend](./frontend/) is the react client-side for the bot.
-* [docs](./documentation/) is the documentation for the bot or you can view the live version [here](https://thatguyjamal.gitbook.io/sho-docs/documentation)
+* [docs](./documentation/) is the documentation for the bot or you can view the live version [here](https://thatguyjamal.gitbook.io/sho-docs/)
 
 ### `Languages`
 
@@ -27,9 +27,9 @@ Currently supported translations. If you would like to help improve them, join o
 _make a pr to add more languages_
 
 ***
-Join my support server [here](https://discord.com/invite/N79DZsm3m2). You can find planned features [here](https://github.com/ThatGuyJamal/statistics-hub-oss/projects/2).
+Join my support server [here](https://discord.com/invite/N79DZsm3m2). You can find planned features [here](https://thatguyjamal.gitbook.io/sho-docs/planned).
 
-You can invite the production version of the bot [here](https://discord.com/api/oauth2/authorize?client\_id=946398697254703174\&permissions=415001496704\&scope=bot%20applications.commands).
+You can invite the production version of the bot [here](https://discord-statistics.vercel.app/invite).
 
 #### `Miscellaneous`
 
