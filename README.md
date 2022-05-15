@@ -27,9 +27,11 @@ Currently supported translations. If you would like to help improve them, join o
 _make a pr to add more languages_
 
 ***
-Join my support server [here](https://discord.com/invite/N79DZsm3m2). You can find planned features [here](https://thatguyjamal.gitbook.io/sho-docs/planned).
+- Join my support server [here](https://discord.com/invite/N79DZsm3m2). 
 
-You can invite the production version of the bot [here](https://discord-statistics.vercel.app/invite).
+- You can find planned features [here](https://thatguyjamal.gitbook.io/sho-docs/planned).
+
+- You can invite the production version of the bot [here](https://discord-statistics.vercel.app/invite).
 
 #### `Miscellaneous`
 

@@ -1,4 +1,6 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
+
 # GNU Make 4.3
 # Built for x86_64-unknown-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -6,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun May 15 03:51:53 2022
+# Make data base, printed on Sun May 15 11:14:47 2022
 
 # Variables
 
@@ -23,7 +25,7 @@ PULSE_SERVER = unix:/run/flatpak/pulse/native
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-b41a7be8-d5e0-473a-8773-78aa3370005c.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-2d2e73ff-00e0-4324-892e-d67d4bf87599.sock
 # environment
 MANDATORY_PATH = /usr/share/gconf/pop.mandatory.path
 # environment
@@ -121,7 +123,7 @@ XDG_DATA_HOME = /home/thatguyjamal/.var/app/com.visualstudio.code/data
 # environment
 SANDBOX_LD_PRELOAD = /app/bin/../lib/libzypak-preload-host.so:/app/bin/../lib/libzypak-preload-host-spawn-strategy.so
 # environment
-SESSION_MANAGER = local/iusepopbtw:@/tmp/.ICE-unix/1950,unix/iusepopbtw:/tmp/.ICE-unix/1950
+SESSION_MANAGER = local/iusepopbtw:@/tmp/.ICE-unix/2103,unix/iusepopbtw:/tmp/.ICE-unix/2103
 # automatic
 *F = $(notdir $*)
 # environment
@@ -167,7 +169,7 @@ DBUS_SYSTEM_BUS_ADDRESS = unix:path=/run/dbus/system_bus_socket
 # environment
 XDG_CONFIG_HOME = /home/thatguyjamal/.var/app/com.visualstudio.code/config
 # environment
-INVOCATION_ID = 315ea3eb42dc454f92d9f68c25666ddd
+INVOCATION_ID = 4c760fd9c65c441583da1e9d875fae99
 # environment
 VSCODE_LOG_NATIVE = false
 # environment
@@ -197,7 +199,7 @@ GIO_LAUNCHED_DESKTOP_FILE = /home/thatguyjamal/.local/share/flatpak/exports/shar
 # makefile
 .DEFAULT_GOAL := 
 # environment
-SYSTEMD_EXEC_PID = 2008
+SYSTEMD_EXEC_PID = 2129
 # environment
 NPM_CONFIG_GLOBALCONFIG = /app/etc/npmrc
 # environment
@@ -211,9 +213,9 @@ DEFAULTS_PATH = /usr/share/gconf/pop.default.path
 # default
 MAKE_VERSION := 4.3
 # environment
-MANAGERPID = 1629
+MANAGERPID = 1755
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 113541
+GIO_LAUNCHED_DESKTOP_FILE_PID = 7636
 # environment
 _ = /usr/bin/make
 # environment
@@ -227,7 +229,7 @@ NVM_RC_VERSION =
 # environment
 NVM_CD_FLAGS = 
 # environment
-JOURNAL_STREAM = 8:35534
+JOURNAL_STREAM = 8:40186
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -294,15 +296,13 @@ Makefile:
 #  Modification time never checked.
 #  File has not been updated.
 
+ 
 # Not a target:
 all:
 #  Command line target.
 #  Implicit rule search has been done.
 #  File does not exist.
 #  File has not been updated.
- 
-make: *** No rule to make target 'all'.  Stop.
-
 
 # Not a target:
 makefile:
@@ -332,6 +332,6 @@ GNUmakefile:
 # strcache performance: lookups = 26 / hit rate = 11%
 # hash-table stats:
 # Load=23/8192=0%, Rehash=0, Collisions=0/26=0%
-# Finished Make data base on Sun May 15 03:51:53 2022
+# Finished Make data base on Sun May 15 11:14:47 2022
 
  

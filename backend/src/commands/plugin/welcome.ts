@@ -60,6 +60,11 @@ export class UserCommand extends ICommand {
     if (!interaction.guild) return;
 
     if (interaction.options.getSubcommand() === "setup") {
+
+      await interaction.deferReply({
+        ephemeral: true,
+      })
+
       const themeOptions = interaction.options.getString("theme-type", true);
       const welcomeChannel = interaction.options.getChannel("welcome-channel", true);
       const goodbyeChannel = interaction.options.getChannel("goodbye-channel", false);
@@ -74,6 +79,7 @@ export class UserCommand extends ICommand {
       if (!goodbyeMessage) goodbyeMessage = "Goodbye, {{user.mention}}!";
 
       const document = await WelcomePluginMongoModel.findOne({ GuildId: interaction.guildId });
+      const cachedData = client.LocalCacheStore.memory.plugins.welcome.get(interaction.guild)
 
       // If no document found, we create a new one.
       if (!document) {
@@ -97,6 +103,7 @@ export class UserCommand extends ICommand {
               [user.username] - Replaces with the user's username.
               [user.id] - Replaces with the user's ID.
               [user.tag] - Replaces with the user's tag.
+              [user.createdAt] - Replaces with the user's creation date.
               [server.memberCount] - Replaces with the server's member count.
               [server.name] - Replaces with the server's name.
               [server.id] - Replaces with the server's ID.
@@ -144,6 +151,22 @@ export class UserCommand extends ICommand {
       }
       // If a document is found, we update it.
       else {
+        client.LocalCacheStore.memory.plugins.welcome.set(interaction.guild!, {
+          ...cachedData,
+          GuildId: interaction.guild.id,
+          GuildName: interaction.guild?.name,
+          GuildOwnerId: interaction.guild?.ownerId,
+          Enabled: true ?? cachedData?.Enabled ?? false,
+          GuildWelcomeChannelId: welcomeChannel?.id ?? cachedData?.GuildWelcomeChannelId ?? undefined,
+          GuildGoodbyeChannelId: goodbyeChannel?.id ?? cachedData?.GuildGoodbyeChannelId ?? undefined,
+          GuildWelcomeMessage: welcomeMessage ?? cachedData?.GuildWelcomeMessage ?? undefined,
+          GuildGoodbyeMessage: goodbyeMessage ?? cachedData?.GuildGoodbyeMessage ?? undefined,
+          GuildWelcomeTheme: themeOptions ?? cachedData?.GuildWelcomeTheme ?? undefined,
+          GuildWelcomePingOnJoin: welcomePingOnJoin ?? cachedData?.GuildWelcomePingOnJoin ?? false,
+          GuildWelcomeThemeUrl: CardURl ?? cachedData?.GuildWelcomeThemeUrl ?? DEFAULT_CARD_URL,
+          CreatedById: interaction.user.id,
+          CreatedAt: new Date(),
+        })
         await WelcomePluginMongoModel.updateOne(
           { GuildId: interaction.guildId },
           {
@@ -165,9 +188,8 @@ export class UserCommand extends ICommand {
           }
         ).then((res) => client.logger.info(res));
       }
-      return await interaction.reply({
-        content: "Welcome plugin setup complete!",
-        ephemeral: true,
+      return await interaction.editReply({
+        content: "Welcome plugin setup complete! You can view your settings with `welcome view`",
       });
     } else if (interaction.options.getSubcommand() === "disable") {
       // When the command is disabled, we will clear up some cache. but it will not delete the document from the database.

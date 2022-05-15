@@ -1,4 +1,5 @@
 import { MessageCommandDeniedPayload, Events, Listener, UserError } from "@sapphire/framework";
+import { seconds } from "../../internal/functions/time";
 import { sendLegacyError } from "../../internal/interactions/responses";
 
 export class CommandDenied extends Listener<typeof Events.MessageCommandDenied> {
@@ -6,7 +7,10 @@ export class CommandDenied extends Listener<typeof Events.MessageCommandDenied> 
     if (Reflect.get(Object(context), "silent")) return;
 
     try {
-      await sendLegacyError(message, content);
+      const sent = await sendLegacyError(message, content);
+      
+      setTimeout(async() => await sent.delete().catch(() => {}), seconds(6))
+
     } catch (err) {
       this.container.logger.error(err);
     }

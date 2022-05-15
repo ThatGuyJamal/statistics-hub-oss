@@ -65,6 +65,7 @@ const allValidCommands = [...container.stores.get("commands").values()].map((c) 
 @ApplyOptions<ICommandOptions>({
   aliases: ["cmd"],
   description: "A plugin for managing the bots commands.",
+  detailedDescription: `This command allows a server admin to enable or disable the bots commands in your server.`,
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
@@ -325,17 +326,17 @@ export class UserCommand extends ICommand {
             {
               description: stripIndent(
                 `
-=== Disabled Commands ===
-${disabledCommands?.join(", ") || "No commands are disabled."}
+__**Disabled Commands**__
+${disabledCommands?.map((c) => `\`${c}\``).join(", ") || "No commands are disabled."}
 
-=== Disabled Channels ===
+__**Disabled Channels**__
 ${disabledChannels?.map((id) => channelMention(id)).join(", ") || "No channels are disabled."}
 
 __**Notes**__
 
 > 1. If you dont see a command or channel, it means it is not disabled.
-> 2. To disable a command, use \`command disable <name>\`.
-> 3. To disable a channel, use \`command disable-channel <channel>\`.
+> 2. To enable a command, use \`command enable <name>\`.
+> 3. To enable a channel, use \`command enable-channel <channel>\`.
 `
               ),
             },
@@ -566,17 +567,17 @@ __**Notes**__
               {
                 description: stripIndent(
                   `
-=== Disabled Commands ===
-${disabledCommands?.join(", ") || "No commands are disabled."}
+__**Disabled Commands**__
+${disabledCommands?.map((c) => `\`${c}\``).join(", ") || "No commands are disabled."}
 
-=== Disabled Channels ===
+__**Disabled Channels**__
 ${disabledChannels?.map((id) => channelMention(id)).join(", ") || "No channels are disabled."}
 
 __**Notes**__
 
 > 1. If you dont see a command or channel, it means it is not disabled.
-> 2. To disable a command, use \`command disable <name>\`.
-> 3. To disable a channel, use \`command disable-channel <channel>\`.
+> 2. To enable a command, use \`command enable <name>\`.
+> 3. To enable a channel, use \`command enable-channel <channel>\`.
 `
                 ),
               },

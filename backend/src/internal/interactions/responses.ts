@@ -103,7 +103,5 @@ export const sendLegacyError = async (ctx: Message, description: string) => {
     allowedMentions: { users: [ctx.author.id], roles: [] },
   };
 
-  return await ctx.reply(payload).catch((err) => {
-    container.logger.error(err);
-  });
+  return await ctx.reply(payload)
 };

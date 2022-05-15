@@ -88,8 +88,8 @@ export const environment = {
      */
     register_commands: false,
     /**
-      * If true, will delete all the slash commands from your test server.
-      */
+     * If true, will delete all the slash commands from your test server.
+     */
     wipe_test_commands: false,
     /**
      * ! WARNING
