@@ -28,7 +28,7 @@ import { getTestGuilds } from "../../internal/load-test-guilds";
   cooldownDelay: seconds(10),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
-  runIn: "GUILD_TEXT",
+  runIn: ["GUILD_TEXT", "DM"],
   nsfw: false,
   enabled: true,
   extendedDescription: {

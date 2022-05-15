@@ -33,7 +33,7 @@ import ms from "ms";
   cooldownDelay: seconds(45),
   cooldownScope: BucketScope.User,
   cooldownLimit: 1,
-  runIn: "GUILD_TEXT",
+  runIn: ["GUILD_TEXT", "DM"],
   nsfw: false,
   enabled: true,
   extendedDescription: {

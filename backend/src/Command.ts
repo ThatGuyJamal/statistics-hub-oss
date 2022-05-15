@@ -47,7 +47,6 @@ export abstract class ICommand extends SapphireCommand<Args, ICommandOptions> {
         PermissionFlagsBits.AttachFiles,
       ]),
       generateDashLessAliases: true,
-      runIn: ["GUILD_TEXT"],
     });
 
     this.extendedDescription = options.extendedDescription;

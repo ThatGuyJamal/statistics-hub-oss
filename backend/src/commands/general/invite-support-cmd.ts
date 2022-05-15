@@ -28,7 +28,7 @@ import { BaseEmbed } from "../../internal/structures/Embed";
   cooldownDelay: seconds(30),
   cooldownScope: BucketScope.User,
   cooldownLimit: 2,
-  runIn: "GUILD_TEXT",
+  runIn: ["GUILD_TEXT", "DM"],
   nsfw: false,
   enabled: true,
   extendedDescription: {
