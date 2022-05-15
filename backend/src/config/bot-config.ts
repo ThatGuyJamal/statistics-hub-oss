@@ -26,7 +26,7 @@ export const CLIENT_OPTIONS: ClientOptions = {
   caseInsensitivePrefixes: false,
   defaultPrefix: environment.bot.bot_prefix,
   logger: {
-    level: canaryMode ? LogLevel.Warn : LogLevel.Debug,
+    level: canaryMode ? LogLevel.Debug : LogLevel.Warn,
   },
   fetchPrefix: async (ctx: Message) => {
     if (!isGuildMessage(ctx)) return environment.bot.bot_prefix;

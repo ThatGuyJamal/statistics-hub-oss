@@ -30,10 +30,10 @@ export class UserEvent extends Listener {
     const { client } = this.container;
 
     await client.user?.setPresence({
-      status: "idle",
+      status: canaryMode ? "dnd" : "online",
       activities: [
         {
-          name: canaryMode ? "Under Construction :construction:" : "mathematics lecture",
+          name: canaryMode ? "Under Construction 🚧" : "mathematics lecture",
           type: "LISTENING",
         },
       ],
@@ -56,7 +56,12 @@ export class UserEvent extends Listener {
     if (!enabled) return;
     else {
       const { client } = this.container;
-      client.application?.commands.set([], "837830514130812970");
+      // Loop over each test server and clear the application commands
+      for (const id of client.environment.bot.test_guild_ids) {
+        client.application?.commands.set([], id).then((res) => {
+          if (res) this.container.logger.warn(`Cleared application commands in ${id}`);
+        })
+      }
       client.logger.fatal("Application commands have been cleared!");
     }
   }
