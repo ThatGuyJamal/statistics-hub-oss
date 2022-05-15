@@ -38,7 +38,7 @@ export class UserCommand extends ICommand {
     return ctx.reply("This command is only available in slash command form.");
   }
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
-    return interaction.reply("Work in progress...");
+    return interaction.reply("Coming soon...");
   }
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
     registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
