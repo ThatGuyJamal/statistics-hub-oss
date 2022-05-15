@@ -32,7 +32,7 @@ const Docs: NextPage = () => {
 
 	return (
 		<>
-			<h1>Redirecting to the documentation...</h1>
+			<h1>Redirecting you to the documentation...</h1>
 		</>
 	);
 };

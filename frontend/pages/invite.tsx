@@ -32,7 +32,7 @@ const Invite: NextPage = () => {
 
 	return (
 		<>
-			<h1>Redirecting to the support server...</h1>
+			<h1>Redirecting you to the support server...</h1>
 		</>
 	);
 };
