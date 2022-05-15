@@ -28,29 +28,46 @@ const Home: NextPage = () => {
   };
 
   return (
-    <>
-      <Head>
-        <title>{common.website_title}</title>
-        <meta name="description" content={common.website_description} />
-        <link rel="icon" href="/image2vector.svg" />
-      </Head>
-      <div className="page aligned-center">
-        <div>
-          <button className={styles.button} onClick={handleLogin}>
-            <FaDiscord size={50} color="#7289DA" />
-            <span>Login with Discord</span>
-          </button>
-          <br />
-          <div className={styles.social_links}>
-            <a target="_blank"  rel="noreferrer" href={common.website_discord_server}>Discord Server</a> |{" "}
-            <a target="_blank"  rel="noreferrer" href={common.website_github_repo}>Github</a> |{" "}
-            <a target="_blank"  rel="noreferrer" href={common.developer_youtube_channel}>YouTube</a>
-          </div>
-        </div>
-      </div>
-      <div></div>
-    </>
-  );
+			<>
+				<Head>
+					<title>{common.website_title}</title>
+					<meta name="description" content={common.website_description} />
+					<link rel="icon" href="/image2vector.svg" />
+				</Head>
+				<div className="page aligned-center">
+					<div>
+						<button className={styles.button} onClick={handleLogin}>
+							<FaDiscord size={50} color="#7289DA" />
+							<span>Login with Discord</span>
+						</button>
+						<br />
+						<div className={styles.social_links}>
+							<a target="_blank" rel="noreferrer" href={common.website_discord_server}>
+								Discord Server
+							</a>{" "}
+							|{" "}
+							<a target="_blank" rel="noreferrer" href={common.website_github_repo}>
+								Github
+							</a>{" "}
+							|{" "}
+							<a
+								target="_blank"
+								rel="noreferrer"
+								href={common.developer_youtube_channel}>
+								YouTube
+							</a>
+							<a
+								target="_blank"
+								rel="noreferrer"
+								href={common.website_documentation_link}>
+								Documentation
+							</a>
+						</div>
+					</div>
+				</div>
+				<div></div>
+			</>
+		);
 };
 
 export default Home;

@@ -26,7 +26,7 @@ const Docs: NextPage = () => {
 	useEffect(() => {
 		const { pathname } = router;
 		if (pathname == "/docs") {
-			router.push(common.welcome_documentation_link);
+			router.push(common.website_documentation_link);
 		}
 	});
 
