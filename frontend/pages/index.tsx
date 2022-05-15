@@ -24,7 +24,7 @@ const Home: NextPage = () => {
   const handleLogin = () => {
     // window.location.href = "http://localhost:3001/api/auth/discord";
 
-    alert("Website under construction...");
+    alert("Website under construction... join our discord server for future updates!");
   };
 
   return (
