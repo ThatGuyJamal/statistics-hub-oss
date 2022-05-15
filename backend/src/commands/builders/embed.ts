@@ -43,11 +43,28 @@ export class UserCommand extends ICommand {
     return interaction.reply("Coming soon...");
   }
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
-    registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
-      guildIds: environment.bot.register_global_commands ? undefined : getTestGuilds(),
-      registerCommandIfMissing: environment.bot.register_commands,
-      behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
-      idHints: [],
-    });
+    registry.registerChatInputCommand(
+      (builder) =>
+        builder
+          .setName(this.name)
+          .setDescription(this.description)
+          .addStringOption((builder) => builder.setName("title").setDescription("The title of the embed").setRequired(false))
+          .addStringOption((builder) => builder.setName("description").setDescription("The description of the embed").setRequired(false))
+          .addStringOption((builder) => builder.setName("url").setDescription("The url of the embed").setRequired(false))
+          .addStringOption((builder) => builder.setName("color").setDescription("The color of the embed").setRequired(false))
+          .addStringOption((builder) => builder.setName("footer").setDescription("The footer of the embed").setRequired(false))
+          .addStringOption((builder) => builder.setName("author").setDescription("The author of the embed").setRequired(false))
+          .addStringOption((builder) => builder.setName("thumbnail").setDescription("The thumbnail of the embed").setRequired(false))
+          .addStringOption((builder) => builder.setName("image").setDescription("The image of the embed").setRequired(false))
+          .addStringOption((builder) => builder.setName("content").setDescription("The content with the embed").setRequired(false))
+          .addBooleanOption((builder) => builder.setName("timestamp").setDescription("If the embed should have a timestamp").setRequired(false))
+          ,
+      {
+        guildIds: environment.bot.register_global_commands ? undefined : getTestGuilds(),
+        registerCommandIfMissing: environment.bot.register_commands,
+        behaviorWhenNotIdentical: RegisterBehavior.Overwrite,
+        idHints: [],
+      }
+    );
   }
 }
