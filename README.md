@@ -10,35 +10,12 @@ _This project is in rapid development and any information is subject to change._
 
 📊 An open-source data analytics discord bot dedicated to server owners. Created by [ThatGuyJamal](https://github.com/ThatGuyJamal) and [contributors](.github/contributors.md)
 
-### `Tech Stack Used`
-
-* [MongoDB](https://www.mongodb.com/) is the main database for the project.
-* [Redis](https://redis.io/) is the cache for the project.
-* [Next-js](https://nextjs.org/) is the dashboard for the project
-* [Discord.js](https://discord.js.org/) is the API library used for the project.
-* [Sapphire.js](https://www.sapphirejs.dev/) is the command/event framework for the project.
-
 #### Directory's
 
-* [Backend](broken-reference) is the main source code of the bot and its functions.
-* [api](api/) is the handler for the bot API and cloud functions.
-* [frontend](frontend/) is the react client-side for the bot.
-
-### `Commands`
-
-| Name          | Description                          | Access Level | Command Type    | Scope  |
-| ------------- | ------------------------------------ | ------------ | --------------- | ------ |
-| ping          | Shows the bot latency.               | everyone     | slash & message | Global |
-| help          | Shows the bot help menu.             | everyone     | slash & message | Global |
-| invite        | Shows the bot invite link.           | everyone     | slash & message | Global |
-| stats         | Shows the bot statistics.            | everyone     | slash & message | Global |
-| welcome       | Configures the welcome plugin        | admins       | slash           | Global |
-| customcommand | Configures the custom command plugin | admins       | slash           | Global |
-| command       | Enables or disables a command        | admins       | slash           | Global |
-| prefix        | Configures the bot prefix            | admins       | message         | Global |
-| language      | Configures the bot language          | admins       | message         | Global |
-
-_More commands will be added to the list in the future._
+* [Backend](./backend/) is the main source code of the bot and its functions.
+* [api](./server/) is the handler for the bot API and cloud functions.
+* [frontend](./frontend/) is the react client-side for the bot.
+* [docs](./documentation/) is the documentation for the bot or you can view the live version [here](https://thatguyjamal.gitbook.io/sho-docs/documentation)
 
 ### `Languages`
 
@@ -50,28 +27,6 @@ Currently supported translations. If you would like to help improve them, join o
 _make a pr to add more languages_
 
 ***
-
-### `Self Hosting Guide`
-
-I highly recommend using the [live version](https://discord-statistics.vercel.app/invite) of the bot and not self-hosting. I will not prove detailed information or tech support if something goes wrong in the process. While being open-source, and free to use and published under the [GNU](LICENSE/) Public License I will try help you get started with the basics.
-
-#### `Requirements`
-
-1. ⭐Star this repository to show some support.
-2. Have Nodejs installed on your computer. With version 17.0.0 or higher.
-3. Go to mongodb.com and create a database, then save the connection url.
-4. Clone this repository, and rename the [example.config.ts](backend/src/) file to config.ts and fill it out.
-5. Install the dependency and then compile the code using `yarn compile`.
-6. Lastly you can run the bot using `yarn start`.
-
-#### `Important Notes`
-
-1. Because of the lack of support moving forward with many message-based commands from both the discord API and libraries, the bot has limited support for things such as a custom prefix and message commands. You can implement this yourself but just know it had not been implemented fully. _And will be removed in the future._
-2. As of now, the current version of the bot is being updated rapidly and is not in a stable version. It is also being developed to be a multi-guild bot in mind, meaning you may want to disable or enable some of the features depending on your needs.
-3. If you want to host on Linux, read this gist for the [commands](https://gist.github.com/ThatGuyJamal/42a65ede25b5da6d84c04eada89d12ff).
-
-***
-
 Join my support server [here](https://discord.com/invite/N79DZsm3m2). You can find planned features [here](https://github.com/ThatGuyJamal/statistics-hub-oss/projects/2).
 
 You can invite the production version of the bot [here](https://discord.com/api/oauth2/authorize?client\_id=946398697254703174\&permissions=415001496704\&scope=bot%20applications.commands).

@@ -4,6 +4,14 @@
 
 An open source project developed to help server owners and developers to collect and analyze data from their servers.
 
+### `Tech Stack Used`
+
+* [MongoDB](https://www.mongodb.com/) is the main database for the project.
+* [Redis](https://redis.io/) is the cache for the project.
+* [Next-js](https://nextjs.org/) is the dashboard for the project
+* [Discord.js](https://discord.js.org/) is the API library used for the project.
+* [Sapphire.js](https://www.sapphirejs.dev/) is the command/event framework for the project.
+
 ## Features
 
 - Moderation Commands (Timeout, listbans, lock-channel, etc)
