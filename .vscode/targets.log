@@ -6,7 +6,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun May 15 03:43:33 2022
+# Make data base, printed on Sun May 15 03:51:53 2022
 
 # Variables
 
@@ -23,7 +23,7 @@ PULSE_SERVER = unix:/run/flatpak/pulse/native
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-394a3b75-16fa-4ae3-8228-bf8731d61627.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-b41a7be8-d5e0-473a-8773-78aa3370005c.sock
 # environment
 MANDATORY_PATH = /usr/share/gconf/pop.mandatory.path
 # environment
@@ -213,7 +213,7 @@ MAKE_VERSION := 4.3
 # environment
 MANAGERPID = 1629
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 111549
+GIO_LAUNCHED_DESKTOP_FILE_PID = 113541
 # environment
 _ = /usr/bin/make
 # environment
@@ -296,13 +296,13 @@ Makefile:
 
 # Not a target:
 all:
- 
-make: *** No rule to make target 'all'.  Stop.
-
 #  Command line target.
 #  Implicit rule search has been done.
 #  File does not exist.
 #  File has not been updated.
+ 
+make: *** No rule to make target 'all'.  Stop.
+
 
 # Not a target:
 makefile:
@@ -332,6 +332,6 @@ GNUmakefile:
 # strcache performance: lookups = 26 / hit rate = 11%
 # hash-table stats:
 # Load=23/8192=0%, Rehash=0, Collisions=0/26=0%
-# Finished Make data base on Sun May 15 03:43:33 2022
+# Finished Make data base on Sun May 15 03:51:53 2022
 
  
