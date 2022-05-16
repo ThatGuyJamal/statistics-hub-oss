@@ -61,7 +61,7 @@ const Home: NextPage = () => {
 								target="_blank"
 								rel="noreferrer"
 								href={common.website_documentation_link}>
-								Documentation
+								Docs
 							</a>
 						</div>
 					</div>
