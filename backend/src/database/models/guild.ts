@@ -43,6 +43,11 @@ const GuildsMongoModel = mongo.model(
       required: false,
       default: "en-US",
     },
+    GuildPingOnJoinChannels: {
+      type: Array,
+      required: false,
+      default: null,
+    },
     BlackListed: {
       type: Boolean,
       required: false,
@@ -70,6 +75,7 @@ export interface GuildModelStructure {
   GuildOwnerId?: string;
   GuildPrefix?: string;
   GuildLanguage?: string;
+  GuildPingOnJoinChannels?: string[];
   BlackListed?: boolean;
   Premium?: GuildPremiumStruct;
   CreatedAt: Date;
@@ -92,6 +98,7 @@ export const supportedLanguagesArray = [
     name: "English",
     code: "en-US",
   },
+  // TODO
   // {
   //   name: "Spanish",
   //   code: "es-ES",
