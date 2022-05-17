@@ -23,7 +23,11 @@ import {
 import { GuildMember } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
 import { environment } from "../../config";
-import { welcomeCommandOptions, welcomeCommandThemeOptions, welcomeCommandThemeURlChoices } from "../../config/commands/slashCommandBuilderChoices";
+import {
+  welcomeCommandOptions,
+  welcomeCommandThemeOptions,
+  welcomeCommandThemeURlChoices,
+} from "../../config/commands/slashCommandBuilderChoices";
 import { WelcomePluginMongoModel } from "../../database/models/plugins/welcome/welcome";
 import stripIndent, {
   channelMention,
@@ -313,7 +317,7 @@ export class UserCommand extends ICommand {
         this.container.client.emit(Events.GuildMemberRemove, interaction.member as GuildMember);
       }
 
-       await interaction.editReply({
+      await interaction.editReply({
         embeds: [
           new BaseEmbed().interactionEmbed(
             {
@@ -336,10 +340,11 @@ export class UserCommand extends ICommand {
 
       if (missingPerms.length > 0) {
         return await interaction.followUp({
-          content: `Warning! Im missing permissions to send messages in the following channels: ${missingPerms.map((c) => `${channelMention(c)
-            }`).join(", ")}. So the simulation message was not sent...`,
+          content: `Warning! Im missing permissions to send messages in the following channels: ${missingPerms
+            .map((c) => `${channelMention(c)}`)
+            .join(", ")}. So the simulation message was not sent...`,
           ephemeral: true,
-        })
+        });
       }
     } else if (interaction.options.getSubcommand() === "update") {
       await interaction.deferReply({

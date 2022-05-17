@@ -31,6 +31,7 @@
     "moderatable",
     "mycustomcommand",
     "nocheck",
+    "pingonjoin",
     "ratelimit",
     "ratelimits",
     "setlang",

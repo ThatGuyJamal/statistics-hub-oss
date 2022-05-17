@@ -16,8 +16,8 @@ import { ApplyOptions } from "@sapphire/decorators";
 import { Args, BucketScope } from "@sapphire/framework";
 import { Message } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
-import { seconds } from "../../internal/functions/time"
-import { fetch, FetchResultTypes } from '@sapphire/fetch';
+import { seconds } from "../../internal/functions/time";
+import { fetch, FetchResultTypes } from "@sapphire/fetch";
 import { environment } from "../../config";
 
 const errorTracked = [];
@@ -53,9 +53,7 @@ export class UserCommand extends ICommand {
     }
     await ctx.channel.send({
       content: `Test finished! ${
-        errorTracked.length > 0
-          ? `${errorTracked.length} errors were tracked. Check the logs...`
-          : ""
+        errorTracked.length > 0 ? `${errorTracked.length} errors were tracked. Check the logs...` : ""
       }`,
     });
   }
@@ -70,7 +68,10 @@ export class UserCommand extends ICommand {
      * @date 2022-05-17
      */
 
-    const data = await fetch<JsonPlaceholderResponse>(`${environment.bot.bot_dashboard_api_url}/ping`, FetchResultTypes.JSON)
+    const data = await fetch<JsonPlaceholderResponse>(
+      `${environment.bot.bot_dashboard_api_url}/ping`,
+      FetchResultTypes.JSON
+    );
 
     if (data.status !== 200) {
       return await ctx.channel.send(`Error: ${data.status}`);

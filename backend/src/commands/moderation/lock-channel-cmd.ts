@@ -73,7 +73,7 @@ export class UserCommand extends ICommand {
         }
 
         // Clear the set after the command is ran.
-        anotherResponse.clear()
+        anotherResponse.clear();
 
         return ctx.channel
           .send({
@@ -90,11 +90,11 @@ export class UserCommand extends ICommand {
       .catch((err) => {
         this.container.logger.error(err);
         return ctx.reply({
-          content: `I dont have permissions to lock ${channelMention(channelArg?.id!)}. Make sure my role in the channel settings has permissions.`,
+          content: `I dont have permissions to lock ${channelMention(
+            channelArg?.id!
+          )}. Make sure my role in the channel settings has permissions.`,
         });
       });
-
-
   }
 }
 
@@ -156,7 +156,9 @@ export class UserCommand2 extends ICommand {
             embeds: [
               {
                 title: "Channel Unlocked :unlock:",
-                description: `${memberMention(ctx.author.id)} unlocked ${channelMention(res.id)}. Make sure my role in the channel settings has permissions.`,
+                description: `${memberMention(ctx.author.id)} unlocked ${channelMention(
+                  res.id
+                )}. Make sure my role in the channel settings has permissions.`,
                 color: "GREEN",
               },
             ],

@@ -131,8 +131,8 @@ export const environment = {
     },
     bot_dashboard_api_url: "",
     /**
-        * If enabled will stop all bot commands from running unless your a developer of the bot.
-        */
+     * If enabled will stop all bot commands from running unless your a developer of the bot.
+     */
     bot_maintenance_mode: false,
     /**
      * Config for the core bot developer.

@@ -49,18 +49,35 @@ export class UserCommand extends ICommand {
       return await ctx.reply({
         content: `No arguments were provided.`,
         embeds: [
-          new BaseEmbed().contextEmbed({
-            description: `The current language is set to **${client.LocalCacheStore.memory.guild.get(ctx.guild!)?.GuildLanguage}**.`,
-          }, ctx).addField("Valid Languages", langsWeCanUse.map((lang) => codeBlock("css", `
+          new BaseEmbed()
+            .contextEmbed(
+              {
+                description: `The current language is set to **${
+                  client.LocalCacheStore.memory.guild.get(ctx.guild!)?.GuildLanguage
+                }**.`,
+              },
+              ctx
+            )
+            .addField(
+              "Valid Languages",
+              langsWeCanUse
+                .map((lang) =>
+                  codeBlock(
+                    "css",
+                    `
           [${lang.name}](${lang.code})
-          `)).join("\n")).addField("Usage", `\`language <language code>\` or \`language reset\``)
-        ]
-      })
+          `
+                  )
+                )
+                .join("\n")
+            )
+            .addField("Usage", `\`language <language code>\` or \`language reset\``),
+        ],
+      });
     }
 
     const cachedLanguage = client.LocalCacheStore.memory.guild.get(ctx.guild!);
     const document = await GuildsMongoModel.findOne({ GuildID: ctx.guildId });
-
 
     if (languageArgument.toLowerCase() === "reset") {
       if (!cachedLanguage) {
@@ -70,13 +87,13 @@ export class UserCommand extends ICommand {
           GuildPrefix: undefined,
           GuildLanguage: "en-US",
           CreatedAt: new Date(),
-        })
+        });
       } else {
         client.LocalCacheStore.memory.guild.set(ctx.guild!, {
           ...cachedLanguage,
           CreatedAt: new Date(),
           GuildLanguage: "en-US",
-        })
+        });
       }
       if (!document) {
         await GuildsMongoModel.create({
@@ -99,17 +116,35 @@ export class UserCommand extends ICommand {
       // Check if the language argument is a valid language code.
       const language = langsWeCanUse.find((lang) => lang.code === languageArgument);
 
-      if(!language) {
+      if (!language) {
         return await ctx.reply({
           content: `The language code provided is not valid.`,
           embeds: [
-            new BaseEmbed().contextEmbed({
-              description: `The current language is set to **${client.LocalCacheStore.memory.guild.get(ctx.guild!)?.GuildLanguage}**.`,
-            }, ctx).addField("Valid Languages", langsWeCanUse.map((lang) => codeBlock("css", `
+            new BaseEmbed()
+              .contextEmbed(
+                {
+                  description: `The current language is set to **${
+                    client.LocalCacheStore.memory.guild.get(ctx.guild!)?.GuildLanguage
+                  }**.`,
+                },
+                ctx
+              )
+              .addField(
+                "Valid Languages",
+                langsWeCanUse
+                  .map((lang) =>
+                    codeBlock(
+                      "css",
+                      `
           [${lang.name}](${lang.code})
-          `)).join("\n")).addField("Usage", `\`language <language code>\` or \`language reset\``)
-          ]
-        })
+          `
+                    )
+                  )
+                  .join("\n")
+              )
+              .addField("Usage", `\`language <language code>\` or \`language reset\``),
+          ],
+        });
       }
 
       if (!cachedLanguage) {
@@ -119,7 +154,7 @@ export class UserCommand extends ICommand {
           GuildPrefix: undefined,
           GuildLanguage: language.code,
           CreatedAt: new Date(),
-        })
+        });
       }
 
       if (!document) {

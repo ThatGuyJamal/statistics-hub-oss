@@ -42,33 +42,40 @@ export const welcomeCommandThemeOptions: APIApplicationCommandOptionChoice<strin
   {
     name: "Text",
     value: "text",
-  }, {
+  },
+  {
     name: "Card",
     value: "card",
-  }
-]
+  },
+];
 
 export const welcomeCommandOptions: APIApplicationCommandOptionChoice<string>[] = [
   {
     name: "Greet Message",
     value: "GuildWelcomeMessage",
-  } , {
+  },
+  {
     name: "Goodbye Message",
     value: "GuildGoodbyeMessage",
-  }, {
+  },
+  {
     name: "Theme",
     value: "GuildWelcomeTheme",
-  }, {
+  },
+  {
     name: "Theme URL",
     value: "GuildWelcomeThemeUrl",
-  }, {
+  },
+  {
     name: "Ping on join",
     value: "GuildWelcomePingOnJoin",
-  }, {
+  },
+  {
     name: "Welcome Channel",
     value: "GuildWelcomeChannelId",
-  }, {
+  },
+  {
     name: "Goodbye Channel",
     value: "GuildGoodbyeChannelId",
   },
-]
+];

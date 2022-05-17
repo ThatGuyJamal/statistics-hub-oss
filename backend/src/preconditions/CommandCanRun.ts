@@ -29,7 +29,7 @@ export class UserPrecondition extends Precondition {
     }
 
     // Checks if we are in maintenance mode.
-    if(this.checkGlobalDisabled() && !container.client.BotDevelopers.has(interaction.user.id)) {
+    if (this.checkGlobalDisabled() && !container.client.BotDevelopers.has(interaction.user.id)) {
       return this.error({
         message: `Sorry but the bot is currently under maintenance. Join our support server for more updates.`,
       });
@@ -94,6 +94,6 @@ export class UserPrecondition extends Precondition {
   }
 
   private checkGlobalDisabled(): boolean {
-    return environment.bot.bot_maintenance_mode
+    return environment.bot.bot_maintenance_mode;
   }
 }
