@@ -17,13 +17,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 
-type Data = {
-  name: string;
+type PingData = {
+    response: string;
 };
 
 export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
+    req: NextApiRequest,
+    res: NextApiResponse<PingData>
 ) {
-  res.status(200).json({ name: "API status 200" });
+    res.status(200).json({ response: "Pong!" });
 }
