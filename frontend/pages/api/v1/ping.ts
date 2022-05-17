@@ -19,11 +19,12 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 type PingData = {
     response: string;
+    status: number;
 };
 
 export default function handler(
     req: NextApiRequest,
     res: NextApiResponse<PingData>
 ) {
-    res.status(200).json({ response: "Pong" });
+    res.status(200).json({ response: "Pong", status: 200 });
 }
