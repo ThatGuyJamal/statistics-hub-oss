@@ -24,6 +24,7 @@ import { BaseEmbed } from "../../internal/structures/Embed";
 import { codeBlock } from "@sapphire/utilities";
 import { capitalizeFirstLetter } from "../../internal/functions/formatting";
 import ms from "ms";
+import { ProcessLegacySubCommands } from "../../internal/functions/legacySubCommand";
 
 @ApplyOptions<ICommandOptions>({
   name: "help",
@@ -38,21 +39,39 @@ import ms from "ms";
   enabled: true,
   extendedDescription: {
     usage: "help <command name>",
-    examples: ["help ping", "help prefix"],
+    examples: ["help ping", "help all"],
     command_type: "both",
+    subcommands: ["all"]
   },
 })
 export class UserCommand extends ICommand {
-  public async messageRun(ctx: Message, _args: Args) {
-    return await this.buildMessagePaginatedCommandList(ctx).catch(() => {
-      return ctx.reply("Something went wrong while trying to build the command list. Please try again later...");
-    });
+  public async messageRun(ctx: Message, args: Args) {
+
+    const argument = await args.pick("string").catch(() => null);
+
+    if(!ProcessLegacySubCommands(argument, ["all"])) {
+      return await this.buildMessagePaginatedCommandList(ctx).catch(() => {
+        return ctx.reply("Something went wrong while trying to build the command list. Please try again later...");
+      });
+    }
+
+    return await ctx.reply({
+      embeds: [this.buildRawCommandListEmbed()]
+    })
   }
 
   public override async chatInputRun(...[interaction]: Parameters<ChatInputCommand["chatInputRun"]>) {
-    return await this.buildSlashPaginatedCommandList(interaction).catch(() => {
-      return interaction.reply("Something went wrong while trying to build the command list. Please try again...");
-    });
+    const argument = interaction.options.getBoolean("all", false)
+
+    if(!argument) {
+      return await this.buildSlashPaginatedCommandList(interaction).catch(() => {
+        return interaction.reply("Something went wrong while trying to build the command list. Please try again...");
+      });
+    }
+
+    return await interaction.reply({
+      embeds: [this.buildRawCommandListEmbed()]
+    })
   }
 
   /**
@@ -148,7 +167,9 @@ export class UserCommand extends ICommand {
 [Examples] = ${command.extendedDescription?.examples ?? "None"}
         `
             )
-          )
+        ).setFooter({
+          text: `help all - full list of commands.`
+        })
           .setColor("RANDOM")
           .setTimestamp()
       );
@@ -241,7 +262,9 @@ export class UserCommand extends ICommand {
 [Examples] = ${command.extendedDescription?.examples ?? "None"}
         `
             )
-          )
+        ).setFooter({
+          text: `help all - full list of commands.`
+        })
           .setColor("RANDOM")
           .setTimestamp()
       );
@@ -254,8 +277,22 @@ export class UserCommand extends ICommand {
     return pagination.render();
   }
 
+  private buildRawCommandListEmbed() {
+    // Get all the commands from the cache.
+    const internalCommandList = [...this.container.client.stores.get("commands").values()].filter(
+      (c) => c.category !== "developer"
+    ) as ICommand[];
+
+    return new BaseEmbed({
+      title: "Full Command List",
+      description: internalCommandList.map((c) => `\`${c.name}\``).join(", "),
+      color: "RANDOM",
+    })
+  }
+
   public override registerApplicationCommands(registry: ApplicationCommandRegistry) {
-    registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description), {
+    registry.registerChatInputCommand((builder) => builder.setName(this.name).setDescription(this.description)
+    .addBooleanOption((builder) => builder.setName("all").setDescription("If you want to see all the commands at once").setRequired(false)), {
       guildIds: environment.bot.register_global_commands ? undefined : getTestGuilds(),
       registerCommandIfMissing: environment.bot.register_commands,
       behaviorWhenNotIdentical: RegisterBehavior.Overwrite,

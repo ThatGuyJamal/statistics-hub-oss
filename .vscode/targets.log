@@ -1,4 +1,6 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
+
 # GNU Make 4.3
 # Built for x86_64-unknown-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -6,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue May 17 13:20:52 2022
+# Make data base, printed on Tue May 17 15:08:08 2022
 
 # Variables
 
@@ -23,7 +25,7 @@ PULSE_SERVER = unix:/run/flatpak/pulse/native
 # environment
 GJS_DEBUG_OUTPUT = stderr
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-253d6c52-cb2a-4fc5-82f1-7f4b5d90e846.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-eb32ba65-3081-4c5b-9657-62e761d1616a.sock
 # environment
 MANDATORY_PATH = /usr/share/gconf/pop.mandatory.path
 # environment
@@ -213,7 +215,7 @@ MAKE_VERSION := 4.3
 # environment
 MANAGERPID = 1598
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 22663
+GIO_LAUNCHED_DESKTOP_FILE_PID = 47718
 # environment
 _ = /usr/bin/make
 # environment
@@ -301,12 +303,10 @@ all:
 #  File does not exist.
 #  File has not been updated.
 
+ 
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
- 
-make: *** No rule to make target 'all'.  Stop.
-
 #  File does not exist.
 #  File has been updated.
 #  Failed to be updated.
@@ -332,6 +332,6 @@ GNUmakefile:
 # strcache performance: lookups = 26 / hit rate = 11%
 # hash-table stats:
 # Load=23/8192=0%, Rehash=0, Collisions=0/26=0%
-# Finished Make data base on Tue May 17 13:20:52 2022
+# Finished Make data base on Tue May 17 15:08:08 2022
 
  
