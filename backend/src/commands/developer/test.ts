@@ -16,7 +16,9 @@ import { ApplyOptions } from "@sapphire/decorators";
 import { Args, BucketScope } from "@sapphire/framework";
 import { Message } from "discord.js";
 import { ICommandOptions, ICommand } from "../../Command";
-import { seconds } from "../../internal/functions/time";
+import { seconds } from "../../internal/functions/time"
+import { fetch, FetchResultTypes } from '@sapphire/fetch';
+import { environment } from "../../config";
 
 const errorTracked = [];
 
@@ -34,8 +36,8 @@ const errorTracked = [];
 })
 export class UserCommand extends ICommand {
   public async messageRun(ctx: Message, args: Args) {
-    await ctx.channel.send({ content: `Starting test...` });
     const { client } = this.container;
+    await ctx.channel.send({ content: `Starting test...` });
     try {
       await this.testCode(ctx, args);
     } catch (e) {
@@ -52,7 +54,7 @@ export class UserCommand extends ICommand {
     await ctx.channel.send({
       content: `Test finished! ${
         errorTracked.length > 0
-          ? `${errorTracked.length} error${errorTracked.length < 1 ? "" : "s"} were tracked. Check the logs...`
+          ? `${errorTracked.length} errors were tracked. Check the logs...`
           : ""
       }`,
     });
@@ -62,13 +64,23 @@ export class UserCommand extends ICommand {
    * The test code to run
    * @param ctx
    */
-  private async testCode(ctx: Message, args: Args) {
-    ctx.channel.send("Working on it...");
-    const text = await args.pick("string").catch(() => null);
-    if (!text) {
-      return ctx.reply("No arguments passed for test...");
+  private async testCode(ctx: Message, _args: Args) {
+    /**
+     * @test Fetch API
+     * @date 2022-05-17
+     */
+
+    const data = await fetch<JsonPlaceholderResponse>(`${environment.bot.bot_dashboard_api_url}/ping`, FetchResultTypes.JSON)
+
+    if (data.status !== 200) {
+      return await ctx.channel.send(`Error: ${data.status}`);
     }
 
-    return ctx.reply(`Argument is: **${text}**`);
+    return await ctx.channel.send(`Response from the API: ${data.response} (Status: ${data.status})`);
   }
+}
+
+interface JsonPlaceholderResponse {
+  response: string;
+  status: number;
 }

@@ -190,7 +190,7 @@ export class LocalCacheStore {
 
     // Log the amount of data
     container.logger.info(
-      `Loaded ${guild.length} guilds, ${user.length} users, and ${welcome.length} welcome plugins.`
+      `Loaded ${guild.length} guilds, ${user.length} users, ${commands.length} commands, and ${welcome.length} welcome plugins.`
     );
   }
 

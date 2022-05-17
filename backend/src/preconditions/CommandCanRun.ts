@@ -14,16 +14,24 @@
 
 import { CommandInteraction, Message } from "discord.js";
 import { ChatInputCommand, container, MessageCommand, Precondition } from "@sapphire/framework";
-import { canaryMode } from "../config";
+import { canaryMode, environment } from "../config";
 
 export class UserPrecondition extends Precondition {
   public override async chatInputRun(interaction: CommandInteraction, command: ChatInputCommand) {
     // Make sure the precondition is run on a guild.
     if (!interaction.guild) return this.ok();
 
+    // Checks if the user is trying to use the production bot or not.
     if (this.checkCanaryMode() && !container.client.BotDevelopers.has(interaction.user.id)) {
       return this.error({
         message: `Sorry but im in "canary" mode and only my developers can run this version of the bot.`,
+      });
+    }
+
+    // Checks if we are in maintenance mode.
+    if(this.checkGlobalDisabled() && !container.client.BotDevelopers.has(interaction.user.id)) {
+      return this.error({
+        message: `Sorry but the bot is currently under maintenance. Join our support server for more updates.`,
       });
     }
 
@@ -83,5 +91,9 @@ export class UserPrecondition extends Precondition {
 
   private checkCanaryMode(): boolean {
     return canaryMode;
+  }
+
+  private checkGlobalDisabled(): boolean {
+    return environment.bot.bot_maintenance_mode
   }
 }
