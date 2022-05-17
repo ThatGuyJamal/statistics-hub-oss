@@ -19,8 +19,11 @@ import "@sapphire/plugin-hmr/register";
 
 import { container } from "@sapphire/framework";
 import { BotClient } from "./Bot";
+import { runAllCustomEvents } from "./internal/emitter";
 
 console.clear();
+
+runAllCustomEvents();
 
 async function bootstrap(): Promise<void> {
   await BotClient.startClient();
