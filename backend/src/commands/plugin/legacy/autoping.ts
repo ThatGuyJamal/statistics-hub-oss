@@ -2,7 +2,7 @@ import { ApplyOptions } from "@sapphire/decorators";
 import { Args, BucketScope } from "@sapphire/framework";
 import { Message } from "discord.js";
 import { ICommandOptions, ICommand } from "../../../Command";
-import { GuildsMongoModel } from "../../../database/models/guild";
+import { GuildModelEnum, GuildsMongoModel } from "../../../database/models/guild";
 import { channelMention, codeBlock } from "../../../internal/functions/formatting";
 import { isGuildMessage } from "../../../internal/functions/guards";
 import { ProcessLegacySubCommands } from "../../../internal/functions/legacySubCommand";
@@ -72,14 +72,15 @@ export class UserCommand extends ICommand {
     const document = await GuildsMongoModel.findOne({ GuildId: ctx.guild?.id });
     const cachedData = this.container.client.LocalCacheStore.memory.guild.get(ctx.guild!);
 
-    const channelData = document?.GuildPingOnJoinChannels ?? [];
-
     if (!cachedData) {
       this.container.client.LocalCacheStore.memory.guild.set(ctx.guild!, {
         GuildId: ctx.guild!.id,
         GuildName: ctx.guild?.name,
         GuildOwnerId: ctx.guild?.ownerId,
-        GuildPingOnJoinChannels: [],
+        GuildPingOnJoinChannels: {
+          data: [],
+          limit: GuildModelEnum.PING_ON_JOIN_LIMIT
+        },
         CreatedAt: new Date(),
       });
     }
@@ -89,10 +90,15 @@ export class UserCommand extends ICommand {
         GuildId: ctx.guild?.id,
         GuildName: ctx.guild?.name,
         GuildOwnerId: ctx.guild?.ownerId,
-        GuildPingOnJoinChannels: [],
+        GuildPingOnJoinChannels: {
+          data: [],
+          limit: GuildModelEnum.PING_ON_JOIN_LIMIT
+        },
         CreatedAt: new Date(),
       });
     }
+
+    const channelData = document?.GuildPingOnJoinChannels?.data ?? [];
 
     // Set
     if (subCommandArgument === "set") {
@@ -112,27 +118,46 @@ export class UserCommand extends ICommand {
           content: `This channel is already set to ping on user join.`,
         });
 
+      // Check if the data limit has been reached
+      if (channelData.length === GuildModelEnum.PING_ON_JOIN_LIMIT)
+        return await ctx.reply({
+          content: `You already have the max amount of channels set. You have to delete some others first. Run \`autoping list\` to see the channels you have set.`,
+        });
+
       // Add the channel id to the new array and save it to the database and cache.
 
       channelData.push(channelArgumentOne.id);
 
-      this.container.client.LocalCacheStore.memory.guild.set(ctx.guild!, {
-        ...cachedData,
-        GuildId: ctx.guild!.id,
-        GuildName: ctx.guild?.name,
-        GuildOwnerId: ctx.guild?.ownerId,
-        GuildPingOnJoinChannels: channelData,
-        CreatedAt: new Date(),
-      });
-
-      await GuildsMongoModel.updateOne(
-        { GuildId: ctx.guild?.id },
-        {
-          $set: {
-            GuildPingOnJoinChannels: channelData,
+      try {
+        this.container.client.LocalCacheStore.memory.guild.set(ctx.guild!, {
+          ...cachedData,
+          GuildId: ctx.guild!.id,
+          GuildName: ctx.guild?.name,
+          GuildOwnerId: ctx.guild?.ownerId,
+          GuildPingOnJoinChannels: {
+            data: channelData,
+            limit: GuildModelEnum.PING_ON_JOIN_LIMIT - 1
           },
-        }
-      );
+          CreatedAt: new Date(),
+        });
+
+        await GuildsMongoModel.updateOne(
+          { GuildId: ctx.guild?.id },
+          {
+            $set: {
+              GuildPingOnJoinChannels: {
+                data: channelData,
+                limit: GuildModelEnum.PING_ON_JOIN_LIMIT - 1
+              },
+            },
+          }
+        );
+      } catch (error) {
+        this.container.logger.error(error);
+        return await ctx.reply({
+          content: `An error occurred while trying to run this command. Please try again...`,
+        });
+      }
 
       return await ctx.reply({
         content: `Successfully set ${channelMention(channelArgumentOne.id)}!`,
@@ -163,7 +188,10 @@ export class UserCommand extends ICommand {
         GuildId: ctx.guild!.id,
         GuildName: ctx.guild?.name,
         GuildOwnerId: ctx.guild?.ownerId,
-        GuildPingOnJoinChannels: channelData,
+        GuildPingOnJoinChannels: {
+          data: channelData,
+          limit: GuildModelEnum.PING_ON_JOIN_LIMIT + 1
+        },
         CreatedAt: new Date(),
       });
 
@@ -171,7 +199,10 @@ export class UserCommand extends ICommand {
         { GuildId: ctx.guild?.id },
         {
           $set: {
-            GuildPingOnJoinChannels: channelData,
+            GuildPingOnJoinChannels: {
+              data: channelData,
+              limit: GuildModelEnum.PING_ON_JOIN_LIMIT + 1
+            },
           },
         }
       );

@@ -10,11 +10,11 @@ export function pingOnJoinEvent() {
 
     if (!cachedData) return;
 
-    if (!cachedData.GuildPingOnJoinChannels) return;
+    if (!cachedData.GuildPingOnJoinChannels?.data) return;
 
     // Loop through all channels and ping the user if they join
 
-    for (const channel of cachedData.GuildPingOnJoinChannels) {
+    for (const channel of cachedData.GuildPingOnJoinChannels.data) {
       const channelToPing = (await member.guild?.channels.cache.get(channel)) as TextChannel;
 
       if (!channelToPing) return;

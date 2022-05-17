@@ -44,9 +44,12 @@ const GuildsMongoModel = mongo.model(
       default: "en-US",
     },
     GuildPingOnJoinChannels: {
-      type: Array,
+      type: Object,
       required: false,
-      default: null,
+      default: {
+        data: [],
+        limit: 3,
+      },
     },
     BlackListed: {
       type: Boolean,
@@ -75,7 +78,10 @@ export interface GuildModelStructure {
   GuildOwnerId?: string;
   GuildPrefix?: string;
   GuildLanguage?: string;
-  GuildPingOnJoinChannels?: string[];
+  GuildPingOnJoinChannels?: {
+    data: string[]
+    limit: number
+  }
   BlackListed?: boolean;
   Premium?: GuildPremiumStruct;
   CreatedAt: Date;
@@ -88,6 +94,10 @@ export interface GuildPremiumStruct {
  The ID of the user who activated the guild premium.
  */
   activatorId: string;
+}
+
+export enum GuildModelEnum {
+  PING_ON_JOIN_LIMIT = 3,
 }
 
 /**
