@@ -466,7 +466,7 @@ __metadata:
     "@types/ms": 0.7.31
     "@types/node": 17.0.31
     concurrently: 7.2.2
-    discord-api-types: ^0.32.1
+    discord-api-types: ^0.37.0
     discord-welcome-card: ^4.7.0
     discord.js: ^13.6.0
     discord.js-docs: ^0.3.0
@@ -1295,10 +1295,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord-api-types@npm:^0.32.1":
-  version: 0.32.1
-  resolution: "discord-api-types@npm:0.32.1"
-  checksum: cce4fa81a4c8311b72cf9f23ff9a3d16e40ba7d862a7634717d9437e0e5918209a8eeb75ea9974f24e3761b06e4599757e7544343b702a23f04b07f31884c304
+"discord-api-types@npm:^0.37.0":
+  version: 0.37.16
+  resolution: "discord-api-types@npm:0.37.16"
+  checksum: bf8fb1d8f83fd26be12173d5a86be0736d411f2dd1a7b5e9e29b5b5880bb96cefd4a253ed4d36b36b58e12105eda29dff53569f0d1d3c51cf05c6789e904e506
   languageName: node
   linkType: hard
 
