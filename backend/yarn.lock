@@ -30,14 +30,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@discord-card/core@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "@discord-card/core@npm:3.0.1"
+"@discord-card/core@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "@discord-card/core@npm:3.2.0"
   dependencies:
     axios: ^0.26.1
-    canvas: ^2.9.1
+    canvas: ^2.11.0
     canvas-txt: ^3.0.0
-  checksum: 4b241849288f245607f1973b17c8ee94a7e1b02766f31d274a2e6cd2ad2850ff28a1154832e30a0a00c931aed9701c0ce246c44060d81059e8311eb2ec903689
+  peerDependencies:
+    discord.js: ^14.x
+  checksum: a2bd3bee8c2ab2fb81d11a5877fa3017194682a7fa56274a636c096e636a35641b16da7842cd31004e1e2e1010fc14a0cc06ed7e2a07ab953846a5d0e55feb5a
   languageName: node
   linkType: hard
 
@@ -926,15 +928,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"canvas@npm:^2.9.0, canvas@npm:^2.9.1":
-  version: 2.9.1
-  resolution: "canvas@npm:2.9.1"
+"canvas@npm:^2.11.0":
+  version: 2.11.2
+  resolution: "canvas@npm:2.11.2"
   dependencies:
     "@mapbox/node-pre-gyp": ^1.0.0
-    nan: ^2.15.0
+    nan: ^2.17.0
     node-gyp: latest
     simple-get: ^3.0.3
-  checksum: 0175067df9eaa591113605441c150ffe7d5196a3273559b0aadfe56854e8353ea99eb3c56c9347c76e54a4781c88dd24662268a0f86500e69b608d5b1e9e6801
+  checksum: 61e554aef80022841dc836964534082ec21435928498032562089dfb7736215f039c7d99ee546b0cf10780232d9bf310950f8b4d489dc394e0fb6f6adfc97994
   languageName: node
   linkType: hard
 
@@ -1303,12 +1305,14 @@ __metadata:
   linkType: hard
 
 "discord-welcome-card@npm:^4.7.0":
-  version: 4.8.1
-  resolution: "discord-welcome-card@npm:4.8.1"
+  version: 4.9.1
+  resolution: "discord-welcome-card@npm:4.9.1"
   dependencies:
-    "@discord-card/core": ^3.0.1
-    canvas: ^2.9.0
-  checksum: ab7020d0345a4606050c34aad53306876774a8903b1d6d6ef59d13ae83793f9832a5247f059e2433e59be4f26cd11a1e72a9b349cec35c5e7b7b28f4e3f463ca
+    "@discord-card/core": ^3.2.0
+    canvas: ^2.11.0
+  peerDependencies:
+    discord.js: ^14.x
+  checksum: 4ac45ed2ac25ee6de43a74a6ac1f92bf057bb8e6dd3db63df0a4f0075ff9c640fa7a1617b3072cd76d88cdb0bbf9038157c5111ab07ad7c9516da3c0d0b138dc
   languageName: node
   linkType: hard
 
@@ -2335,6 +2339,15 @@ __metadata:
   dependencies:
     node-gyp: latest
   checksum: 33e1bb4dfca447fe37d4bb5889be55de154828632c8d38646db67293a21afd61ed9909cdf1b886214a64707d935926c4e60e2b09de9edfc2ad58de31d6ce8f39
+  languageName: node
+  linkType: hard
+
+"nan@npm:^2.17.0":
+  version: 2.18.0
+  resolution: "nan@npm:2.18.0"
+  dependencies:
+    node-gyp: latest
+  checksum: 4fe42f58456504eab3105c04a5cffb72066b5f22bd45decf33523cb17e7d6abc33cca2a19829407b9000539c5cb25f410312d4dc5b30220167a3594896ea6a0a
   languageName: node
   linkType: hard
 
