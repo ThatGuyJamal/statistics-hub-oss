@@ -462,7 +462,7 @@ __metadata:
     "@sapphire/ratelimits": ^2.4.4
     "@sapphire/time-utilities": ^1.5.2
     "@sapphire/type": ^2.1.2
-    "@types/min-indent": 1.0.0
+    "@types/min-indent": 1.0.2
     "@types/ms": 0.7.31
     "@types/node": 17.0.31
     concurrently: 7.2.2
@@ -526,10 +526,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/min-indent@npm:1.0.0":
-  version: 1.0.0
-  resolution: "@types/min-indent@npm:1.0.0"
-  checksum: 50b9a1388c05d726bebc837ee90fe5e12afd4e0c71c15de247cda9c805481ae5973a9d9c9333261c1bb3f28aadde14e8f61da2898397cdcf144aa12858dac513
+"@types/min-indent@npm:1.0.2":
+  version: 1.0.2
+  resolution: "@types/min-indent@npm:1.0.2"
+  checksum: 2ecf317e8a0a398407284a286c72e0e7b142d677e2145b304cf8948b6861fe49b7585ed8496044ffbca88479c1ee51a55f337c7fb616e1175d4a8fc41a5a9141
   languageName: node
   linkType: hard
 
